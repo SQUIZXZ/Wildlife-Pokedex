@@ -28,6 +28,7 @@ public class AnimalSearchFragment extends ListFragment implements SearchView.OnQ
          setHasOptionsMenu(true);
          setAllValues();
 
+
     }
 
     @Override
@@ -46,7 +47,7 @@ public class AnimalSearchFragment extends ListFragment implements SearchView.OnQ
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_bird_search, container, false);
+        View v = inflater.inflate(R.layout.fragment_bird_search, container,false);
         listView = v.findViewById(android.R.id.list);
         v.findViewById(R.id.empty).setVisibility(View.INVISIBLE);
         mAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, mAllValues);
