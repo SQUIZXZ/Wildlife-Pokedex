@@ -27,8 +27,6 @@ public class AnimalSearchFragment extends ListFragment implements SearchView.OnQ
          super.onCreate(savedInstanceState);
          setHasOptionsMenu(true);
          setAllValues();
-
-
     }
 
     @Override
@@ -76,12 +74,6 @@ public class AnimalSearchFragment extends ListFragment implements SearchView.OnQ
             resetSearch();
             return false;
         }
-//          else {
-//            SearchForBirdService searchForBirdService = new SearchForBirdService();
-//            List<Animal> filteredAnimals = searchForBirdService.filterByName(newText, mAllValues);
-//            mAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, filteredAnimals);
-//
-//        }
         return false;
     }
 
