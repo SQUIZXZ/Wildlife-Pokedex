@@ -1,5 +1,8 @@
 package com.example.wildlifeapplication;
 
+import com.example.wildlifeapplication.Search.Animal;
+import com.example.wildlifeapplication.Search.SearchForBirdService;
+
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.example.wildlifeapplication;
+package com.example.wildlifeapplication.Search;
 
 public class Animal {
     private String noun;

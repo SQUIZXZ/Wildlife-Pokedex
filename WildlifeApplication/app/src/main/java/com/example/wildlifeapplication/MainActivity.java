@@ -7,6 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.wildlifeapplication.Extras.ExtrasFragment;
+import com.example.wildlifeapplication.Feed.FeedFragment;
+import com.example.wildlifeapplication.Map.MapFragment;
+import com.example.wildlifeapplication.Search.AnimalSearchFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;

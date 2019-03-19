@@ -1,4 +1,6 @@
-package com.example.wildlifeapplication;
+package com.example.wildlifeapplication.Search;
+
+import com.example.wildlifeapplication.Search.Animal;
 
 import java.util.List;
 
