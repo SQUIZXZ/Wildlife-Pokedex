@@ -14,22 +14,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.SearchView;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AnimalSearchFragment extends ListFragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
-    ArrayList<String> mAllValues;
-    private ArrayAdapter<String> mAdapter;
+    private ArrayList<Animal> mAllValues;
+    private ArrayAdapter<Animal> mAdapter;
+    ListView listView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);
          setHasOptionsMenu(true);
          setAllValues();
+
     }
 
     @Override
     public void onListItemClick(ListView listView, View v, int position, long id) {
-        String item = (String) listView.getAdapter().getItem(position);
+        String item = listView.getAdapter().getItem(position).toString();
         if(getActivity() instanceof  OnItem1SelectedListener) {
             ((OnItem1SelectedListener) getActivity()).OnItem1SelectedListener(item);
         }
@@ -44,9 +47,10 @@ public class AnimalSearchFragment extends ListFragment implements SearchView.OnQ
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_bird_search, container, false);
-        ListView listView = v.findViewById(android.R.id.list);
-        TextView emptyTextView = v.findViewById(android.R.id.empty);
-        listView.setEmptyView(emptyTextView);
+        listView = v.findViewById(android.R.id.list);
+        v.findViewById(R.id.empty).setVisibility(View.INVISIBLE);
+        mAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, mAllValues);
+        listView.setAdapter(mAdapter);
         return v;
     }
 
@@ -58,12 +62,6 @@ public class AnimalSearchFragment extends ListFragment implements SearchView.OnQ
         searchView.setIconifiedByDefault(false);
         searchView.setOnQueryTextListener(this);
         searchView.setQueryHint("Search");
-        searchView.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                if (
-            }
-        });
     }
 
     @Override
@@ -77,15 +75,12 @@ public class AnimalSearchFragment extends ListFragment implements SearchView.OnQ
             resetSearch();
             return false;
         }
-        ArrayList<String> filteredValues = new ArrayList<>(mAllValues);
-        for (String value: mAllValues) {
-            if (!value.toLowerCase().contains(newText.toLowerCase())) {
-                filteredValues.remove(value);
-            }
-        }
-
-        mAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, filteredValues);
-        setListAdapter(mAdapter);
+//          else {
+//            SearchForBirdService searchForBirdService = new SearchForBirdService();
+//            List<Animal> filteredAnimals = searchForBirdService.filterByName(newText, mAllValues);
+//            mAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, filteredAnimals);
+//
+//        }
         return false;
     }
 
@@ -107,11 +102,9 @@ public class AnimalSearchFragment extends ListFragment implements SearchView.OnQ
     private void setAllValues() {
         mAllValues = new ArrayList<>();
 
-        mAllValues.add("Bird1");
-        mAllValues.add("Bird2");
-
-        mAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, mAllValues);
-        setListAdapter(mAdapter);
+        SearchForBirdService birdSearchService = new SearchForBirdService();
+        mAllValues.addAll(birdSearchService.getAll());
+        System.out.println(mAllValues);
     }
 
     public interface OnItem1SelectedListener {

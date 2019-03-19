@@ -9,6 +9,11 @@ public class Animal {
         this.scientificNoun = aScientificNoun;
     }
 
+    @Override
+    public String toString() {
+        return "Noun: "+noun+"\nScientific Noun: "+scientificNoun;
+    }
+
     public String getNoun() {
         return noun;
     }
@@ -16,4 +21,6 @@ public class Animal {
     public String getScientificNoun() {
         return scientificNoun;
     }
+
+
 }

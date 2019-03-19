@@ -4,5 +4,7 @@ import java.util.List;
 
 public interface ISearchForAnimalService {
 
-    Animal filterByName(List<Animal> listOfAnimalsToFilter);
+    List<Animal> getAll();
+
+    List<Animal> filterByName(String name, List<Animal> listOfAnimalsToFilter);
 }
