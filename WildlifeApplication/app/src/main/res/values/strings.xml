@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WildLifeProjectNavigationTest</string>
+    <string name="app_name">WildLife</string>
     <string name="title_map">Map</string>
     <string name="title_feed">Feed</string>
     <string name="title_search">Search</string>
