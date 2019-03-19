@@ -1,5 +1,6 @@
 package com.example.wildlifeapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -28,7 +29,12 @@ public class MainActivity extends AppCompatActivity {
                     switchToMainActivity();
                     return true;
                 case R.id.navigation_search:
+                    mTextMessage.setText(R.string.title_search);
                     switchToBirdSearchFragment();
+                    return true;
+                case R.id.navigation_extras:
+                    mTextMessage.setText(R.string.extras);
+                    switchToMainActivity();
                     return true;
             }
             return false;
