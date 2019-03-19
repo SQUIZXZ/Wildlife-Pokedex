@@ -16,7 +16,7 @@ import com.example.wildlifeapplication.R;
 
 import java.util.ArrayList;
 
-public class AnimalSearchFragment extends ListFragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+public class AnimalSearchFragment extends ListFragment {
 
     private ArrayList<Animal> mAllValues;
     private ArrayAdapter<Animal> mAdapter;
@@ -59,22 +59,24 @@ public class AnimalSearchFragment extends ListFragment implements SearchView.OnQ
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setIconifiedByDefault(false);
-        searchView.setOnQueryTextListener(this);
-        searchView.setQueryHint("Search");
-    }
+        searchView.setQueryHint("Search by name or scientific name");
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return true;
-    }
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        if (newText == null || newText.trim().isEmpty()) {
-            resetSearch();
-            return false;
-        }
-        return false;
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText == null || newText.trim().isEmpty()) {
+                    resetSearch();
+                } else {
+                    mAdapter.getFilter().filter(newText);
+                }
+                return false;
+            }
+        });
     }
 
     public void resetSearch() {
@@ -82,22 +84,11 @@ public class AnimalSearchFragment extends ListFragment implements SearchView.OnQ
         setListAdapter(mAdapter);
     }
 
-    @Override
-    public boolean onMenuItemActionExpand(MenuItem item) {
-        return true;
-    }
-
-    @Override
-    public boolean onMenuItemActionCollapse(MenuItem item) {
-        return true;
-    }
-
     private void setAllValues() {
         mAllValues = new ArrayList<>();
 
         SearchForBirdService birdSearchService = new SearchForBirdService();
         mAllValues.addAll(birdSearchService.getAll());
-        System.out.println(mAllValues);
     }
 
     public interface OnItem1SelectedListener {

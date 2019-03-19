@@ -16,15 +16,4 @@ public class SearchForBirdService implements ISearchForAnimalService {
         listOfAllBirds.add(new Animal("Bird4", "Ave4"));
         return listOfAllBirds;
     }
-
-    @Override
-    public List<Animal> filterByName(String name, List<Animal> listOfAnimalsToFilter) {
-        List<Animal> filteredAnimals = new ArrayList<>(listOfAnimalsToFilter);
-        for (Animal animal : listOfAnimalsToFilter) {
-            if(!(animal.getNoun().equalsIgnoreCase(name) || animal.getScientificNoun().equalsIgnoreCase(name))) {
-                filteredAnimals.remove(animal);
-            }
-        }
-        return filteredAnimals;
-    }
 }
