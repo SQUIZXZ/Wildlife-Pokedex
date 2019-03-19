@@ -16,7 +16,7 @@ import android.widget.SearchView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnimalSearchFragment extends ListFragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+public class AnimalSearchFragment extends ListFragment {
 
     private ArrayList<Animal> mAllValues;
     private ArrayAdapter<Animal> mAdapter;
@@ -60,43 +60,29 @@ public class AnimalSearchFragment extends ListFragment implements SearchView.OnQ
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setIconifiedByDefault(false);
-        searchView.setOnQueryTextListener(this);
-        searchView.setQueryHint("Search");
-    }
+        searchView.setQueryHint("Search by name or scientific name");
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return true;
-    }
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        if (newText == null || newText.trim().isEmpty()) {
-            resetSearch();
-            return false;
-        }
-//          else {
-//            SearchForBirdService searchForBirdService = new SearchForBirdService();
-//            List<Animal> filteredAnimals = searchForBirdService.filterByName(newText, mAllValues);
-//            mAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, filteredAnimals);
-//
-//        }
-        return false;
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText == null || newText.trim().isEmpty()) {
+                    resetSearch();
+                } else {
+                    mAdapter.getFilter().filter(newText);
+                }
+                return false;
+            }
+        });
     }
 
     public void resetSearch() {
         mAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, mAllValues);
         setListAdapter(mAdapter);
-    }
-
-    @Override
-    public boolean onMenuItemActionExpand(MenuItem item) {
-        return true;
-    }
-
-    @Override
-    public boolean onMenuItemActionCollapse(MenuItem item) {
-        return true;
     }
 
     private void setAllValues() {
