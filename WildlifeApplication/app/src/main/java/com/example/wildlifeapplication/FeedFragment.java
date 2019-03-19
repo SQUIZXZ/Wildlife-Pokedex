@@ -1,4 +1,4 @@
 package com.example.wildlifeapplication;
 
-public class mapFragment {
+public class FeedFragment {
 }

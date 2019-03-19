@@ -20,11 +20,9 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_map:
                     mTextMessage.setText(R.string.title_map);
-                    switchToMainActivity();
                     return true;
                 case R.id.navigation_feed:
                     mTextMessage.setText(R.string.title_feed);
-                    switchToMainActivity();
                     return true;
                 case R.id.navigation_search:
                     mTextMessage.setText(R.string.title_search);
@@ -32,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_extras:
                     mTextMessage.setText(R.string.extras);
-                    switchToMainActivity();
                     return true;
             }
             return false;
