@@ -11,6 +11,10 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
     private AnimalSearchFragment animalSearchFragment;
+    private ExtrasFragment extrasFragment;
+    private FeedFragment feedFragment;
+    private MapFragment mapFragment;
+    FragmentManager fragmentManager = getSupportFragmentManager();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -19,17 +23,16 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_map:
-                    mTextMessage.setText(R.string.title_map);
+                    switchToMapFragment();
                     return true;
                 case R.id.navigation_feed:
-                    mTextMessage.setText(R.string.title_feed);
+                    switchToFeedFragment();
                     return true;
                 case R.id.navigation_search:
-                    mTextMessage.setText(R.string.title_search);
                     switchToBirdSearchFragment();
                     return true;
                 case R.id.navigation_extras:
-                    mTextMessage.setText(R.string.extras);
+                    switchToExtrasFragment();
                     return true;
             }
             return false;
@@ -41,17 +44,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setSelectedItemId(R.id.navigation_map);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        switchToMapFragment();
+
     }
 
     public void switchToBirdSearchFragment() {
-        mTextMessage.setText("");
-        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragment_container, animalSearchFragment = new AnimalSearchFragment()).commit();
+    }
+
+    public void switchToExtrasFragment() {
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, extrasFragment = new ExtrasFragment()).commit();
+    }
+
+    public void switchToFeedFragment() {
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, feedFragment = new FeedFragment()).commit();
+    }
+
+    public void switchToMapFragment() {
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment = new MapFragment()).commit();
     }
 
     public void  switchToMainActivity() {
