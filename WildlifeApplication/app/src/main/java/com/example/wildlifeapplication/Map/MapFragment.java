@@ -1,8 +1,10 @@
 package com.example.wildlifeapplication.Map;
 
 import android.Manifest;
+import android.arch.persistence.room.Room;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.wildlifeapplication.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,9 +27,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.text.SimpleDateFormat;
 
 
 import static android.support.constraint.Constraints.TAG;
@@ -38,6 +46,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private boolean mLocationPermissionGranted = false;
     private final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private FusedLocationProviderClient mFusedLocationProviderClient;
+    volatile static List<Spotting> recentSpottings;
 
 
     public MapFragment() {
@@ -58,7 +67,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         getLocationPermission();
 
         mapView = (MapView) v.findViewById(R.id.map);
-        if(mapView != null) {
+        if (mapView != null) {
             mapView.onCreate(null);
             mapView.onResume();
             mapView.getMapAsync(this);
@@ -66,7 +75,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
         mGoogleMap = googleMap;
 
@@ -83,8 +92,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 "51.460692, -3.168486, Whitethroat, 15/03/19, 17:20", "51.523946, -3.245422, " +
                 "Great Spotted Woodpecker, 16/03/19, 16:41", "51.519453, -3.252643, Blue Tit," +
                 " 19/03/19, 11:36", "51.517328, -3.247728, Kingfisher, 18/03/19, 15:55"};
+        final List<Spotting> listOfSpottingsGenerated = generateSpottings(seenAnimals);
 
-        addMarkersForSpottedAnimals(seenAnimals, googleMap);
+        final SpottingOfAnimalsDatabase db;
+        db = Room.databaseBuilder(getContext(), SpottingOfAnimalsDatabase.class, "spotting of animals database").build();
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                db.spottingAnimalDao().insertAll(listOfSpottingsGenerated);
+
+                recentSpottings = db.spottingAnimalDao().getRecentSpottings();
+            }
+
+        });
+
         getLocationPermission();
         if (mLocationPermissionGranted) {
             mGoogleMap.setMyLocationEnabled(true);
@@ -94,8 +117,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cardiffCentre));
         }
 
+        synchronized (this ) {
+            while (recentSpottings == null) {
+                try {
+                    MapFragment.this.wait(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        addMarkersForSpottedAnimals(recentSpottings, googleMap);
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
@@ -113,17 +147,37 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         updateLocationUI();
     }
 
-    public void addMarkersForSpottedAnimals(String[] detailsOfSpottedAnimals, GoogleMap googleMap) {
 
-        for(String spottedAnimalDetails: detailsOfSpottedAnimals) {
-            String[] spottedAnimalDetailsSplit = spottedAnimalDetails.split(", ");
+    public void addMarkersForSpottedAnimals(List<Spotting> spottings, GoogleMap googleMap) {
+
+        for (Spotting spotting : spottings) {
             googleMap.addMarker(new MarkerOptions().position(
-                    new LatLng(Float.parseFloat(spottedAnimalDetailsSplit[0]),
-                            Float.parseFloat(spottedAnimalDetailsSplit[1]))).
-                    title(spottedAnimalDetailsSplit[2]).snippet("Seen on "+
-                    spottedAnimalDetailsSplit[3]+" at "+spottedAnimalDetailsSplit[4]).
+                    new LatLng(spotting.getLatitudeOfSpotting(),
+                            spotting.getLongitudeOfSpotting())).
+                    title(spotting.getNoun()).snippet("Seen on " +
+                    spotting.getDatetimeOfSpotting()).
                     icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         }
+
+    }
+
+    public List<Spotting> generateSpottings(String[] spottingsAsStringArray) {
+        List<Spotting> spottings = new ArrayList<>();
+        for (String spottingDetails : spottingsAsStringArray) {
+            String[] spottingDetailsSplit = spottingDetails.split(", ");
+            Spotting newSpotting = new Spotting();
+            newSpotting.setLatitudeOfSpotting(Float.parseFloat(spottingDetailsSplit[0]));
+            newSpotting.setLongitudeOfSpotting(Float.parseFloat(spottingDetailsSplit[1]));
+            newSpotting.setNoun(spottingDetailsSplit[2]);
+            try {
+                Date date = new SimpleDateFormat("dd/MM/yy").parse(spottingDetailsSplit[3]);
+                newSpotting.setDatetimeOfSpotting(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            spottings.add(newSpotting);
+        }
+        return spottings;
 
     }
 
