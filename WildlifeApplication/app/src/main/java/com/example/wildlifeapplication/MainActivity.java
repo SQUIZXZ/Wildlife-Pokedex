@@ -1,10 +1,13 @@
 package com.example.wildlifeapplication;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.wildlifeapplication.Extras.ExtrasFragment;
@@ -50,11 +53,24 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setSelectedItemId(R.id.navigation_map);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        switchToMapFragment();
-
+        SharedPreferences sp = getSharedPreferences("Shared Preferences",Context.MODE_PRIVATE);
+        String launchChoice = sp.getString("LaunchChoice","Map");
+        switch (launchChoice){
+            case "Search":
+                switchToBirdSearchFragment();
+                navigation.setSelectedItemId(R.id.navigation_search);
+                break;
+            case "Feed":
+                switchToFeedFragment();
+                navigation.setSelectedItemId(R.id.navigation_feed);
+                break;
+            case "Map":
+                switchToMapFragment();
+                navigation.setSelectedItemId(R.id.navigation_map);
+                break;
+        }
     }
 
     public void switchToBirdSearchFragment() {

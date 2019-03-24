@@ -54,10 +54,13 @@ public class ExtrasFragment extends ListFragment {
             case "Settings":
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, settingsFragment = new SettingsFragment()).commit();
+                break;
             case "Statistics":
                 Toast.makeText(getContext(), item, Toast.LENGTH_SHORT).show();
+                break;
             case "Log Out":
                 Toast.makeText(getContext(), item, Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 

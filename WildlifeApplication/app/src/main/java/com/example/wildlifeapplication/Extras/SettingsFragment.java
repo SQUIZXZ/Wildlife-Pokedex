@@ -1,5 +1,7 @@
 package com.example.wildlifeapplication.Extras;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.Gravity;
@@ -45,7 +47,7 @@ public class SettingsFragment extends ListFragment {
         String item = listView.getAdapter().getItem(position).toString();
         switch (item) {
             case "Change Launch Area":
-                showLaunchMenu(listView.getChildAt(0));
+                changeLaunchSetting(listView.getChildAt(0));
         }
     }
 
@@ -74,9 +76,17 @@ public class SettingsFragment extends ListFragment {
         Settings_List.add("Online/Offline Mode");
     }
 
-    public void showLaunchMenu(View View){
+    public void changeLaunchSetting(View View){
         PopupMenu popup = new PopupMenu(getContext(),View);
         popup.getMenuInflater().inflate(R.menu.launch_setting_menu,popup.getMenu());
         popup.show();
+
+        SharedPreferences sp = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        System.out.println(sp.getAll());
+        //editor.clear();
+        editor.putString("LaunchChoice","Feed");
+        System.out.println(sp.getAll());
+        editor.commit();
     }
 }
