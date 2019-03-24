@@ -5,4 +5,16 @@
     <string name="title_search">Search</string>
     <string name="extras">Extras</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="animal">Total animals spotted in Cardiff: </string>
+    <string name="animal_count">184(Going to link into full database)</string>
+    <string name="animal_in_database">"Types of animals in the database:</string>
+    <string name="animal_in_database_count">209</string>
+    <string name="number_of_birds_string">Birds in the database:</string>
+    <string name="birds">163</string>
+    <string name="number_of_reptiles_string">Reptiles in the database:</string>
+    <string name="reptiles">18</string>
+    <string name="number_of_mammals_string">Mammals in the database:</string>
+    <string name="mammals">27</string>
+    <string name="number_of_invert_string">Invertebrates in the database:</string>
+    <string name="invert">56</string>
 </resources>

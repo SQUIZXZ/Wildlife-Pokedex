@@ -21,42 +21,32 @@ import java.util.ArrayList;
 public class ExtrasFragment extends ListFragment {
 
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
     private SettingsFragment settingsFragment;
+    private StatisticsFragment statisticsFragment;
 
     private ArrayList<String> Extras_List = new ArrayList<>();
     private ArrayAdapter<String> mAdapter;
     ListView listView;
 
-    public ExtrasFragment() {
-        // Required empty public constructor
-    }
 
     public static ExtrasFragment newInstance(String param1, String param2) {
         ExtrasFragment fragment = new ExtrasFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onListItemClick(ListView listView, View v, int position, long id) {
+        FragmentManager fragmentManager = getFragmentManager();
         String item = listView.getAdapter().getItem(position).toString();
 
         switch (item){
             case "Settings":
-                FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, settingsFragment = new SettingsFragment()).commit();
                 break;
             case "Statistics":
-                Toast.makeText(getContext(), item, Toast.LENGTH_SHORT).show();
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, statisticsFragment = new StatisticsFragment()).commit();
                 break;
             case "Log Out":
                 Toast.makeText(getContext(), item, Toast.LENGTH_SHORT).show();
@@ -68,10 +58,7 @@ public class ExtrasFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
