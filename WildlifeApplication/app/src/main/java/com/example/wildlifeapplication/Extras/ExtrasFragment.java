@@ -2,13 +2,17 @@ package com.example.wildlifeapplication.Extras;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.wildlifeapplication.Map.MapFragment;
 import com.example.wildlifeapplication.R;
 
 import java.util.ArrayList;
@@ -22,6 +26,8 @@ public class ExtrasFragment extends ListFragment {
 
     private String mParam1;
     private String mParam2;
+
+    private SettingsFragment settingsFragment;
 
     private ArrayList<String> Extras_List = new ArrayList<>();
     private ArrayAdapter<String> mAdapter;
@@ -38,6 +44,21 @@ public class ExtrasFragment extends ListFragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onListItemClick(ListView listView, View v, int position, long id) {
+        String item = listView.getAdapter().getItem(position).toString();
+
+        switch (item){
+            case "Settings":
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, settingsFragment = new SettingsFragment()).commit();
+            case "Statistics":
+                Toast.makeText(getContext(), item, Toast.LENGTH_SHORT).show();
+            case "Log Out":
+                Toast.makeText(getContext(), item, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -82,4 +103,6 @@ public class ExtrasFragment extends ListFragment {
         Extras_List.add("Statistics");
         Extras_List.add("Log Out");
     }
+
+
 }
