@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -22,6 +23,7 @@ public class SettingsFragment extends ListFragment {
     private ArrayList<String> Settings_List = new ArrayList<>();
     private ArrayAdapter<String> mAdapter;
     ListView listView;
+    String selected;
 
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
@@ -35,7 +37,7 @@ public class SettingsFragment extends ListFragment {
         String item = listView.getAdapter().getItem(position).toString();
         switch (item) {
             case "Change Launch Area":
-                changeLaunchSetting(listView.getChildAt(0));
+                createPopUpMenu(listView.getChildAt(0));
         }
     }
 
@@ -55,22 +57,42 @@ public class SettingsFragment extends ListFragment {
         return v;
     }
 
+
     public void getOptions() {
         Settings_List.add("Change Launch Area");
         Settings_List.add("Online/Offline Mode");
     }
 
-    public void changeLaunchSetting(View View){
+    public void createPopUpMenu(View View){
         PopupMenu popup = new PopupMenu(getContext(),View);
         popup.getMenuInflater().inflate(R.menu.launch_setting_menu,popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                changeLaunchSettings(item.getTitle().toString());
+                return true;
+            }
+        });
         popup.show();
 
-        SharedPreferences sp = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+    }
+
+    public void changeLaunchSettings(String selected){
+        SharedPreferences sp = getActivity().getSharedPreferences("pref",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        System.out.println(sp.getAll());
-        //editor.clear();
-        editor.putString("LaunchChoice","Feed");
-        System.out.println(sp.getAll());
+        editor.clear();
+
+        switch (selected){
+            case "Feed":
+                editor.putString("LaunchChoice","Feed");
+                break;
+            case "Search":
+                editor.putString("LaunchChoice","Search");
+                break;
+            case "Map":
+                editor.putString("LaunchChoice","Map");
+        }
         editor.commit();
     }
 }

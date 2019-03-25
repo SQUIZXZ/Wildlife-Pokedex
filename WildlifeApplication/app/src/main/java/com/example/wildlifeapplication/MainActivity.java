@@ -55,8 +55,11 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        SharedPreferences sp = getSharedPreferences("Shared Preferences",Context.MODE_PRIVATE);
+        SharedPreferences sp = getSharedPreferences("pref",Context.MODE_PRIVATE);
         String launchChoice = sp.getString("LaunchChoice","Map");
+
+        System.out.println(sp.getAll());
+
         switch (launchChoice){
             case "Search":
                 switchToBirdSearchFragment();
