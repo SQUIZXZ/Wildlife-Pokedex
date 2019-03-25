@@ -7,7 +7,7 @@
     tools:context=".RegisterActivity"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:background="@drawable/reg_background">
+    android:background="#e7e7e7">
 
     <EditText
         android:id="@+id/editText_username"
@@ -22,31 +22,44 @@
         android:drawablePadding="-18dp"
         android:layout_marginTop="250dp" />
 
-    <EditText
-        android:id="@+id/editText_password"
-        android:ellipsize="start"
-        android:gravity="center_horizontal"
-        android:layout_width="230dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="15dp"
-        android:drawableLeft="@drawable/password"
-        android:padding="10dip"
-        android:background="@drawable/radius"
-        android:drawablePadding="-18dp"
-        android:hint="@string/password"/>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:passwordToggleEnabled="true">
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/editText_password"
+            android:ellipsize="start"
+            android:gravity="center_horizontal"
+            android:layout_width="230dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:drawableLeft="@drawable/password"
+            android:padding="10dip"
+            android:background="@drawable/radius"
+            android:drawablePadding="-18dp"
+            android:hint="@string/password"
+            android:inputType="textPassword"/>
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleContentDescription="true">
 
-    <EditText
-        android:id="@+id/editText_confirm_password"
-        android:ellipsize="start"
-        android:gravity="center_horizontal"
-        android:layout_width="230dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="15dp"
-        android:drawableLeft="@drawable/password"
-        android:padding="10dip"
-        android:background="@drawable/radius"
-        android:drawablePadding="-5dp"
-        android:hint="@string/confirm_password"/>
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/editText_confirm_password"
+            android:ellipsize="start"
+            android:gravity="center_horizontal"
+            android:layout_width="230dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:drawableLeft="@drawable/password"
+            android:padding="10dip"
+            android:background="@drawable/radius"
+            android:drawablePadding="-5dp"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword"/>
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/button_register"
@@ -55,7 +68,7 @@
         android:layout_marginTop="15dp"
         android:text="Register"
         android:paddingLeft="4dp"
-        android:background="@drawable/radius"/>
+        android:background="@drawable/radius_register_login"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -67,13 +80,14 @@
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:text="@string/already_registered"
-        android:paddingLeft="10dp"/>
+        android:paddingLeft="10dp"
+        android:layout_marginTop="10dp"/>
 
     <TextView
-        android:id="@+id/textView_register"
+        android:id="@+id/textView_login"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
-        android:text="@string/existing_account_login"
+        android:text="@string/login"
         android:textSize="16sp"
         android:paddingLeft="10dp"
         android:textStyle="bold"/>
