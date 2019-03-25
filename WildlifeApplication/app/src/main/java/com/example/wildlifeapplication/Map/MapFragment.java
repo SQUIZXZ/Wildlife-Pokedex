@@ -1,6 +1,7 @@
 package com.example.wildlifeapplication.Map;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.arch.persistence.room.Room;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -74,6 +75,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());

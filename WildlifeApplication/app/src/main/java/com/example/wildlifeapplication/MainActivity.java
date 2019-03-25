@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -57,20 +58,18 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("pref",Context.MODE_PRIVATE);
         String launchChoice = sp.getString("LaunchChoice","Map");
 
-        System.out.println(sp.getAll());
-
         switch (launchChoice){
             case "Search":
                 switchToBirdSearchFragment();
-                navigation.setSelectedItemId(R.id.navigation_search);
+//                navigation.setSelectedItemId(R.id.navigation_search);
                 break;
             case "Feed":
                 switchToFeedFragment();
-                navigation.setSelectedItemId(R.id.navigation_feed);
+//                navigation.setSelectedItemId(R.id.navigation_feed);
                 break;
             case "Map":
                 switchToMapFragment();
-                navigation.setSelectedItemId(R.id.navigation_map);
+//                navigation.setSelectedItemId(R.id.navigation_map);
                 break;
         }
     }
