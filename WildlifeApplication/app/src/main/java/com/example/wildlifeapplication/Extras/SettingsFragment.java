@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import com.example.wildlifeapplication.R;
 
@@ -34,10 +33,24 @@ public class SettingsFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView listView, View v, int position, long id) {
+        SharedPreferences sp = getActivity().getSharedPreferences("pref",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
         String item = listView.getAdapter().getItem(position).toString();
         switch (item) {
             case "Change Launch Area":
                 createPopUpMenu(listView.getChildAt(0));
+                break;
+            case "Online/Offline Mode":
+                System.out.println(sp.getAll());
+                if(sp.getString("OnlineStatus","Online").equals("Online")){
+                    Toast.makeText(getContext(), "You'vre gone offline", Toast.LENGTH_SHORT).show();
+                    editor.putString("OnlineStatus","Offline");
+                }else{
+                    Toast.makeText(getContext(),"You've gone online",Toast.LENGTH_SHORT).show();
+                    editor.putString("OnlineStatus","Online");
+                }
+                editor.apply();
+                break;
         }
     }
 
@@ -81,7 +94,6 @@ public class SettingsFragment extends ListFragment {
     public void changeLaunchSettings(String selected){
         SharedPreferences sp = getActivity().getSharedPreferences("pref",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.clear();
 
         switch (selected){
             case "Feed":
@@ -93,6 +105,6 @@ public class SettingsFragment extends ListFragment {
             case "Map":
                 editor.putString("LaunchChoice","Map");
         }
-        editor.commit();
+        editor.apply();
     }
 }
