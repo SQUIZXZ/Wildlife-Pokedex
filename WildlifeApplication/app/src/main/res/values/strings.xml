@@ -17,4 +17,12 @@
     <string name="mammals">27</string>
     <string name="number_of_invert_string">Invertebrates in the database:</string>
     <string name="invert">56</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="not_registered">Not Registered?</string>
+    <string name="register">REGISTER</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="already_registered">Already Registered?</string>
+    <string name="existing_account_login">Login</string>
 </resources>
