@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        feedFragment = new FeedFragment();
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -75,19 +77,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchToBirdSearchFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, animalSearchFragment = new AnimalSearchFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, new AnimalSearchFragment()).commit();
     }
 
     public void switchToExtrasFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, extrasFragment = new ExtrasFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, new ExtrasFragment()).commit();
     }
 
     public void switchToFeedFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, feedFragment = new FeedFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, feedFragment).commit();
     }
 
     public void switchToMapFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment = new MapFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, new MapFragment()).commit();
     }
 
     public void  switchToMainActivity() {
