@@ -24,3 +24,5 @@ Limitations/Known Issues:
 -Login validation is not thorough
 
 -Offline setting does not currently change the functionality of the app
+
+-Statistics does not update automatically
