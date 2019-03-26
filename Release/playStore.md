@@ -1,3 +1,9 @@
+Description:
+
+The wildlife app was created to store sightings of animals and display where they were spotted as markers on a map.
+
+The app also features a basic search for data about animals, a statistics page as well as some basic settings.
+
 Features:
 
 -The user can login to the app
