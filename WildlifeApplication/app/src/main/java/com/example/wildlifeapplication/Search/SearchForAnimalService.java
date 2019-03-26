@@ -6,7 +6,7 @@ import com.example.wildlifeapplication.Search.ISearchForAnimalService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchForBirdService implements ISearchForAnimalService {
+public class SearchForAnimalService implements ISearchForAnimalService {
     @Override
     public List<Animal> getAll() {
         List<Animal> listOfAllBirds = new ArrayList<>();

@@ -87,7 +87,7 @@ public class AnimalSearchFragment extends ListFragment {
     private void setAllValues() {
         mAllValues = new ArrayList<>();
 
-        SearchForBirdService birdSearchService = new SearchForBirdService();
+        SearchForAnimalService birdSearchService = new SearchForAnimalService();
         mAllValues.addAll(birdSearchService.getAll());
     }
 
