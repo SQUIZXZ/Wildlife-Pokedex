@@ -1,9 +1,9 @@
 package com.example.wildlifeapplication.Search;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface ISearchForAnimalService {
 
-    List<Animal> getAll();
+    ArrayList<Animal> getAllAnimals();
 
 }

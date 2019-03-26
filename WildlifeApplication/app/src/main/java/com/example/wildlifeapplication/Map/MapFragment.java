@@ -125,7 +125,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         synchronized (this ) {
             while (recentSpottings == null) {
                 try {
-                    MapFragment.this.wait(100);
+                    MapFragment.this.wait(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
