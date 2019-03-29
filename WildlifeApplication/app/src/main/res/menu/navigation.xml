@@ -22,4 +22,8 @@
         android:icon="@drawable/ic_menu_black_24dp"
         android:title="@string/extras"/>
 
+    <item
+        android:id="@+id/navigation_temp"
+        android:title="temp"/>
+
 </menu>
