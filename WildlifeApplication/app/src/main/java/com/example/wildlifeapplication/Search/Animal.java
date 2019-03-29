@@ -32,6 +32,9 @@ public class Animal {
     @ColumnInfo(name = "identification")
     private String identification;
 
+    @ColumnInfo(name = "colours")
+    private String colours;
+
     @ColumnInfo(name = "habitat")
     private String habitat;
 
@@ -55,12 +58,13 @@ public class Animal {
 
     @Ignore
     public Animal(@NonNull String aNoun, @NonNull String aScientificNoun, int aMinBodyLength, int aMaxBodyLength,
-                  String anIdentification, String aHabitat, String aBestTimeToSee, String aFoodSource, Integer anImgURL) {
+                  String anIdentification, String someColours, String aHabitat, String aBestTimeToSee, String aFoodSource, Integer anImgURL) {
         this.noun = aNoun;
         this.scientificNoun = aScientificNoun;
         this.minBodyLength = aMinBodyLength;
         this.maxBodyLength = aMaxBodyLength;
         this.identification = anIdentification;
+        this.colours = someColours;
         this.habitat = aHabitat;
         this.bestTimeToSee = aBestTimeToSee;
         this.foodSource = aFoodSource;
@@ -68,7 +72,7 @@ public class Animal {
     }
 
     public Animal(String aNoun, String aScientificNoun, int aMinBodyLength, int aMaxBodyLength,
-                  int aMinWingspan, int aMaxWingspan, String anIdentification, String aHabitat,
+                  int aMinWingspan, int aMaxWingspan, String anIdentification, String beakAndFeatherColours, String aHabitat,
                   String aBestTimeToSee, String aFoodSource, Integer anImgURL) {
         this.noun = aNoun;
         this.scientificNoun = aScientificNoun;
@@ -77,6 +81,7 @@ public class Animal {
         this.minWingspan = aMinWingspan;
         this.maxWingspan = aMaxWingspan;
         this.identification = anIdentification;
+        this.colours = beakAndFeatherColours;
         this.habitat = aHabitat;
         this.bestTimeToSee = aBestTimeToSee;
         this.foodSource = aFoodSource;
@@ -144,6 +149,14 @@ public class Animal {
 
     public void setIdentification(String identification) {
         this.identification = identification;
+    }
+
+    public String getColours() {
+        return colours;
+    }
+
+    public void setColours(String colours) {
+        this.colours = colours;
     }
 
     public String getHabitat() {
