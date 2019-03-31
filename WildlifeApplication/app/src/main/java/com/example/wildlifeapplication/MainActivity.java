@@ -1,5 +1,6 @@
 package com.example.wildlifeapplication;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private MapFragment mapFragment;
     private StoreFragment storeFragment;
     FragmentManager fragmentManager = getSupportFragmentManager();
+    private static final int CAMERA_PIC_REQUEST = 1337;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -101,13 +103,15 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().replace(R.id.fragment_container, storeFragment = new StoreFragment()).commit();
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode,resultCode,data);
-//        if (requestCode == CAMERA_PIC_REQUEST) {
-//            Bitmap image = (Bitmap) data.getExtras().get("data");
-//            ImageView imageview = (ImageView) getView().findViewById(R.id.imageView); //sets imageview as the bitmap
-//            imageview.setImageBitmap(image);
-//        }
-//    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+        System.out.println("in #1");
+        if (requestCode == CAMERA_PIC_REQUEST) {
+            System.out.println("in #2");
+            Bitmap image = (Bitmap) data.getExtras().get("data");
+            ImageView imageview = (ImageView) findViewById(R.id.imageView); //sets imageview as the bitmap
+            imageview.setImageBitmap(image);
+        }
+    }
 }

@@ -18,7 +18,7 @@ import com.example.wildlifeapplication.R;
 
 public class StoreFragment extends Fragment {
 
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1337;
+    private static final int CAMERA_PIC_REQUEST = 1337;
 
     public static StoreFragment newInstance() {
         StoreFragment fragment = new StoreFragment();
@@ -53,18 +53,11 @@ public class StoreFragment extends Fragment {
         button1.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                System.out.print("Act: " + getActivity());
-                System.out.println("In: " + intent);
-                System.out.print("Act: " + getActivity());
-                getActivity().startActivityForResult(intent, 100);
+                getActivity().startActivityForResult(intent, CAMERA_PIC_REQUEST);
             }
         });
 
         return view;
     }
-
-
-
-
 
 }
