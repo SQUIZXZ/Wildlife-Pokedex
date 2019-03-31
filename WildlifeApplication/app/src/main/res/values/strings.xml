@@ -25,4 +25,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="already_registered">Already Registered?</string>
     <string name="existing_account_login">Login</string>
+    <string name="unknown">Unknown</string>
+    <string name="image_of_animal">image of animal</string>
+    <string name="image_of_an_animal">image of an animal</string>
 </resources>

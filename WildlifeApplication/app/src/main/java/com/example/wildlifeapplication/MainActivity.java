@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.wildlifeapplication.Extras.ExtrasFragment;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private FeedFragment feedFragment;
     private MapFragment mapFragment;
     FragmentManager fragmentManager = getSupportFragmentManager();
+    View view;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -60,16 +62,16 @@ public class MainActivity extends AppCompatActivity {
 
         switch (launchChoice){
             case "Search":
-                switchToBirdSearchFragment();
-//                navigation.setSelectedItemId(R.id.navigation_search);
+                view = navigation.findViewById(R.id.navigation_search);
+                view.performClick();
                 break;
             case "Feed":
-                switchToFeedFragment();
-//                navigation.setSelectedItemId(R.id.navigation_feed);
+                view = navigation.findViewById(R.id.navigation_feed);
+                view.performClick();
                 break;
             case "Map":
-                switchToMapFragment();
-//                navigation.setSelectedItemId(R.id.navigation_map);
+                view = navigation.findViewById(R.id.navigation_map);
+                view.performClick();
                 break;
         }
     }
