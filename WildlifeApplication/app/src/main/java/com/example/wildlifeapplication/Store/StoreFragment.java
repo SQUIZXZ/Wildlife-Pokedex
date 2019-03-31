@@ -53,6 +53,9 @@ public class StoreFragment extends Fragment {
         button1.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                System.out.print("Act: " + getActivity());
+                System.out.println("In: " + intent);
+                System.out.print("Act: " + getActivity());
                 getActivity().startActivityForResult(intent, 100);
             }
         });
