@@ -1,9 +1,11 @@
-package com.example.wildlifeapplication.Search;
+package com.example.wildlifeapplication.Search.AnimalInformation;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 @Entity
@@ -127,6 +129,10 @@ public class Animal {
         this.minBodyLength = minBodyLength;
     }
 
+    public String getBodyLengthRange() {
+        return Integer.toString(this.minBodyLength) + " - " + Integer.toString(this.maxBodyLength);
+    }
+
     public int getMaxWingspan() {
         return maxWingspan;
     }
@@ -190,4 +196,5 @@ public class Animal {
     public void setImgURL(Integer imgURL) {
         this.imgURL = imgURL;
     }
+
 }

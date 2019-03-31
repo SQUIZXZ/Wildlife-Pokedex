@@ -1,4 +1,4 @@
-package com.example.wildlifeapplication.Search;
+package com.example.wildlifeapplication.Search.AnimalInformation;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;

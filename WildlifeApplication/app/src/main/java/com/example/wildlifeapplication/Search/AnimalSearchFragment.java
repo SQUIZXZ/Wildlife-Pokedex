@@ -14,16 +14,23 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleAdapter;
 
+import com.example.wildlifeapplication.Map.MapFragment;
 import com.example.wildlifeapplication.R;
+import com.example.wildlifeapplication.Search.AnimalInformation.Animal;
+import com.example.wildlifeapplication.Search.AnimalInformation.AnimalDatabase;
+import com.example.wildlifeapplication.Search.AnimalInformation.AnimalInformationFragment;
 
+import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class AnimalSearchFragment extends ListFragment {
 
     private List<Animal> mAllAnimals;
-    ArrayList<HashMap<String, String>> data = new ArrayList<>();
+    ArrayList<Map<String, String>> data = new ArrayList<>();
     private SimpleAdapter mAdapter;
 
     @Override
@@ -39,6 +46,22 @@ public class AnimalSearchFragment extends ListFragment {
             ((OnItem1SelectedListener) getActivity()).OnItem1SelectedListener(item);
         }
         getFragmentManager().popBackStack();
+
+        AnimalInformationFragment animalInformationFragment = new AnimalInformationFragment();
+        Bundle args = new Bundle();
+        HashMap hashMap = (HashMap) listView.getItemAtPosition(position);
+        System.out.println(hashMap);
+        int arraySize = hashMap.entrySet().toArray().length;
+        for(int i = 0; i < arraySize; i++) {
+            String[] valuesAsStringArray = hashMap.entrySet().toArray()[i].toString().split("=");
+            if (valuesAsStringArray.length > 1) {
+                args.putString(valuesAsStringArray[0], valuesAsStringArray[1]);
+            }
+
+        }
+        animalInformationFragment.setArguments(args);
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, animalInformationFragment).commit();
+
     }
 
     @Override

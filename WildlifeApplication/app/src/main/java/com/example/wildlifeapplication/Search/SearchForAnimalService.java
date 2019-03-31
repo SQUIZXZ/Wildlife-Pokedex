@@ -1,11 +1,9 @@
 package com.example.wildlifeapplication.Search;
 
 import com.example.wildlifeapplication.R;
-import com.example.wildlifeapplication.Search.Animal;
-import com.example.wildlifeapplication.Search.ISearchForAnimalService;
+import com.example.wildlifeapplication.Search.AnimalInformation.Animal;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SearchForAnimalService implements ISearchForAnimalService {
     @Override
