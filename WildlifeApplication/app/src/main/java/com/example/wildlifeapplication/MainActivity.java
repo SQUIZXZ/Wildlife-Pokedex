@@ -1,6 +1,7 @@
 package com.example.wildlifeapplication;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.wildlifeapplication.Extras.ExtrasFragment;
@@ -98,4 +100,14 @@ public class MainActivity extends AppCompatActivity {
     public void  switchToTempFragment() {
         fragmentManager.beginTransaction().replace(R.id.fragment_container, storeFragment = new StoreFragment()).commit();
     }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode,resultCode,data);
+//        if (requestCode == CAMERA_PIC_REQUEST) {
+//            Bitmap image = (Bitmap) data.getExtras().get("data");
+//            ImageView imageview = (ImageView) getView().findViewById(R.id.imageView); //sets imageview as the bitmap
+//            imageview.setImageBitmap(image);
+//        }
+//    }
 }
