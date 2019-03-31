@@ -1,7 +1,6 @@
 package com.example.wildlifeapplication.Search.AnimalInformation;
 
 import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.example.wildlifeapplication.Map.MapFragment;
 import com.example.wildlifeapplication.R;
 
 public class AnimalInformationFragment extends Fragment {

@@ -14,18 +14,15 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleAdapter;
 
-import com.example.wildlifeapplication.Map.MapFragment;
 import com.example.wildlifeapplication.R;
 import com.example.wildlifeapplication.Search.AnimalInformation.Animal;
 import com.example.wildlifeapplication.Search.AnimalInformation.AnimalDatabase;
 import com.example.wildlifeapplication.Search.AnimalInformation.AnimalInformationFragment;
 
-import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class AnimalSearchFragment extends ListFragment {
 
