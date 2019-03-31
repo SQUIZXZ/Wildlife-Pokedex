@@ -48,14 +48,8 @@ public class AnimalSearchFragment extends ListFragment {
         Bundle args = new Bundle();
         HashMap hashMap = (HashMap) listView.getItemAtPosition(position);
         System.out.println(hashMap);
-        int arraySize = hashMap.entrySet().toArray().length;
-        for(int i = 0; i < arraySize; i++) {
-            String[] valuesAsStringArray = hashMap.entrySet().toArray()[i].toString().split("=");
-            if (valuesAsStringArray.length > 1) {
-                args.putString(valuesAsStringArray[0], valuesAsStringArray[1]);
-            }
-
-        }
+        String[] scientificNounValueAsStringArray = hashMap.entrySet().toArray()[0].toString().split("=");
+        args.putString(scientificNounValueAsStringArray[0], scientificNounValueAsStringArray[1]);
         animalInformationFragment.setArguments(args);
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, animalInformationFragment).commit();
 

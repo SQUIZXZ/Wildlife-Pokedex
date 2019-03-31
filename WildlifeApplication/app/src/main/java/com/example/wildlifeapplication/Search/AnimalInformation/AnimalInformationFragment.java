@@ -16,11 +16,6 @@ import com.example.wildlifeapplication.R;
 public class AnimalInformationFragment extends Fragment {
     private volatile static Animal animal;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -35,7 +30,7 @@ public class AnimalInformationFragment extends Fragment {
         });
         View v = inflater.inflate(R.layout.fragment_animal_info, container,false);
         synchronized (this ) {
-            while (animal == null) {
+            while (animal == null || !animal.getScientificNoun().equals(sNoun)) {
                 try {
                     AnimalInformationFragment.this.wait(10);
                 } catch (InterruptedException e) {
@@ -45,6 +40,7 @@ public class AnimalInformationFragment extends Fragment {
 
             //Setting text views with animal's information
             ((ImageView) v.findViewById(R.id.animal_image)).setImageResource(animal.getImgURL());
+            ((TextView) v.findViewById(R.id.animal_identification)).setText(animal.getIdentification());
             ((TextView) v.findViewById(R.id.animal_noun)).setText(animal.getNoun());
             ((TextView) v.findViewById(R.id.animal_scientific_noun)).setText(animal.getScientificNoun());
             ((TextView) v.findViewById(R.id.animal_body_length)).setText(animal.getBodyLengthRange());
@@ -56,5 +52,8 @@ public class AnimalInformationFragment extends Fragment {
         return v;
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }
