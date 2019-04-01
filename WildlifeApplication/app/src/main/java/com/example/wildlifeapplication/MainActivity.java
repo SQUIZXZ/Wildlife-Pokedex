@@ -3,6 +3,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -17,6 +18,8 @@ import com.example.wildlifeapplication.Feed.FeedFragment;
 import com.example.wildlifeapplication.Map.MapFragment;
 import com.example.wildlifeapplication.Search.AnimalSearchFragment;
 import com.example.wildlifeapplication.Store.StoreFragment;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -105,12 +108,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
-        System.out.println("in #1");
         if (requestCode == CAMERA_PIC_REQUEST) {
-            System.out.println("in #2");
-            Bitmap image = (Bitmap) data.getExtras().get("data");
-            ImageView imageview = (ImageView) findViewById(R.id.imageView);
-            imageview.setImageBitmap(image);
+            File imgFile = new File(storeFragment.getPictureFilePath());
+            if (imgFile.exists()) {
+                ImageView imageview = (ImageView) findViewById(R.id.imageView);
+                imageview.setImageURI(Uri.fromFile(imgFile));
+            }
         }
     }
 }
