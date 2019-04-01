@@ -169,6 +169,14 @@ public class Animal {
         this.identification = identification;
     }
 
+    public String[] getColoursAsStringArray() {
+        if(colours!= null) {
+            return colours.split(", ");
+        }else {
+            return new String[]{};
+        }
+    }
+
     public String getColours() {
         return colours;
     }
