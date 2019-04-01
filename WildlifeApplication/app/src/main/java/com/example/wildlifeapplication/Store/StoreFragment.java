@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +18,9 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.example.wildlifeapplication.Map.MapFragment;
 import com.example.wildlifeapplication.R;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -28,6 +32,9 @@ public class StoreFragment extends Fragment {
     private String pictureFilePath;
     private File image = null;
     private Activity activity;
+    private boolean manualLocation;
+    private MapFragment mapFragment;
+    private LatLng latLng;
 
     public static StoreFragment newInstance() {
         StoreFragment fragment = new StoreFragment();
@@ -44,6 +51,7 @@ public class StoreFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        manualLocation = false;
         activity = getActivity();
         View view = inflater.inflate(R.layout.fragment_store,container,false);
         Switch switch1 = view.findViewById(R.id.switch1);
@@ -74,22 +82,36 @@ public class StoreFragment extends Fragment {
                     Toast.makeText(getContext(),"Photo file could not be created, please try again",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (image != null){
-                    Uri photoURI = FileProvider.getUriForFile(getContext(),"com.example.wildlifeapplication",image);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
+                if (image != null) {
+                    Uri photoURI = FileProvider.getUriForFile(getContext(), "com.example.wildlifeapplication", image);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                     System.out.println("act: " + activity);
                     activity.startActivityForResult(intent, CAMERA_PIC_REQUEST);
                 }
-
-
             }
         });
-
+        button3.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction tr = fragmentManager.beginTransaction();
+                tr.replace(R.id.fragment_container, mapFragment = new MapFragment()).commit();
+                tr.addToBackStack(null);
+                mapFragment.setStoreFragManualLocation(true);
+            }
+        });
         return view;
     }
 
 
     public String getPictureFilePath(){
         return this.pictureFilePath;
+    }
+
+    public boolean getManualLocation(){
+        return this.manualLocation;
+    }
+
+    public void setLatLng(LatLng latLng){
+        this.latLng = latLng;
     }
 }

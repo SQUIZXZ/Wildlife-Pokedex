@@ -98,11 +98,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchToMapFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment = new MapFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment = new MapFragment(),"Map").commit();
     }
 
     public void  switchToTempFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, storeFragment = new StoreFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, storeFragment = new StoreFragment(),"Store").commit();
     }
 
     @Override

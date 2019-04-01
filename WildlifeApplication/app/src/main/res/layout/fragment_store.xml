@@ -11,15 +11,15 @@
         android:id="@+id/picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/switchLayout"
         >
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:src="@drawable/yih"
-            android:scaleType="center"
+            android:adjustViewBounds="true"
             />
 
         <Button
@@ -33,11 +33,11 @@
 
 
     <RelativeLayout
+        android:layout_alignParentTop="true"
         android:id="@+id/switchLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/picture"
         >
 
         <TextView
@@ -86,7 +86,7 @@
         android:id="@+id/data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/switchLayout"
+        android:layout_below="@+id/picture"
         >
 
 
