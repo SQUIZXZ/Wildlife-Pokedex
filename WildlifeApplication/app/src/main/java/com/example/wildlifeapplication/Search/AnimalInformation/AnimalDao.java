@@ -25,9 +25,6 @@ public interface AnimalDao {
     @Query("SELECT * FROM Animal WHERE  max_body_length<= :maxBodyLength")
     List<Animal> getAnimalWithMaxLength(int maxBodyLength);
 
-    @Query("SELECT * FROM Animal WHERE  colours= :colours")
-    List<Animal> getAnimalWithColours(String colours);
-
     @Insert
     void insertAnimal(Animal animal);
 
@@ -36,4 +33,5 @@ public interface AnimalDao {
 
     @Delete
     void clearDatabase(List<Animal> AnimalList);
+
 }
