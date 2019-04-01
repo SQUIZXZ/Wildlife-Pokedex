@@ -251,15 +251,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    public String storeFragLocationSelect(){
+    public void storeFragLocationSelect(){
         mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
                 storeFragment = (StoreFragment) getFragmentManager().findFragmentByTag("Store");
                 storeFragment.setLatLng(latLng);
+                System.out.println("LATLNG: " + latLng);
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, storeFragment).commit();
             }
-        });return("");
+        });
     }
 
     public void setStoreFragManualLocation(boolean value){
@@ -267,6 +268,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public LatLng storeFragGetLoc(){
+        System.out.println("pos: " + position);
         return position;
     }
 }

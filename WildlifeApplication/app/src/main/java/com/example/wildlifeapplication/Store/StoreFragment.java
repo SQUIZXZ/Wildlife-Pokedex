@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 public class StoreFragment extends Fragment {
 
@@ -35,6 +36,7 @@ public class StoreFragment extends Fragment {
     private boolean manualLocation;
     private MapFragment mapFragment;
     private LatLng latLng;
+    private boolean manual = false;
 
     public static StoreFragment newInstance() {
         StoreFragment fragment = new StoreFragment();
@@ -51,6 +53,7 @@ public class StoreFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mapFragment = (MapFragment) getFragmentManager().findFragmentByTag("Map");
         manualLocation = false;
         activity = getActivity();
         View view = inflater.inflate(R.layout.fragment_store,container,false);
@@ -63,8 +66,10 @@ public class StoreFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
+                    manual = true;
                     button3.setVisibility(View.VISIBLE);
                 }else{
+                    manual = false;
                     button3.setVisibility(View.INVISIBLE);
                 }
             }
@@ -93,9 +98,8 @@ public class StoreFragment extends Fragment {
         });
         button3.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction tr = fragmentManager.beginTransaction();
-                tr.replace(R.id.fragment_container, mapFragment = new MapFragment()).commit();
+                FragmentTransaction tr = getFragmentManager().beginTransaction();
+                tr.replace(R.id.fragment_container, mapFragment).commit();
                 tr.addToBackStack(null);
                 mapFragment.setStoreFragManualLocation(true);
             }
@@ -104,8 +108,11 @@ public class StoreFragment extends Fragment {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LatLng pos = mapFragment.storeFragGetLoc(); // crashing here
-                setLatLng(pos);
+                System.out.println(manual);
+                if (manual = true) {
+                    LatLng pos = mapFragment.storeFragGetLoc(); // crashing here
+                    setLatLng(pos);
+                }
                 System.out.println("LATLNG: " + latLng);
             }
         });
