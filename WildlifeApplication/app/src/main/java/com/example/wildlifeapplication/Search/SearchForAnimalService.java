@@ -1,9 +1,13 @@
 package com.example.wildlifeapplication.Search;
 
+import android.arch.persistence.room.Room;
+
 import com.example.wildlifeapplication.R;
 import com.example.wildlifeapplication.Search.AnimalInformation.Animal;
+import com.example.wildlifeapplication.Search.AnimalInformation.AnimalDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchForAnimalService implements ISearchForAnimalService {
     @Override
@@ -131,6 +135,26 @@ public class SearchForAnimalService implements ISearchForAnimalService {
                 "Insects, seeds and nuts", R.mipmap.great_spotted_woodpecker));
         return listOfAllAnimals;
     }
+
+    List<Animal> filterByColours(List<Animal> animalsToBeFiltered, String[] coloursSelected) {
+        ArrayList<Animal> filteredAnimals = new ArrayList<>(animalsToBeFiltered);
+        for (Animal animal : animalsToBeFiltered) {
+            String[] colours = animal.getColoursAsStringArray();
+            int numberOfMatchingColours = 0;
+            for (String providedFeatherColour : coloursSelected) {
+                for (String colour : colours) {
+                    if (colour.compareToIgnoreCase(providedFeatherColour) == 0) {
+                        numberOfMatchingColours++;
+                    }
+                }
+            }
+            if (numberOfMatchingColours != coloursSelected.length) {
+                filteredAnimals.remove(animal);
+            }
+        }
+        return filteredAnimals;
+    }
+
 
 
 }
