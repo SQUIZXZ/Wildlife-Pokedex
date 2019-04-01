@@ -28,6 +28,7 @@ import com.example.wildlifeapplication.Search.AnimalInformation.AnimalDatabase;
 import com.example.wildlifeapplication.Search.AnimalInformation.AnimalInformationFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,10 +42,11 @@ public class AnimalSearchFragment extends ListFragment {
     AppCompatButton mButton;
     String[] colourList;
     boolean[] checkedItems;
-    ArrayList<Integer> mSelectedColours = new ArrayList<>();
+    ArrayList<Integer> mSelectedColoursPositions = new ArrayList<>();
     volatile static List<Animal> animalsWithSelectedType;
     volatile static List<Animal> animalsWithSelectedMinLength;
     volatile static List<Animal> animalsWithSelectedMaxLength;
+    volatile static List<Animal> animalsWithSelectedColours;
 
 
     @Override
@@ -127,11 +129,11 @@ public class AnimalSearchFragment extends ListFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int position, boolean isChecked) {
                         if (isChecked) {
-                            if (!mSelectedColours.contains(position)) {
-                                mSelectedColours.add(position);
-                            } else {
-                                mSelectedColours.remove(position);
+                            if (!mSelectedColoursPositions.contains(position)) {
+                                mSelectedColoursPositions.add(position);
                             }
+                        }else if(mSelectedColoursPositions.contains(position)) {
+                            mSelectedColoursPositions.remove(mSelectedColoursPositions.indexOf(position));
                         }
                     }
                 });
@@ -140,9 +142,24 @@ public class AnimalSearchFragment extends ListFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String item = "";
-                        for (int i = 0; i < mSelectedColours.size(); i++) {
-                            item = item + colourList[mSelectedColours.get(i)];
+                        for (int i = 0; i < mSelectedColoursPositions.size(); i++) {
+                            item = item + colourList[mSelectedColoursPositions.get(i)];
+                            if(i != mSelectedColoursPositions.size() - 1){
+                                item = item +", ";
+                            }
                         }
+
+                        String[] selectedColoursAsStringArray = item.split(",");
+
+                        ///heress
+                        SearchForAnimalService animalSearchService = new SearchForAnimalService();
+                        animalsWithSelectedColours = animalSearchService.filterByColours(mAllAnimals, selectedColoursAsStringArray);
+                        if(animalsWithSelectedColours.size() == 0 ){
+                            animalsWithSelectedColours = null;
+                        }
+                        updateListView();
+
+
                     }
                 });
                 mBuilder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
@@ -157,8 +174,9 @@ public class AnimalSearchFragment extends ListFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         for (int i = 0; i < checkedItems.length; i++) {
                             checkedItems[i] = false;
-                            mSelectedColours.clear();
+                            mSelectedColoursPositions.clear();
                         }
+                        animalsWithSelectedColours = null;
                     }
                 });
                 AlertDialog mDialog = mBuilder.create();
@@ -392,7 +410,7 @@ public class AnimalSearchFragment extends ListFragment {
     }
 
     public void updateListView() {
-        List<Animal> listOfAnimalsToDisplay = determineListOfAnimalsToDisplay(mAllAnimals, animalsWithSelectedMinLength, animalsWithSelectedType, animalsWithSelectedMaxLength);
+        List<Animal> listOfAnimalsToDisplay = determineListOfAnimalsToDisplay(mAllAnimals, animalsWithSelectedMinLength, animalsWithSelectedType, animalsWithSelectedMaxLength, animalsWithSelectedColours);
 
         if (listOfAnimalsToDisplay.size() == 0) {
             getActivity().findViewById(R.id.empty).setVisibility(View.VISIBLE);
