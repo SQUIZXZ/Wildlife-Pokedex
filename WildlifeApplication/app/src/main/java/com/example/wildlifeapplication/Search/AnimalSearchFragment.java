@@ -65,10 +65,11 @@ public class AnimalSearchFragment extends ListFragment {
         }
         getFragmentManager().popBackStack();
 
+        //Sending the scientific noun of the animal selected from the list to the
+        //AnimalInformationFragment as an argument
         AnimalInformationFragment animalInformationFragment = new AnimalInformationFragment();
         Bundle args = new Bundle();
         HashMap hashMap = (HashMap) listView.getItemAtPosition(position);
-        System.out.println(hashMap);
         String[] scientificNounValueAsStringArray = hashMap.entrySet().toArray()[0].toString().split("=");
         args.putString(scientificNounValueAsStringArray[0], scientificNounValueAsStringArray[1]);
         animalInformationFragment.setArguments(args);
@@ -116,10 +117,11 @@ public class AnimalSearchFragment extends ListFragment {
             setListAdapter(mAdapter);
         }
 
-        mButton = v.findViewById(R.id.colour_spinner);
+        mButton = v.findViewById(R.id.colour_button);
         colourList = getResources().getStringArray(R.array.colours);
         checkedItems = new boolean[colourList.length];
 
+        //Adapted code from https://github.com/codingdemos/MultichoiceTutorial
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,12 +185,16 @@ public class AnimalSearchFragment extends ListFragment {
                 mDialog.show();
             }
         });
+        //End of adaptation
+
         //Adapted code from: https://android--code.blogspot.com/2015/08/android-spinner-hint.html
         //setting type filter spinner options
         ArrayAdapter<String> typeSpinnerAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.types));
         final TextView typeTitle = v.findViewById(R.id.type_title);
         typeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ((Spinner) v.findViewById(R.id.type_spinner)).setAdapter(typeSpinnerAdapter);
+
+        //setting a listener for the type spinner
         ((Spinner) v.findViewById(R.id.type_spinner)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -237,6 +243,8 @@ public class AnimalSearchFragment extends ListFragment {
         final TextView minSizeTitle = v.findViewById(R.id.min_size_title);
         minSizeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ((Spinner) v.findViewById(R.id.min_size_spinner)).setAdapter(minSizeSpinnerAdapter);
+
+        //setting a listener for the minimum size spinner
         ((Spinner) v.findViewById(R.id.min_size_spinner)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -282,6 +290,8 @@ public class AnimalSearchFragment extends ListFragment {
         final TextView maxSizeTitle = v.findViewById(R.id.max_size_title);
         maxSizeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ((Spinner) v.findViewById(R.id.max_size_spinner)).setAdapter(maxSizeSpinnerAdapter);
+
+        //setting a listener for the maximum size spinner
         ((Spinner) v.findViewById(R.id.max_size_spinner)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

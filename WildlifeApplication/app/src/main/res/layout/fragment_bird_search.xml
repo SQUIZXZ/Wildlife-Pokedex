@@ -70,7 +70,7 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/colour_spinner"
+                android:id="@+id/colour_button"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="53dp"
                 android:layout_height="match_parent"
