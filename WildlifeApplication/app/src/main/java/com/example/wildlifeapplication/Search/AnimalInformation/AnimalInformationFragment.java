@@ -24,7 +24,7 @@ public class AnimalInformationFragment extends Fragment {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                animal = animalDB.animalDao().getAnimal(sNoun);
+                animal = animalDB.animalDao().getAnimalWithScientificNoun(sNoun);
                 animalDB.close();
             }
         });
