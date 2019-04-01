@@ -13,8 +13,20 @@ public interface AnimalDao {
     @Query("SELECT * FROM Animal")
     List<Animal> getAllAnimals();
 
-    @Query("SELECT * FROM Animal WHERE scientific_noun = :aScientificNoun")
-    Animal getAnimal(String aScientificNoun);
+    @Query("SELECT * FROM Animal WHERE scientific_noun = :scientificNoun")
+    Animal getAnimalWithScientificNoun(String scientificNoun);
+
+    @Query("SELECT * FROM Animal WHERE  type= :type")
+    List<Animal> getAnimalOfType(String type);
+
+    @Query("SELECT * FROM Animal WHERE  min_body_length= :minBodyLength")
+    List<Animal> getAnimalWithMinLength(int minBodyLength);
+
+    @Query("SELECT * FROM Animal WHERE  max_body_length= :maxBodyLength")
+    List<Animal> getAnimalOfWithMaxLength(int maxBodyLength);
+
+    @Query("SELECT * FROM Animal WHERE  colours= :colours")
+    List<Animal> getAnimalWithColours(String colours);
 
     @Insert
     void insertAnimal(Animal animal);
