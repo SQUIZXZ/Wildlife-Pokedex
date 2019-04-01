@@ -58,6 +58,7 @@ public class StoreFragment extends Fragment {
         final Button button3 = view.findViewById(R.id.button3);
         button3.setVisibility(View.INVISIBLE);
         final Button button1 = view.findViewById(R.id.button);
+        final Button button2 = view.findViewById(R.id.button2);
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -99,6 +100,15 @@ public class StoreFragment extends Fragment {
                 mapFragment.setStoreFragManualLocation(true);
             }
         });
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LatLng pos = mapFragment.storeFragGetLoc(); // crashing here
+                setLatLng(pos);
+                System.out.println("LATLNG: " + latLng);
+            }
+        });
         return view;
     }
 
@@ -107,9 +117,6 @@ public class StoreFragment extends Fragment {
         return this.pictureFilePath;
     }
 
-    public boolean getManualLocation(){
-        return this.manualLocation;
-    }
 
     public void setLatLng(LatLng latLng){
         this.latLng = latLng;

@@ -52,6 +52,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     volatile static List<Spotting> recentSpottings;
     private boolean storeFragManualLocation = false;
     private StoreFragment storeFragment;
+    private LatLng position;
+
 
 
     public MapFragment() {
@@ -87,6 +89,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if(storeFragManualLocation){
             storeFragLocationSelect();
         }
+
 
 
         String[] seenAnimals = new String[]{"51.493514, -3.194885, Common Kingfisher, 19/03/19," +
@@ -233,6 +236,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             Location currentLocation = (Location) task.getResult();
                             CameraPosition devicePosition = CameraPosition.builder().target(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).zoom(13).bearing(5).tilt(2).build();
                             mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(devicePosition));
+                            position = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                         } else {
                             Log.d(TAG,"could not find device's location");
 
@@ -262,4 +266,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         this.storeFragManualLocation = value;
     }
 
+    public LatLng storeFragGetLoc(){
+        return position;
+    }
 }
