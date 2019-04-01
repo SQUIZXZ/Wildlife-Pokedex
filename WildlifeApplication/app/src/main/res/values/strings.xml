@@ -28,6 +28,11 @@
     <string name="unknown">Unknown</string>
     <string name="image_of_animal">image of animal</string>
     <string name="image_of_an_animal">image of an animal</string>
+    <string name="colours">Colours</string>
+    <string name="no_results">No results</string>
+    <string name="max_length">Max length</string>
+    <string name="min_length">Min length</string>
+    <string name="type">Type</string>
 
     <string-array name="colours">
         <item>Black</item>
@@ -59,6 +64,6 @@
         <item>20</item>
         <item>40</item>
         <item>90</item>
-        <item>150</item>
+        <item>160</item>
     </string-array>
 </resources>
