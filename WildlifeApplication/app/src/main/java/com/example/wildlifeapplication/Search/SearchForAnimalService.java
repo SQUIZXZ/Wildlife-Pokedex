@@ -131,4 +131,6 @@ public class SearchForAnimalService implements ISearchForAnimalService {
                 "Insects, seeds and nuts", R.mipmap.great_spotted_woodpecker));
         return listOfAllAnimals;
     }
+
+
 }

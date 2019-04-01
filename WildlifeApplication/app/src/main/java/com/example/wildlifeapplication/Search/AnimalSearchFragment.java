@@ -2,6 +2,7 @@ package com.example.wildlifeapplication.Search;
 
 import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
+import android.arch.persistence.room.RoomDatabase;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -21,7 +22,6 @@ import android.widget.SearchView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.wildlifeapplication.R;
 import com.example.wildlifeapplication.Search.AnimalInformation.Animal;
@@ -43,6 +43,7 @@ public class AnimalSearchFragment extends ListFragment {
     String[] colourList;
     boolean[] checkedItems;
     ArrayList<Integer> mSelectedColours = new ArrayList<>();
+    volatile static List<Animal> animalsWithSelectedType;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -162,7 +163,7 @@ public class AnimalSearchFragment extends ListFragment {
                 mDialog.show();
             }
         });
-
+        //Adapted code from: https://android--code.blogspot.com/2015/08/android-spinner-hint.html
         //setting type filter spinner options
         ArrayAdapter<String> typeSpinnerAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.types));
         final TextView typeTitle = v.findViewById(R.id.type_title);
@@ -171,12 +172,30 @@ public class AnimalSearchFragment extends ListFragment {
         ((Spinner) v.findViewById(R.id.type_spinner)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                                                     @Override
                                                                                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                                                                        String selectedItemText = (String) parent.getItemAtPosition(position);
-                                                                                        // If user change the default selection
-                                                                                        // First item is disable and it is used for hint
+                                                                                        final String selectedItemText = (String) parent.getItemAtPosition(position);
                                                                                         if (position > 0) {
                                                                                             // Notify the selected item text
                                                                                             typeTitle.setText(selectedItemText);
+                                                                                            AsyncTask.execute(new Runnable() {
+                                                                                                @Override
+                                                                                                public void run() {
+                                                                                                    RoomDatabase animalDB = Room.databaseBuilder(getContext(), AnimalDatabase.class, "animal database").build();
+                                                                                                    animalsWithSelectedType = ((AnimalDatabase) animalDB).animalDao().getAnimalOfType(selectedItemText);
+                                                                                                    animalDB.close();
+                                                                                                }
+                                                                                            });
+
+
+                                                                                            synchronized (this) {
+                                                                                                while (animalsWithSelectedType == null || !animalsWithSelectedType.get(0).getType().equalsIgnoreCase(selectedItemText)){
+                                                                                                    try {
+                                                                                                        wait(5);
+                                                                                                    } catch (InterruptedException e) {
+                                                                                                        e.printStackTrace();
+                                                                                                    }
+                                                                                                }
+                                                                                                updateListView(animalsWithSelectedType);
+                                                                                            }
                                                                                         } else {
                                                                                             typeTitle.setText("Type");
                                                                                         }
@@ -186,6 +205,7 @@ public class AnimalSearchFragment extends ListFragment {
                                                                                     public void onNothingSelected(AdapterView<?> parent) {
 
                                                                                     }
+
                                                                                 });
 
 
@@ -198,8 +218,6 @@ public class AnimalSearchFragment extends ListFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItemText = (String) parent.getItemAtPosition(position);
-                // If user change the default selection
-                // First item is disable and it is used for hint
                 if (position > 0) {
                     // Notify the selected item text
                     minSizeTitle.setText(selectedItemText);
@@ -223,9 +241,6 @@ public class AnimalSearchFragment extends ListFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItemText = (String) parent.getItemAtPosition(position);
-                // If user change the default selection
-                // First item is disable and it is used for hint
-
                 if (position > 0) {
                     // Notify the selected item text
                     maxSizeTitle.setText(selectedItemText);
@@ -239,6 +254,7 @@ public class AnimalSearchFragment extends ListFragment {
 
             }
         });
+        //End of adaptation
 
 
         return v;
@@ -290,9 +306,35 @@ public class AnimalSearchFragment extends ListFragment {
                 }
                 db.animalDao().insertAllAnimals(animalSearchService.getAllAnimals());
                 mAllAnimals = db.animalDao().getAllAnimals();
+                db.close();
             }
         });
 
+
+    }
+
+    public void updateListView(List<Animal> listOfAnimalsToDisplay) {
+
+        HashMap<String, String> hashMap;
+        data = new ArrayList<>();
+        for (Animal animal : listOfAnimalsToDisplay) {
+            hashMap = new HashMap<>();
+            hashMap.put("Noun", animal.getNoun());
+            hashMap.put("Scientific noun", animal.getScientificNoun());
+
+            if (animal.getMinBodyLength() > 0) {
+                hashMap.put("Body length", "Body length: " + animal.getMinBodyLength() + "-" + animal.getMaxBodyLength() + " cm");
+            } else {
+                hashMap.put("Body length", "");
+            }
+            hashMap.put("Image", Integer.toString(animal.getImgURL()));
+            data.add(hashMap);
+        }
+
+        String[] from = {"Noun", "Scientific noun", "Body length", "Image"};
+        int[] to = {R.id.listview_heading, R.id.listview_subheading, R.id.listview_description, R.id.listview_image};
+        mAdapter = new SimpleAdapter(getActivity(), data, R.layout.custom_list_view_image_and_text, from, to);
+        setListAdapter(mAdapter);
 
     }
 }
