@@ -28,4 +28,37 @@
     <string name="unknown">Unknown</string>
     <string name="image_of_animal">image of animal</string>
     <string name="image_of_an_animal">image of an animal</string>
+
+    <string-array name="colours">
+        <item>Black</item>
+        <item>White</item>
+        <item>Grey</item>
+        <item>Blue</item>
+        <item>Red</item>
+        <item>Orange</item>
+        <item>Yellow</item>
+    </string-array>
+
+    <string-array name="types">
+        <item>Select a type...</item>
+        <item>Bird</item>
+        <item>Invertebrate</item>
+    </string-array>
+
+    <string-array name="min_length">
+        <item>Select a minimum size...</item>
+        <item>10</item>
+        <item>20</item>
+        <item>70</item>
+        <item>140</item>
+    </string-array>
+
+    <string-array name="max_length">
+        <item>Select a maximum size...</item>
+        <item>10</item>
+        <item>20</item>
+        <item>40</item>
+        <item>90</item>
+        <item>150</item>
+    </string-array>
 </resources>

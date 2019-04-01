@@ -1,18 +1,27 @@
 package com.example.wildlifeapplication.Search;
 
+import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.wildlifeapplication.R;
 import com.example.wildlifeapplication.Search.AnimalInformation.Animal;
@@ -30,16 +39,23 @@ public class AnimalSearchFragment extends ListFragment {
     ArrayList<Map<String, String>> data = new ArrayList<>();
     private SimpleAdapter mAdapter;
 
+    AppCompatButton mButton;
+    String[] colourList;
+    boolean[] checkedItems;
+    ArrayList<Integer> mSelectedColours = new ArrayList<>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-         super.onCreate(savedInstanceState);
-         setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
+
     }
 
     @Override
     public void onListItemClick(ListView listView, View v, int position, long id) {
         String item = listView.getAdapter().getItem(position).toString();
-        if(getActivity() instanceof  OnItem1SelectedListener) {
+        if (getActivity() instanceof OnItem1SelectedListener) {
             ((OnItem1SelectedListener) getActivity()).OnItem1SelectedListener(item);
         }
         getFragmentManager().popBackStack();
@@ -62,7 +78,7 @@ public class AnimalSearchFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_bird_search, container,false);
+        View v = inflater.inflate(R.layout.fragment_bird_search, container, false);
         v.findViewById(R.id.empty).setVisibility(View.INVISIBLE);
 
         synchronized (this) {
@@ -75,13 +91,13 @@ public class AnimalSearchFragment extends ListFragment {
                 e.printStackTrace();
             }
             HashMap<String, String> hashMap;
-            for(Animal animal: mAllAnimals) {
+            for (Animal animal : mAllAnimals) {
                 hashMap = new HashMap<>();
                 hashMap.put("Noun", animal.getNoun());
                 hashMap.put("Scientific noun", animal.getScientificNoun());
 
                 if (animal.getMinBodyLength() > 0) {
-                    hashMap.put("Body length", "Body length: "+animal.getMinBodyLength()+"-"+animal.getMaxBodyLength()+" cm");
+                    hashMap.put("Body length", "Body length: " + animal.getMinBodyLength() + "-" + animal.getMaxBodyLength() + " cm");
                 } else {
                     hashMap.put("Body length", "");
                 }
@@ -89,13 +105,143 @@ public class AnimalSearchFragment extends ListFragment {
                 data.add(hashMap);
             }
 
-            String[] from = {"Noun","Scientific noun", "Body length", "Image"};
+            String[] from = {"Noun", "Scientific noun", "Body length", "Image"};
             int[] to = {R.id.listview_heading, R.id.listview_subheading, R.id.listview_description, R.id.listview_image};
             mAdapter = new SimpleAdapter(getActivity(), data, R.layout.custom_list_view_image_and_text, from, to);
             setListAdapter(mAdapter);
-            return v;
         }
 
+        mButton = v.findViewById(R.id.colour_spinner);
+        colourList = getResources().getStringArray(R.array.colours);
+        checkedItems = new boolean[colourList.length];
+
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
+                mBuilder.setTitle("Colours of animal");
+                mBuilder.setMultiChoiceItems(colourList, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int position, boolean isChecked) {
+                        if(isChecked) {
+                            if(!mSelectedColours.contains(position)) {
+                                mSelectedColours.add(position);
+                            } else {
+                                mSelectedColours.remove(position);
+                            }
+                        }
+                    }
+                });
+                mBuilder.setCancelable(false);
+                mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String item = "";
+                        for (int i = 0; i< mSelectedColours.size(); i++) {
+                            item = item + colourList[mSelectedColours.get(i)];
+                        }
+                    }
+                });
+                mBuilder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                mBuilder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        for (int i = 0; i < checkedItems.length; i++) {
+                            checkedItems[i] = false;
+                            mSelectedColours.clear();
+                        }
+                    }
+                });
+                AlertDialog mDialog = mBuilder.create();
+                mDialog.show();
+            }
+        });
+
+        //setting type filter spinner options
+        ArrayAdapter<String> typeSpinnerAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.types));
+        final TextView typeTitle = v.findViewById(R.id.type_title);
+        typeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ((Spinner) v.findViewById(R.id.type_spinner)).setAdapter(typeSpinnerAdapter);
+        ((Spinner) v.findViewById(R.id.type_spinner)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                                                    @Override
+                                                                                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                                                                        String selectedItemText = (String) parent.getItemAtPosition(position);
+                                                                                        // If user change the default selection
+                                                                                        // First item is disable and it is used for hint
+                                                                                        if (position > 0) {
+                                                                                            // Notify the selected item text
+                                                                                            typeTitle.setText(selectedItemText);
+                                                                                        } else {
+                                                                                            typeTitle.setText("Type");
+                                                                                        }
+                                                                                    }
+
+                                                                                    @Override
+                                                                                    public void onNothingSelected(AdapterView<?> parent) {
+
+                                                                                    }
+                                                                                });
+
+
+        //setting minimum size filter spinner options
+        ArrayAdapter<String> minSizeSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.min_length));
+        final TextView minSizeTitle = v.findViewById(R.id.min_size_title);
+        minSizeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ((Spinner) v.findViewById(R.id.min_size_spinner)).setAdapter(minSizeSpinnerAdapter);
+        ((Spinner) v.findViewById(R.id.min_size_spinner)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItemText = (String) parent.getItemAtPosition(position);
+                // If user change the default selection
+                // First item is disable and it is used for hint
+                if (position > 0) {
+                    // Notify the selected item text
+                    minSizeTitle.setText(selectedItemText);
+                }else {
+                    minSizeTitle.setText("Min Length");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        //setting maximum size filter spinner options
+        ArrayAdapter<String> maxSizeSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.max_length));
+        final TextView maxSizeTitle = v.findViewById(R.id.max_size_title);
+        maxSizeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ((Spinner) v.findViewById(R.id.max_size_spinner)).setAdapter(minSizeSpinnerAdapter);
+        ((Spinner) v.findViewById(R.id.max_size_spinner)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItemText = (String) parent.getItemAtPosition(position);
+                // If user change the default selection
+                // First item is disable and it is used for hint
+
+                if (position > 0) {
+                    // Notify the selected item text
+                    maxSizeTitle.setText(selectedItemText);
+                }else {
+                    maxSizeTitle.setText("Max Length");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        return v;
     }
 
     @Override
@@ -132,14 +278,14 @@ public class AnimalSearchFragment extends ListFragment {
         void OnItem1SelectedListener(String item);
     }
 
-    private void initialiseDatabase(){
+    private void initialiseDatabase() {
         final SearchForAnimalService animalSearchService = new SearchForAnimalService();
         final AnimalDatabase db = Room.databaseBuilder(getContext(), AnimalDatabase.class, "animal database").build();
 
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                if(db.animalDao().getAllAnimals() != null) {
+                if (db.animalDao().getAllAnimals() != null) {
                     db.clearAllTables();
                 }
                 db.animalDao().insertAllAnimals(animalSearchService.getAllAnimals());
