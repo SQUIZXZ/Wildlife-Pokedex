@@ -19,11 +19,11 @@ public interface AnimalDao {
     @Query("SELECT * FROM Animal WHERE  type= :type")
     List<Animal> getAnimalOfType(String type);
 
-    @Query("SELECT * FROM Animal WHERE  min_body_length= :minBodyLength")
+    @Query("SELECT * FROM Animal WHERE  min_body_length>= :minBodyLength")
     List<Animal> getAnimalWithMinLength(int minBodyLength);
 
-    @Query("SELECT * FROM Animal WHERE  max_body_length= :maxBodyLength")
-    List<Animal> getAnimalOfWithMaxLength(int maxBodyLength);
+    @Query("SELECT * FROM Animal WHERE  max_body_length<= :maxBodyLength")
+    List<Animal> getAnimalWithMaxLength(int maxBodyLength);
 
     @Query("SELECT * FROM Animal WHERE  colours= :colours")
     List<Animal> getAnimalWithColours(String colours);
