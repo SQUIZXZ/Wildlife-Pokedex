@@ -17,6 +17,9 @@ public class Animal {
     @ColumnInfo(name = "scientific_noun")
     private String scientificNoun;
 
+    @ColumnInfo(name = "type")
+    private String type;
+
     @ColumnInfo(name = "max_body_length")
     private int maxBodyLength;
 
@@ -50,17 +53,19 @@ public class Animal {
     public Animal() {}
 
     @Ignore
-    public Animal(@NonNull String aNoun, @NonNull String aScientificNoun, Integer anImgURL ) {
+    public Animal(@NonNull String aNoun, @NonNull String aScientificNoun, String aType, Integer anImgURL ) {
         this.noun = aNoun;
         this.scientificNoun = aScientificNoun;
+        this.type = aType;
         this.imgURL = anImgURL;
     }
 
     @Ignore
-    public Animal(@NonNull String aNoun, @NonNull String aScientificNoun, int aMinBodyLength, int aMaxBodyLength,
+    public Animal(@NonNull String aNoun, @NonNull String aScientificNoun, String aType, int aMinBodyLength, int aMaxBodyLength,
                   String anIdentification, String someColours, String aHabitat, String aBestTimeToSee, String aFoodSource, Integer anImgURL) {
         this.noun = aNoun;
         this.scientificNoun = aScientificNoun;
+        this.type = aType;
         this.minBodyLength = aMinBodyLength;
         this.maxBodyLength = aMaxBodyLength;
         this.identification = anIdentification;
@@ -71,11 +76,12 @@ public class Animal {
         this.imgURL = anImgURL;
     }
 
-    public Animal(String aNoun, String aScientificNoun, int aMinBodyLength, int aMaxBodyLength,
+    public Animal(String aNoun, String aScientificNoun, String aType, int aMinBodyLength, int aMaxBodyLength,
                   int aMinWingspan, int aMaxWingspan, String anIdentification, String beakAndFeatherColours, String aHabitat,
                   String aBestTimeToSee, String aFoodSource, Integer anImgURL) {
         this.noun = aNoun;
         this.scientificNoun = aScientificNoun;
+        this.type = aType;
         this.minBodyLength = aMinBodyLength;
         this.maxBodyLength = aMaxBodyLength;
         this.minWingspan = aMinWingspan;
@@ -109,6 +115,14 @@ public class Animal {
 
     public void setScientificNoun(@NonNull String scientificNoun) {
         this.scientificNoun = scientificNoun;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getMaxBodyLength() {
