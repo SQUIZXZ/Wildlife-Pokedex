@@ -37,6 +37,7 @@ public class FeedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_feed, container, false);
 
         AsyncTask.execute(new Runnable() {
             @Override
@@ -46,40 +47,41 @@ public class FeedFragment extends Fragment {
                         PostDatabase.class, "Newsfeed_Database").build();
 
                 db.postDA0().insertPosts(
-                        new Post("Joe", "I love this app!")
+                        new Post("Joey", "I love this app!!!")
                 );
 
-                synchronized (this) {
-                    while(posts == null) {
-                        try {
-                            wait(5);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
                 posts = db.postDA0().getAllPosts();
-                Log.d("BOO_TEST", String.format("Number of Posts: %d", posts.size()));
-
-                String username = posts.get(posts.size()-1).getUsername();
-
-                String caption = posts.get(posts.size()-1).getCaption();
-
-                TextView textViewUsername = (TextView) getActivity().findViewById(R.id.username);
-
-                textViewUsername.setText(username);
-
-                TextView textViewCaption = (TextView) getActivity().findViewById(R.id.caption);
-                textViewCaption.setText(caption);
-
-
+                db.close();
 
 //                Toast.makeText(getApplicationContext(),username,Toast.LENGTH_SHORT).show();
 
             }
         });
 
-        return inflater.inflate(R.layout.fragment_feed, container, false);
+        synchronized (this) {
+            while(posts == null) {
+                try {
+                    wait(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        Log.d("BOO_TEST", String.format("Number of Posts: %d", posts.size()));
+
+        String username = posts.get(posts.size()-1).getUsername();
+
+        String caption = posts.get(posts.size()-1).getCaption();
+
+        TextView textViewUsername = (TextView) v.findViewById(R.id.username);
+
+        textViewUsername.setText(username);
+
+        TextView textViewCaption = (TextView) v.findViewById(R.id.caption);
+        textViewCaption.setText(caption);
+
+        return v;
     }
 }
