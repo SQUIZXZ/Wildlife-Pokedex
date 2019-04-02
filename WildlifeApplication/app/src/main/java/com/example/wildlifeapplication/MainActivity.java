@@ -51,9 +51,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_extras:
                     switchToExtrasFragment();
                     return true;
-                case R.id.navigation_temp:
-                    switchToTempFragment();
-                    return true;
             }
             return false;
         }
@@ -99,12 +96,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchToMapFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment = new MapFragment(),"Map").addToBackStack(null).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment = new MapFragment()).addToBackStack(null).commit();
     }
 
-    public void  switchToTempFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, storeFragment = new StoreFragment(),"Store").commit();
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

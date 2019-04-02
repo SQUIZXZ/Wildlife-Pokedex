@@ -98,7 +98,7 @@ public class StoreFragment extends Fragment {
         button3.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
                 FragmentTransaction tr = getFragmentManager().beginTransaction();
-                tr.replace(R.id.fragment_container, mapFragment).addToBackStack(null).commit();
+                tr.replace(R.id.fragment_container, mapFragment = new MapFragment(),"Map").addToBackStack(null).commit();
                 mapFragment.setStoreFragManualLocation(true);
             }
         });
