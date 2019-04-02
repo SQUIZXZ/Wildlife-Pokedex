@@ -1,16 +1,13 @@
 package com.example.wildlifeapplication;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.wildlifeapplication.Extras.ExtrasFragment;
@@ -18,8 +15,6 @@ import com.example.wildlifeapplication.Feed.FeedFragment;
 import com.example.wildlifeapplication.Map.MapFragment;
 import com.example.wildlifeapplication.Search.AnimalSearchFragment;
 import com.example.wildlifeapplication.Store.StoreFragment;
-
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private MapFragment mapFragment;
     private StoreFragment storeFragment;
     FragmentManager fragmentManager = getSupportFragmentManager();
-    View view;
-    private static final int CAMERA_PIC_REQUEST = 1337;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -72,16 +65,16 @@ public class MainActivity extends AppCompatActivity {
 
         switch (launchChoice){
             case "Search":
-                view = navigation.findViewById(R.id.navigation_search);
-                view.performClick();
+                switchToBirdSearchFragment();
+//                navigation.setSelectedItemId(R.id.navigation_search);
                 break;
             case "Feed":
-                view = navigation.findViewById(R.id.navigation_feed);
-                view.performClick();
+                switchToFeedFragment();
+//                navigation.setSelectedItemId(R.id.navigation_feed);
                 break;
             case "Map":
-                view = navigation.findViewById(R.id.navigation_map);
-                view.performClick();
+                switchToMapFragment();
+//                navigation.setSelectedItemId(R.id.navigation_map);
                 break;
         }
     }
@@ -99,22 +92,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchToMapFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment = new MapFragment(),"Map").addToBackStack(null).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment = new MapFragment()).commit();
     }
 
     public void  switchToTempFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, storeFragment = new StoreFragment(),"Store").commit();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
-        if (requestCode == CAMERA_PIC_REQUEST) {
-            File imgFile = new File(storeFragment.getPictureFilePath());
-            if (imgFile.exists()) {
-                ImageView imageview = (ImageView) findViewById(R.id.imageView);
-                imageview.setImageURI(Uri.fromFile(imgFile));
-            }
-        }
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, storeFragment = new StoreFragment()).commit();
     }
 }

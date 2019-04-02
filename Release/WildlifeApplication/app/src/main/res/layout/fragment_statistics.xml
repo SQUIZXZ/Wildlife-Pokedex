@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/animal"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/number1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/animal_count"
+        android:textSize="17sp"
+        android:layout_gravity="center"
+        android:textColor="@color/Red"
+         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/animal_in_database"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/number2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/animal_in_database_count"
+        android:textSize="17sp"
+        android:layout_gravity="center"
+        android:textColor="@color/Red"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/number_of_birds_string"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/number3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/birds"
+        android:textSize="17sp"
+        android:layout_gravity="center"
+        android:textColor="@color/Red"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/number_of_reptiles_string"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/number4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reptiles"
+        android:textSize="17sp"
+        android:layout_gravity="center"
+        android:textColor="@color/Red"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/number_of_mammals_string"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/number5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/mammals"
+        android:textSize="17sp"
+        android:layout_gravity="center"
+        android:textColor="@color/Red"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/number_of_invert_string"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/number6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/invert"
+        android:textSize="17sp"
+        android:layout_gravity="center"
+        android:textColor="@color/Red"/>
+
+</android.support.v7.widget.LinearLayoutCompat>
