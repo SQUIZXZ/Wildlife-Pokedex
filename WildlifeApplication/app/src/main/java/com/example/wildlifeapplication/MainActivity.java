@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == CAMERA_PIC_REQUEST) {
+            storeFragment = (StoreFragment) fragmentManager.findFragmentByTag("Store");
             File imgFile = new File(storeFragment.getPictureFilePath());
             if (imgFile.exists()) {
                 ImageView imageview = (ImageView) findViewById(R.id.imageView);
