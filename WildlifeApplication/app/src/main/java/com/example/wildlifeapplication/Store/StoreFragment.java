@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wildlifeapplication.Map.MapFragment;
@@ -53,15 +54,23 @@ public class StoreFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mapFragment = (MapFragment) getFragmentManager().findFragmentByTag("Map");
+        mapFragment = new MapFragment();
         manualLocation = false;
         activity = getActivity();
         View view = inflater.inflate(R.layout.fragment_store,container,false);
         Switch switch1 = view.findViewById(R.id.switch1);
         final Button button3 = view.findViewById(R.id.button3);
-        button3.setVisibility(View.INVISIBLE);
         final Button button1 = view.findViewById(R.id.button);
         final Button button2 = view.findViewById(R.id.button2);
+        final TextView nounDisplay = view.findViewById(R.id.textView15);
+        final TextView scientificNounDisplay = view.findViewById(R.id.textView16);
+        String noun = getArguments().getString("noun");
+        String scientificNoun = getArguments().getString("scientific_noun");
+
+        button3.setVisibility(View.INVISIBLE);
+        nounDisplay.setText(noun);
+        scientificNounDisplay.setText(scientificNoun);
+
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -98,8 +107,9 @@ public class StoreFragment extends Fragment {
         button3.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
                 FragmentTransaction tr = getFragmentManager().beginTransaction();
-                tr.replace(R.id.fragment_container, mapFragment = new MapFragment(),"Map").addToBackStack(null).commit();
+                tr.replace(R.id.fragment_container, mapFragment,"Map").addToBackStack(null).commit();
                 mapFragment.setStoreFragManualLocation(true);
+                Toast.makeText(getContext(),"Tap on the Location",Toast.LENGTH_LONG).show();
             }
         });
 
