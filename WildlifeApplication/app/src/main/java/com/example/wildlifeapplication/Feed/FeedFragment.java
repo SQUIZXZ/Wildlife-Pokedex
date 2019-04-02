@@ -46,8 +46,18 @@ public class FeedFragment extends Fragment {
                         PostDatabase.class, "Newsfeed_Database").build();
 
                 db.postDA0().insertPosts(
-                        new Post("Rikki Snaebjornsson", "I love this app!")
+                        new Post("Joe", "I love this app!")
                 );
+
+                synchronized (this) {
+                    while(posts == null) {
+                        try {
+                            wait(5);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
 
                 posts = db.postDA0().getAllPosts();
                 Log.d("BOO_TEST", String.format("Number of Posts: %d", posts.size()));
@@ -56,11 +66,11 @@ public class FeedFragment extends Fragment {
 
                 String caption = posts.get(posts.size()-1).getCaption();
 
-                TextView textViewUsername = (TextView) getView().findViewById(R.id.username);
+                TextView textViewUsername = (TextView) getActivity().findViewById(R.id.username);
 
                 textViewUsername.setText(username);
 
-                TextView textViewCaption = (TextView) getView().findViewById(R.id.caption);
+                TextView textViewCaption = (TextView) getActivity().findViewById(R.id.caption);
                 textViewCaption.setText(caption);
 
 
