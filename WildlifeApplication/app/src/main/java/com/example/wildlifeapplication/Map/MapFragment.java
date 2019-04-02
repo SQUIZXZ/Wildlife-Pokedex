@@ -257,7 +257,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onMapClick(LatLng latLng) {
                 storeFragment = (StoreFragment) getFragmentManager().findFragmentByTag("Store");
                 storeFragment.setLatLng(latLng);
-                System.out.println("LATLNG: " + latLng);
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, storeFragment).commit();
             }
         });
@@ -268,7 +267,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public LatLng storeFragGetLoc(){
-        System.out.println("pos: " + position);
         return position;
     }
 }

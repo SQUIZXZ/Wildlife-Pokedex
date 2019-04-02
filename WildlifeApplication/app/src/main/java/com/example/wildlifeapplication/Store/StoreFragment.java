@@ -91,7 +91,6 @@ public class StoreFragment extends Fragment {
                 if (image != null) {
                     Uri photoURI = FileProvider.getUriForFile(getContext(), "com.example.wildlifeapplication", image);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    System.out.println("act: " + activity);
                     activity.startActivityForResult(intent, CAMERA_PIC_REQUEST);
                 }
             }
@@ -99,8 +98,7 @@ public class StoreFragment extends Fragment {
         button3.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
                 FragmentTransaction tr = getFragmentManager().beginTransaction();
-                tr.replace(R.id.fragment_container, mapFragment).commit();
-                tr.addToBackStack(null);
+                tr.replace(R.id.fragment_container, mapFragment).addToBackStack(null).commit();
                 mapFragment.setStoreFragManualLocation(true);
             }
         });
@@ -108,12 +106,11 @@ public class StoreFragment extends Fragment {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println(manual);
-                if (manual = true) {
+                if (!manual) {
                     LatLng pos = mapFragment.storeFragGetLoc(); // crashing here
                     setLatLng(pos);
                 }
-                System.out.println("LATLNG: " + latLng);
+
             }
         });
         return view;
