@@ -14,6 +14,7 @@ import com.example.wildlifeapplication.Extras.ExtrasFragment;
 import com.example.wildlifeapplication.Feed.FeedFragment;
 import com.example.wildlifeapplication.Map.MapFragment;
 import com.example.wildlifeapplication.Search.AnimalSearchFragment;
+import com.example.wildlifeapplication.Store.StoreFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private ExtrasFragment extrasFragment;
     private FeedFragment feedFragment;
     private MapFragment mapFragment;
+    private StoreFragment storeFragment;
     FragmentManager fragmentManager = getSupportFragmentManager();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -41,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_extras:
                     switchToExtrasFragment();
+                    return true;
+                case R.id.navigation_temp:
+                    switchToTempFragment();
                     return true;
             }
             return false;
@@ -90,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment = new MapFragment()).commit();
     }
 
-    public void  switchToMainActivity() {
-        getSupportFragmentManager().beginTransaction().remove(animalSearchFragment).commit();
+    public void  switchToTempFragment() {
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, storeFragment = new StoreFragment()).commit();
     }
 }

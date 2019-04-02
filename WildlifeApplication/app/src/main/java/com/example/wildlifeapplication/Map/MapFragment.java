@@ -15,8 +15,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.wildlifeapplication.R;
+import com.example.wildlifeapplication.Store.StoreFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -48,6 +50,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     volatile static List<Spotting> recentSpottings;
+    private boolean storeFragManualLocation = false;
+    private StoreFragment storeFragment;
+    private LatLng position;
+
 
 
     public MapFragment() {
@@ -80,6 +86,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(final GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
         mGoogleMap = googleMap;
+        if(storeFragManualLocation){
+            storeFragLocationSelect();
+        }
+
+
 
         String[] seenAnimals = new String[]{"51.493514, -3.194885, Common Kingfisher, 19/03/19," +
                 " 10:30", "51.490448, -3.193393, European Blue Tit, 15/03/19, 15:00", "51.488832, " +
@@ -225,6 +236,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             Location currentLocation = (Location) task.getResult();
                             CameraPosition devicePosition = CameraPosition.builder().target(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).zoom(13).bearing(5).tilt(2).build();
                             mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(devicePosition));
+                            position = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                         } else {
                             Log.d(TAG,"could not find device's location");
 
@@ -239,6 +251,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    public void storeFragLocationSelect(){
+        mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                storeFragment = (StoreFragment) getFragmentManager().findFragmentByTag("Store");
+                storeFragment.setLatLng(latLng);
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, storeFragment).commit();
+            }
+        });
+    }
 
+    public void setStoreFragManualLocation(boolean value){
+        this.storeFragManualLocation = value;
+    }
 
+    public LatLng storeFragGetLoc(){
+        return position;
+    }
 }

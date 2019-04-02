@@ -17,8 +17,14 @@ public class Post {
     @ColumnInfo(name = "post_caption")
     private String caption;
 
-    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-    private byte[] image;
+//    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+//    private byte[] image;
+
+    public Post(String username, String caption) {
+        this.username = username;
+        this.caption = caption;
+
+    }
 
     public int getId() {
         return id;
@@ -44,11 +50,11 @@ public class Post {
         this.caption = caption;
     }
 
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
+//    public byte[] getImage() {
+//        return image;
+//    }
+//
+//    public void setImage(byte[] image) {
+//        this.image = image;
+//    }
 }

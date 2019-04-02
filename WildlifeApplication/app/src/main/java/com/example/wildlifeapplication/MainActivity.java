@@ -1,20 +1,25 @@
 package com.example.wildlifeapplication;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.wildlifeapplication.Extras.ExtrasFragment;
 import com.example.wildlifeapplication.Feed.FeedFragment;
 import com.example.wildlifeapplication.Map.MapFragment;
 import com.example.wildlifeapplication.Search.AnimalSearchFragment;
+import com.example.wildlifeapplication.Store.StoreFragment;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,8 +28,10 @@ public class MainActivity extends AppCompatActivity {
     private ExtrasFragment extrasFragment;
     private FeedFragment feedFragment;
     private MapFragment mapFragment;
+    private StoreFragment storeFragment;
     FragmentManager fragmentManager = getSupportFragmentManager();
     View view;
+    private static final int CAMERA_PIC_REQUEST = 1337;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -54,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        feedFragment = new FeedFragment();
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -77,22 +86,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchToBirdSearchFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, animalSearchFragment = new AnimalSearchFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, new AnimalSearchFragment()).commit();
     }
 
     public void switchToExtrasFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, extrasFragment = new ExtrasFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, new ExtrasFragment()).commit();
     }
 
     public void switchToFeedFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, feedFragment = new FeedFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, feedFragment).commit();
     }
 
     public void switchToMapFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment = new MapFragment()).commit();
+
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment = new MapFragment()).addToBackStack(null).commit();
     }
 
-    public void  switchToMainActivity() {
-        getSupportFragmentManager().beginTransaction().remove(animalSearchFragment).commit();
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+        if (requestCode == CAMERA_PIC_REQUEST) {
+            storeFragment = (StoreFragment) fragmentManager.findFragmentByTag("Store");
+            File imgFile = new File(storeFragment.getPictureFilePath());
+            if (imgFile.exists()) {
+                ImageView imageview = (ImageView) findViewById(R.id.imageView);
+                imageview.setImageURI(Uri.fromFile(imgFile));
+            }
+        }
     }
 }
