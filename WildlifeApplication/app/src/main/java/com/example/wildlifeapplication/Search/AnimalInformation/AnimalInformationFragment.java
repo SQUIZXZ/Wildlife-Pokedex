@@ -42,13 +42,6 @@ public class AnimalInformationFragment extends Fragment {
                 }
             }
 
-            ((Button) v.findViewById(R.id.store_animal_button)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, storeFragment = new StoreFragment(),"Store").commit();
-                }
-            });
 
             //Setting text views with animal's information
             ((ImageView) v.findViewById(R.id.animal_image)).setImageResource(animal.getImgURL());
@@ -60,6 +53,21 @@ public class AnimalInformationFragment extends Fragment {
             ((TextView) v.findViewById(R.id.animal_time)).setText(animal.getBestTimeToSee());
             ((TextView) v.findViewById(R.id.animal_food_source)).setText(animal.getFoodSource());
         }
+
+        ((Button) v.findViewById(R.id.store_animal_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getFragmentManager();
+                storeFragment = new StoreFragment();
+                Bundle args = new Bundle();
+                String noun = animal.getNoun();
+                String scientificNoun = animal.getScientificNoun();
+                args.putString("noun",noun);
+                args.putString("scientific_noun",scientificNoun);
+                storeFragment.setArguments(args);
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, storeFragment,"Store").commit();
+            }
+        });
 
         return v;
     }
