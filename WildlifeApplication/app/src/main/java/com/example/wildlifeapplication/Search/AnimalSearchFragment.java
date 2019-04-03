@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleAdapter;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.Inflater;
 
 public class AnimalSearchFragment extends ListFragment {
 
@@ -82,9 +84,10 @@ public class AnimalSearchFragment extends ListFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_animal_search, container, false);
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        final View v = inflater.inflate(R.layout.fragment_animal_search, container, false);
         v.findViewById(R.id.empty).setVisibility(View.INVISIBLE);
+//        ((LinearLayout) v.findViewById(R.id.type_filter)).addView(inflater.inflate(R.layout.filter_tag, container, false));
 
         synchronized (this) {
             initialiseDatabase();
@@ -189,7 +192,6 @@ public class AnimalSearchFragment extends ListFragment {
         //Adapted code from: https://android--code.blogspot.com/2015/08/android-spinner-hint.html
         //setting type filter spinner options
         ArrayAdapter<String> typeSpinnerAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.types));
-        final TextView typeTitle = v.findViewById(R.id.type_title);
         typeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ((Spinner) v.findViewById(R.id.type_spinner)).setAdapter(typeSpinnerAdapter);
 
@@ -201,7 +203,6 @@ public class AnimalSearchFragment extends ListFragment {
                 animalsWithSelectedType = null;
                 if (position > 0) {
                     // Notify the selected item text
-                    typeTitle.setText(selectedItemText);
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
@@ -221,10 +222,21 @@ public class AnimalSearchFragment extends ListFragment {
                             }
                         }
 
-                        updateListView();
+                        if (((ViewGroup) v.findViewById(R.id.type_filter)).getChildCount() == 1) {
+                            //adding filter tag
+                            addFilterTag(inflater, container, R.id.type_filter, "Type", selectedItemText);
+                            updateListView();
+                        }else{
+                            updateFilterTag(R.id.type_filter, selectedItemText);
+                            updateListView();
+                        }
+
                     }
                 } else {
-                    typeTitle.setText("Type");
+                    if(selectedItemText.equals("Select a type") && ((ViewGroup) v.findViewById(R.id.type_filter)).getChildCount() == 2 ) {
+                        View filterTagView = ((ViewGroup) v.findViewById(R.id.type_filter)).getChildAt(1);
+                        ((ViewGroup) v.findViewById(R.id.type_filter)).removeView(filterTagView);
+                    }
                     updateListView();
                 }
             }
@@ -239,7 +251,6 @@ public class AnimalSearchFragment extends ListFragment {
 
         //setting minimum size filter spinner options
         ArrayAdapter<String> minSizeSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.min_length));
-        final TextView minSizeTitle = v.findViewById(R.id.min_size_title);
         minSizeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ((Spinner) v.findViewById(R.id.min_size_spinner)).setAdapter(minSizeSpinnerAdapter);
 
@@ -251,7 +262,6 @@ public class AnimalSearchFragment extends ListFragment {
                 animalsWithSelectedMinLength = null;
                 if (position > 0) {
                     // Notify the selected item text
-                    minSizeTitle.setText(selectedItemText);
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
@@ -272,9 +282,19 @@ public class AnimalSearchFragment extends ListFragment {
                         }
                     }
                         updateListView();
+                    if (((ViewGroup) v.findViewById(R.id.min_length_filter)).getChildCount() != 2) {
+                        //adding filter tag
+                        addFilterTag(inflater, container, R.id.min_length_filter, "Min Length", selectedItemText);
+                    }else {
+                        updateFilterTag( R.id.min_length_filter, selectedItemText);
+
+                    }
                 } else {
-                    minSizeTitle.setText("Min Length");
-                    updateListView();
+                    if(selectedItemText.equals("Select a minimum size(cm)") && ((ViewGroup) v.findViewById(R.id.min_length_filter)).getChildCount() == 2 ) {
+                        View filterTagView = ((ViewGroup) v.findViewById(R.id.min_length_filter)).getChildAt(1);
+                        ((ViewGroup) v.findViewById(R.id.min_length_filter)).removeView(filterTagView);
+                        updateListView();
+                    }
                 }
             }
 
@@ -286,7 +306,6 @@ public class AnimalSearchFragment extends ListFragment {
 
         //setting maximum size filter spinner options
         ArrayAdapter<String> maxSizeSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.max_length));
-        final TextView maxSizeTitle = v.findViewById(R.id.max_size_title);
         maxSizeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ((Spinner) v.findViewById(R.id.max_size_spinner)).setAdapter(maxSizeSpinnerAdapter);
 
@@ -298,7 +317,6 @@ public class AnimalSearchFragment extends ListFragment {
                 animalsWithSelectedMaxLength = null;
                 if (position > 0) {
                     // Notify the selected item text
-                    maxSizeTitle.setText(selectedItemText);
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
@@ -319,8 +337,18 @@ public class AnimalSearchFragment extends ListFragment {
                         }
                     }
                     updateListView();
+                    if (((ViewGroup) v.findViewById(R.id.max_length_filter)).getChildCount() != 2) {
+                        //adding filter tag
+                        addFilterTag(inflater, container, R.id.max_length_filter,"Max Length", selectedItemText);
+                    }else {
+                        updateFilterTag( R.id.max_length_filter, selectedItemText);
+
+                    }
                 } else {
-                    maxSizeTitle.setText("Max Length");
+                    if(selectedItemText.equals("Select a maximum size(cm)") && ((ViewGroup) v.findViewById(R.id.max_length_filter)).getChildCount() == 2 ) {
+                        View filterTagView = ((ViewGroup) v.findViewById(R.id.max_length_filter)).getChildAt(1);
+                        ((ViewGroup) v.findViewById(R.id.max_length_filter)).removeView(filterTagView);
+                    }
                     updateListView();
                 }
             }
@@ -449,5 +477,35 @@ public class AnimalSearchFragment extends ListFragment {
             setListAdapter(mAdapter);
 
         }
+    }
+
+    public void addFilterTag(LayoutInflater inflater, ViewGroup container, final int idOfViewWhichToInsertInto, final String typeOfFilter, final String filterSelected) {
+        final View filterTagView = inflater.inflate(R.layout.filter_tag, container, false);
+        ((LinearLayout) getActivity().findViewById(idOfViewWhichToInsertInto)).addView(filterTagView);
+        //Setting text of filter tag
+        ViewGroup viewWhichToInsertTo = getActivity().findViewById(idOfViewWhichToInsertInto);
+        ((TextView) viewWhichToInsertTo.findViewById(R.id.filter_tag_title)).setText(filterSelected);
+//        ((TextView) ((ViewGroup) viewWhichToInsertTo.getChildAt(1)).getChildAt(0)).setText(filter);
+
+        //Setting listener for filter tag
+        ((ViewGroup) viewWhichToInsertTo.getChildAt(1)).getChildAt(1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((LinearLayout) getActivity().findViewById(idOfViewWhichToInsertInto)).removeView(filterTagView);
+                switch (typeOfFilter) {
+                    case "Type":
+                        animalsWithSelectedType = null;
+                    case "Min Length":
+                        animalsWithSelectedMinLength = null;
+                    case "Max Length":
+                        animalsWithSelectedMaxLength = null;
+                }
+                updateListView();
+            }
+        });
+    }
+
+    public void updateFilterTag(final int idOfViewFilterTagIsIn, String filter) {
+        ((TextView) getActivity().findViewById(idOfViewFilterTagIsIn).findViewById(R.id.filter_tag_title)).setText(filter);
     }
 }
