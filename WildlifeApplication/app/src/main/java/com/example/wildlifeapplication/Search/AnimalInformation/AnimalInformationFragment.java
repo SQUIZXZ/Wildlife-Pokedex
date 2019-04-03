@@ -44,7 +44,7 @@ public class AnimalInformationFragment extends Fragment {
 
 
             //Setting text views with animal's information
-            ((ImageView) v.findViewById(R.id.animal_image)).setImageResource(animal.getImgURL());
+            ((ImageView) v.findViewById(R.id.animal_image)).setImageResource(animal.getImgId());
             ((TextView) v.findViewById(R.id.animal_identification)).setText(animal.getIdentification());
             ((TextView) v.findViewById(R.id.animal_noun)).setText(animal.getNoun());
             ((TextView) v.findViewById(R.id.animal_scientific_noun)).setText(animal.getScientificNoun());

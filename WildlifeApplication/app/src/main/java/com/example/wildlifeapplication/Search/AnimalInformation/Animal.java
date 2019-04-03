@@ -48,21 +48,24 @@ public class Animal {
     private String foodSource;
 
     @ColumnInfo
-    private Integer imgURL;
+    private Integer imgId;
 
     public Animal() {}
 
     @Ignore
-    public Animal(@NonNull String aNoun, @NonNull String aScientificNoun, String aType, Integer anImgURL ) {
+    public Animal(@NonNull String aNoun, @NonNull String aScientificNoun, String aType, Integer anImgId ) {
+        if(aNoun.equalsIgnoreCase(aScientificNoun)){
+            throw new IllegalArgumentException("Noun and scientific noun cannot be the same");
+        }
         this.noun = aNoun;
         this.scientificNoun = aScientificNoun;
         this.type = aType;
-        this.imgURL = anImgURL;
+        this.imgId = anImgId;
     }
 
     @Ignore
     public Animal(@NonNull String aNoun, @NonNull String aScientificNoun, String aType, int aMinBodyLength, int aMaxBodyLength,
-                  String anIdentification, String someColours, String aHabitat, String aBestTimeToSee, String aFoodSource, Integer anImgURL) {
+                  String anIdentification, String someColours, String aHabitat, String aBestTimeToSee, String aFoodSource, Integer anImgId) {
         this.noun = aNoun;
         this.scientificNoun = aScientificNoun;
         this.type = aType;
@@ -73,12 +76,12 @@ public class Animal {
         this.habitat = aHabitat;
         this.bestTimeToSee = aBestTimeToSee;
         this.foodSource = aFoodSource;
-        this.imgURL = anImgURL;
+        this.imgId = anImgId;
     }
 
     public Animal(String aNoun, String aScientificNoun, String aType, int aMinBodyLength, int aMaxBodyLength,
                   int aMinWingspan, int aMaxWingspan, String anIdentification, String beakAndFeatherColours, String aHabitat,
-                  String aBestTimeToSee, String aFoodSource, Integer anImgURL) {
+                  String aBestTimeToSee, String aFoodSource, Integer anImgId) {
         this.noun = aNoun;
         this.scientificNoun = aScientificNoun;
         this.type = aType;
@@ -91,7 +94,7 @@ public class Animal {
         this.habitat = aHabitat;
         this.bestTimeToSee = aBestTimeToSee;
         this.foodSource = aFoodSource;
-        this.imgURL = anImgURL;
+        this.imgId = anImgId;
     }
 
     @Override
@@ -209,12 +212,11 @@ public class Animal {
         this.foodSource = foodSource;
     }
 
-    public Integer getImgURL() {
-        return imgURL;
+    public Integer getImgId() {
+        return imgId;
     }
 
-    public void setImgURL(Integer imgURL) {
-        this.imgURL = imgURL;
+    public void setImgId(Integer imgId) {
+        this.imgId = imgId;
     }
-
 }

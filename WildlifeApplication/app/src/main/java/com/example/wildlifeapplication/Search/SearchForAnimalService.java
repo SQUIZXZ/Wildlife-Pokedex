@@ -1,10 +1,7 @@
 package com.example.wildlifeapplication.Search;
 
-import android.arch.persistence.room.Room;
-
 import com.example.wildlifeapplication.R;
 import com.example.wildlifeapplication.Search.AnimalInformation.Animal;
-import com.example.wildlifeapplication.Search.AnimalInformation.AnimalDatabase;
 
 import java.util.ArrayList;
 import java.util.List;

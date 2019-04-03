@@ -111,7 +111,7 @@ public class AnimalSearchFragment extends ListFragment {
                 } else {
                     hashMap.put("Body length", "");
                 }
-                hashMap.put("Image", Integer.toString(animal.getImgURL()));
+                hashMap.put("Image", Integer.toString(animal.getImgId()));
                 data.add(hashMap);
             }
 
@@ -482,7 +482,7 @@ public class AnimalSearchFragment extends ListFragment {
                 } else {
                     hashMap.put("Body length", "");
                 }
-                hashMap.put("Image", Integer.toString(animal.getImgURL()));
+                hashMap.put("Image", Integer.toString(animal.getImgId()));
                 data.add(hashMap);
             }
 
