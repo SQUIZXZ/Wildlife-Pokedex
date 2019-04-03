@@ -28,7 +28,6 @@ import com.example.wildlifeapplication.Search.AnimalInformation.AnimalDatabase;
 import com.example.wildlifeapplication.Search.AnimalInformation.AnimalInformationFragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +83,7 @@ public class AnimalSearchFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_bird_search, container, false);
+        View v = inflater.inflate(R.layout.fragment_animal_search, container, false);
         v.findViewById(R.id.empty).setVisibility(View.INVISIBLE);
 
         synchronized (this) {
