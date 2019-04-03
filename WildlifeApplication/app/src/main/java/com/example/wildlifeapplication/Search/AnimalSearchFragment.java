@@ -29,6 +29,7 @@ import com.example.wildlifeapplication.Search.AnimalInformation.AnimalDatabase;
 import com.example.wildlifeapplication.Search.AnimalInformation.AnimalInformationFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,7 @@ public class AnimalSearchFragment extends ListFragment {
 
     AppCompatButton mButton;
     String[] colourList;
+    String[] selectedColoursAsStringArray;
     boolean[] checkedItems;
     ArrayList<Integer> mSelectedColoursPositions = new ArrayList<>();
     volatile static List<Animal> animalsWithSelectedType;
@@ -126,7 +128,7 @@ public class AnimalSearchFragment extends ListFragment {
         //Adapted code from https://github.com/codingdemos/MultichoiceTutorial
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
                 mBuilder.setTitle("Colours of animal");
                 mBuilder.setMultiChoiceItems(colourList, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
@@ -139,6 +141,8 @@ public class AnimalSearchFragment extends ListFragment {
                         }else if(mSelectedColoursPositions.contains(position)) {
                             mSelectedColoursPositions.remove(mSelectedColoursPositions.indexOf(position));
                         }
+
+
                     }
                 });
                 mBuilder.setCancelable(false);
@@ -153,15 +157,27 @@ public class AnimalSearchFragment extends ListFragment {
                             }
                         }
 
-                        String[] selectedColoursAsStringArray = item.split(",");
+                        selectedColoursAsStringArray = item.split(", ");
 
-                        ///heress
+                        ///getting animals with specified colours
                         SearchForAnimalService animalSearchService = new SearchForAnimalService();
                         animalsWithSelectedColours = animalSearchService.filterByColours(mAllAnimals, selectedColoursAsStringArray);
                         if(animalsWithSelectedColours.size() == 0 ){
                             animalsWithSelectedColours = null;
                         }
                         updateListView();
+
+                        //removes all tags currently displaying
+                        if(((ViewGroup) getActivity().findViewById(R.id.colour_filter)).getChildCount() > 1){
+                            ((ViewGroup) getActivity().findViewById(R.id.colour_filter)).removeViews(1, ((ViewGroup) getActivity().findViewById(R.id.colour_filter)).getChildCount()-1);
+                        }
+
+                        //adds tags for each colour
+                        for(String colour: selectedColoursAsStringArray) {
+                            if(!colour.equals("")) {
+                                addFilterTag(inflater, container, R.id.colour_filter, "Colour", colour.trim());
+                            }
+                        }
 
 
                     }
@@ -293,8 +309,8 @@ public class AnimalSearchFragment extends ListFragment {
                     if(selectedItemText.equals("Select a minimum size(cm)") && ((ViewGroup) v.findViewById(R.id.min_length_filter)).getChildCount() == 2 ) {
                         View filterTagView = ((ViewGroup) v.findViewById(R.id.min_length_filter)).getChildAt(1);
                         ((ViewGroup) v.findViewById(R.id.min_length_filter)).removeView(filterTagView);
-                        updateListView();
                     }
+                    updateListView();
                 }
             }
 
@@ -336,14 +352,13 @@ public class AnimalSearchFragment extends ListFragment {
                             }
                         }
                     }
-                    updateListView();
                     if (((ViewGroup) v.findViewById(R.id.max_length_filter)).getChildCount() != 2) {
                         //adding filter tag
                         addFilterTag(inflater, container, R.id.max_length_filter,"Max Length", selectedItemText);
                     }else {
                         updateFilterTag( R.id.max_length_filter, selectedItemText);
-
                     }
+                    updateListView();
                 } else {
                     if(selectedItemText.equals("Select a maximum size(cm)") && ((ViewGroup) v.findViewById(R.id.max_length_filter)).getChildCount() == 2 ) {
                         View filterTagView = ((ViewGroup) v.findViewById(R.id.max_length_filter)).getChildAt(1);
@@ -483,26 +498,29 @@ public class AnimalSearchFragment extends ListFragment {
         final View filterTagView = inflater.inflate(R.layout.filter_tag, container, false);
         ((LinearLayout) getActivity().findViewById(idOfViewWhichToInsertInto)).addView(filterTagView);
         //Setting text of filter tag
-        ViewGroup viewWhichToInsertTo = getActivity().findViewById(idOfViewWhichToInsertInto);
-        ((TextView) viewWhichToInsertTo.findViewById(R.id.filter_tag_title)).setText(filterSelected);
-//        ((TextView) ((ViewGroup) viewWhichToInsertTo.getChildAt(1)).getChildAt(0)).setText(filter);
+        ((TextView) filterTagView.findViewById(R.id.filter_tag_title)).setText(filterSelected);
 
-        //Setting listener for filter tag
-        ((ViewGroup) viewWhichToInsertTo.getChildAt(1)).getChildAt(1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((LinearLayout) getActivity().findViewById(idOfViewWhichToInsertInto)).removeView(filterTagView);
-                switch (typeOfFilter) {
-                    case "Type":
-                        animalsWithSelectedType = null;
-                    case "Min Length":
-                        animalsWithSelectedMinLength = null;
-                    case "Max Length":
-                        animalsWithSelectedMaxLength = null;
+        if(typeOfFilter == "Colour") {
+            ((ViewGroup) filterTagView).removeView(filterTagView.findViewById(R.id.x_button));
+        } else {
+
+            //Setting listener for filter tag
+            ((ViewGroup) filterTagView).getChildAt(1).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((LinearLayout) getActivity().findViewById(idOfViewWhichToInsertInto)).removeView(filterTagView);
+                    switch (typeOfFilter) {
+                        case "Type":
+                            animalsWithSelectedType = null;
+                        case "Min Length":
+                            animalsWithSelectedMinLength = null;
+                        case "Max Length":
+                            animalsWithSelectedMaxLength = null;
+                    }
+                    updateListView();
                 }
-                updateListView();
-            }
-        });
+            });
+        }
     }
 
     public void updateFilterTag(final int idOfViewFilterTagIsIn, String filter) {
