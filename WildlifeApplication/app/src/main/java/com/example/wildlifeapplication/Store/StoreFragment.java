@@ -15,12 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wildlifeapplication.Map.MapFragment;
 import com.example.wildlifeapplication.R;
+import com.example.wildlifeapplication.Search.AnimalSearchFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
@@ -36,9 +38,14 @@ public class StoreFragment extends Fragment {
     private Activity activity;
     private boolean manualLocation;
     private MapFragment mapFragment;
-    private LatLng latLng;
+    private AnimalSearchFragment searchFragment;
+    private LatLng location;
     private boolean manual = false;
-
+    private String bodyLength;
+    private String wingspan;
+    private String colour;
+    private String habitat;
+    private String toy;
     public static StoreFragment newInstance() {
         StoreFragment fragment = new StoreFragment();
         Bundle args = new Bundle();
@@ -57,13 +64,18 @@ public class StoreFragment extends Fragment {
         mapFragment = new MapFragment();
         manualLocation = false;
         activity = getActivity();
-        View view = inflater.inflate(R.layout.fragment_store,container,false);
+        final View view = inflater.inflate(R.layout.fragment_store,container,false);
         Switch switch1 = view.findViewById(R.id.switch1);
         final Button button3 = view.findViewById(R.id.button3);
         final Button button1 = view.findViewById(R.id.button);
         final Button button2 = view.findViewById(R.id.button2);
         final TextView nounDisplay = view.findViewById(R.id.textView15);
         final TextView scientificNounDisplay = view.findViewById(R.id.textView16);
+        final EditText bodyLengthInput = view.findViewById(R.id.editText1);
+        final EditText wingspanInput = view.findViewById(R.id.editText2);
+        final EditText colourInput = view.findViewById(R.id.editText3);
+        final EditText habitatInput = view.findViewById(R.id.editText4);
+        final EditText toyInput = view.findViewById(R.id.editText5);
         String noun = getArguments().getString("noun");
         String scientificNoun = getArguments().getString("scientific_noun");
 
@@ -121,6 +133,21 @@ public class StoreFragment extends Fragment {
                     setLatLng(pos);
                 }
 
+
+                StoreAnimalSighting storeAnimalSighting = new StoreAnimalSighting();
+                storeAnimalSighting.storeAnimal(
+                        bodyLengthInput.getText().toString(),
+                        wingspanInput.getText().toString(),
+                        colourInput.getText().toString(),
+                        habitatInput.getText().toString(),
+                        toyInput.getText().toString(),
+                        getLocation());
+                Toast.makeText(getContext(),"Thank you for reporting your sighting",Toast.LENGTH_LONG).show();
+                FragmentTransaction tr = getFragmentManager().beginTransaction();
+                tr.replace(R.id.fragment_container,searchFragment = new AnimalSearchFragment()).commit();
+
+
+
             }
         });
         return view;
@@ -133,6 +160,50 @@ public class StoreFragment extends Fragment {
 
 
     public void setLatLng(LatLng latLng){
-        this.latLng = latLng;
+        this.location = latLng;
+    }
+
+    public void setBodyLength(String bodyLength){
+        this.bodyLength = bodyLength;
+    }
+
+    public void setWingspan(String wingspan){
+        this.wingspan = wingspan;
+    }
+
+    public void setColour(String colour){
+        this.colour = colour;
+    }
+
+    public void setHabitat(String habitat){
+        this.habitat = habitat;
+    }
+
+    public void setTimeOfYear(String toy){
+        this.toy = toy;
+    }
+
+    public LatLng getLocation() {
+        return location;
+    }
+
+    public String getBodyLength() {
+        return bodyLength;
+    }
+
+    public String getWingspan() {
+        return wingspan;
+    }
+
+    public String getColour() {
+        return colour;
+    }
+
+    public String getHabitat() {
+        return habitat;
+    }
+
+    public String getToy() {
+        return toy;
     }
 }
