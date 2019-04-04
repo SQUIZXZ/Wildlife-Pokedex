@@ -91,7 +91,6 @@ public class StoreFragment extends Fragment {
                     String pictureFile = "Wildlife_" + timeStamp;
                     File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                     image = File.createTempFile(pictureFile, ".jpg", storageDir); // crashing here
-                    pictureFilePath = image.getAbsolutePath();
                 }catch (java.io.IOException e){
                     e.printStackTrace();
                     Toast.makeText(getContext(),"Photo file could not be created, please try again",Toast.LENGTH_SHORT).show();
