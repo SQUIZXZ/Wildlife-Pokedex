@@ -130,18 +130,22 @@ public class StoreFragment extends Fragment {
             public void onClick(View v) {
                 if (!manual) {
                     LatLng pos = mapFragment.storeFragGetLoc(); // crashing here
+                    System.out.println(pos);
                     setLatLng(pos);
                 }
-
+                System.out.println("Location: " + getLocation());
 
                 StoreAnimalSighting storeAnimalSighting = new StoreAnimalSighting();
                 storeAnimalSighting.storeAnimal(
-                        bodyLengthInput.getText().toString(),
-                        wingspanInput.getText().toString(),
+                        nounDisplay.getText().toString(),
+                        scientificNounDisplay.getText().toString(),
+                        Integer.parseInt(bodyLengthInput.getText().toString()),
+                        Integer.parseInt(wingspanInput.getText().toString()),
                         colourInput.getText().toString(),
                         habitatInput.getText().toString(),
                         toyInput.getText().toString(),
-                        getLocation());
+                        getLocation().latitude,
+                        getLocation().longitude);
                 Toast.makeText(getContext(),"Thank you for reporting your sighting",Toast.LENGTH_LONG).show();
                 FragmentTransaction tr = getFragmentManager().beginTransaction();
                 tr.replace(R.id.fragment_container,searchFragment = new AnimalSearchFragment()).commit();

@@ -236,7 +236,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             Location currentLocation = (Location) task.getResult();
                             CameraPosition devicePosition = CameraPosition.builder().target(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).zoom(13).bearing(5).tilt(2).build();
                             mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(devicePosition));
-                            position = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                            setPosition(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                         } else {
                             Log.d(TAG,"could not find device's location");
 
@@ -268,5 +268,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     public LatLng storeFragGetLoc(){
         return position;
+    }
+
+    public void setPosition(LatLng aPosition){
+        this.position = aPosition;
     }
 }
