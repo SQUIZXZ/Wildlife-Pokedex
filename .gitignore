@@ -43,14 +43,14 @@ local.properties
 *.iml
 
 .idea
-
+/
 .idea/workspace.xml
 
 .idea/modules.xml
 .idea/codeStyles/Project.xml
 .idea/vcs.xml
 .idea/WildLife2.iml
-.idea/
+.idea/misc.xml
 .gradle
 
 build/
