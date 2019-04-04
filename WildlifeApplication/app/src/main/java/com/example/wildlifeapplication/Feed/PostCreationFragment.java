@@ -37,6 +37,9 @@ public class PostCreationFragment extends Fragment {
     public PostCreationFragment() {
     }
 
+    //Followed tutorial on: https://www.youtube.com/watch?v=325agnrMyzo
+    //for the process of taking and saving the image to the gallery
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -82,22 +85,9 @@ public class PostCreationFragment extends Fragment {
                             postDatabase.close();
 
                             FeedFragment feedFragment = new FeedFragment();
-
                             getFragmentManager().beginTransaction().replace(R.id.fragment_container, feedFragment).commit();
                         }
                     });
-
-//                    synchronized (this) {
-//                        try {
-//                            while(!postInserted[0])
-//                            wait(5);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                    FeedFragment feedFragment = new FeedFragment();
-//
-//                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, feedFragment).commit();
                 }
             }
         });
@@ -108,8 +98,6 @@ public class PostCreationFragment extends Fragment {
     public void takePhoto() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
-
-
     }
 
     @Override
@@ -133,9 +121,9 @@ public class PostCreationFragment extends Fragment {
         File myDir = new File(root+"/image");
         myDir.mkdirs();
         Random generator = new Random();
-        int n = 10000;
-        n = generator.nextInt(n);
-        String imageName = "Image-"+n+".jpg";
+        int i = 0;
+        i = generator.nextInt(i);
+        String imageName = "Image-"+i+".jpg";
         File file = new File(myDir, imageName);
         if(file.exists()) file.delete();
         try{
