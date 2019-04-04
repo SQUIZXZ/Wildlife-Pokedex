@@ -138,9 +138,9 @@ public class SearchForAnimalService implements ISearchForAnimalService {
         for (Animal animal : animalsToBeFiltered) {
             String[] colours = animal.getColoursAsStringArray();
             int numberOfMatchingColours = 0;
-            for (String providedFeatherColour : coloursSelected) {
+            for (String providedColour : coloursSelected) {
                 for (String colour : colours) {
-                    if (colour.compareToIgnoreCase(providedFeatherColour) == 0) {
+                    if (colour.compareToIgnoreCase(providedColour) == 0) {
                         numberOfMatchingColours++;
                     }
                 }
@@ -149,6 +149,7 @@ public class SearchForAnimalService implements ISearchForAnimalService {
                 filteredAnimals.remove(animal);
             }
         }
+
         return filteredAnimals;
     }
 
