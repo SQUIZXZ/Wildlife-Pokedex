@@ -121,7 +121,7 @@ public class PostCreationFragment extends Fragment {
         File myDir = new File(root+"/image");
         myDir.mkdirs();
         Random generator = new Random();
-        int i = 0;
+        int i = 10000;
         i = generator.nextInt(i);
         String imageName = "Image-"+i+".jpg";
         File file = new File(myDir, imageName);
