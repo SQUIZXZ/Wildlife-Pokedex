@@ -50,6 +50,7 @@ local.properties
 .idea/codeStyles/Project.xml
 .idea/vcs.xml
 .idea/WildLife2.iml
+.idea/
 .gradle
 
 build/
