@@ -29,11 +29,9 @@ import com.example.wildlifeapplication.Search.AnimalInformation.AnimalDatabase;
 import com.example.wildlifeapplication.Search.AnimalInformation.AnimalInformationFragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.Inflater;
 
 public class AnimalSearchFragment extends ListFragment {
 
@@ -89,7 +87,6 @@ public class AnimalSearchFragment extends ListFragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_animal_search, container, false);
         v.findViewById(R.id.empty).setVisibility(View.INVISIBLE);
-//        ((LinearLayout) v.findViewById(R.id.type_filter)).addView(inflater.inflate(R.layout.filter_tag, container, false));
 
         synchronized (this) {
             initialiseDatabase();
@@ -100,6 +97,8 @@ public class AnimalSearchFragment extends ListFragment {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+            //Adding all the animals from the database to the list view
             HashMap<String, String> hashMap;
             for (Animal animal : mAllAnimals) {
                 hashMap = new HashMap<>();
@@ -120,6 +119,8 @@ public class AnimalSearchFragment extends ListFragment {
             mAdapter = new SimpleAdapter(getActivity(), data, R.layout.custom_list_view_image_and_text, from, to);
             setListAdapter(mAdapter);
         }
+
+        //Button in order to be able to select multiple colours in a dialog box
 
         mButton = v.findViewById(R.id.colour_button);
         colourList = getResources().getStringArray(R.array.colours);
@@ -162,9 +163,6 @@ public class AnimalSearchFragment extends ListFragment {
                         ///getting animals with specified colours
                         SearchForAnimalService animalSearchService = new SearchForAnimalService();
                         animalsWithSelectedColours = animalSearchService.filterByColours(mAllAnimals, selectedColoursAsStringArray);
-                        if(animalsWithSelectedColours.size() == 0 ){
-                            animalsWithSelectedColours = null;
-                        }
                         updateListView();
 
                         //removes all tags currently displaying
@@ -384,6 +382,7 @@ public class AnimalSearchFragment extends ListFragment {
         inflater.inflate(R.menu.search_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
+        //Expanding the search view
         searchView.setIconifiedByDefault(false);
         searchView.setQueryHint("Search by name");
 
@@ -443,7 +442,8 @@ public class AnimalSearchFragment extends ListFragment {
         List<Animal> copyMAllAnimals = new ArrayList<>(allAnimals);
 
 
-
+        //Checks which animals all the lists have in common and removes the ones that are not
+        //present in all of the lists
         for(List<Animal> listOfAnimals: listsOfAnimals) {
                 for (Animal animalInAllAnimals : allAnimals) {
                     boolean animalInList = false;
@@ -465,9 +465,11 @@ public class AnimalSearchFragment extends ListFragment {
         List<Animal> listOfAnimalsToDisplay = determineListOfAnimalsToDisplay(mAllAnimals, animalsWithSelectedMinLength, animalsWithSelectedType, animalsWithSelectedMaxLength, animalsWithSelectedColours);
 
         if (listOfAnimalsToDisplay.size() == 0) {
+            //Display no results text and hide list view
             getActivity().findViewById(R.id.empty).setVisibility(View.VISIBLE);
             getActivity().findViewById(android.R.id.list).setVisibility(View.INVISIBLE);
         } else {
+            //Display the list view with animals and hide the no results text
             getActivity().findViewById(android.R.id.list).setVisibility(View.VISIBLE);
             getActivity().findViewById(R.id.empty).setVisibility(View.INVISIBLE);
             HashMap<String, String> hashMap;
