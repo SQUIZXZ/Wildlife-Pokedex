@@ -131,6 +131,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         } else {
             CameraPosition cardiffCentre = CameraPosition.builder().target(new LatLng(51.481580, -3.179089)).zoom(13).bearing(5).tilt(2).build();
             googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cardiffCentre));
+            setPosition(new LatLng(51.481580, -3.179089));
         }
 
         synchronized (this ) {
