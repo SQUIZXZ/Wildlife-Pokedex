@@ -75,7 +75,6 @@ public class AnimalSearchFragment extends ListFragment {
         args.putString(scientificNounValueAsStringArray[0], scientificNounValueAsStringArray[1]);
         animalInformationFragment.setArguments(args);
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, animalInformationFragment).commit();
-
     }
 
     @Override

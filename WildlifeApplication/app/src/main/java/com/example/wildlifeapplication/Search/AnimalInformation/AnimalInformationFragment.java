@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.wildlifeapplication.R;
+import com.example.wildlifeapplication.Search.ISearchForAnimalService;
+import com.example.wildlifeapplication.Search.SearchForAnimalService;
 import com.example.wildlifeapplication.Store.StoreFragment;
 
 public class AnimalInformationFragment extends Fragment {
@@ -23,18 +25,44 @@ public class AnimalInformationFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final String sNoun = getArguments().getString("Scientific noun");
+        final String[] sNoun = new String[1];
+        sNoun[0] = getArguments().getString("Scientific noun");
+        if(sNoun[0] == null){
+            final String noun = getArguments().getString("Noun");
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    AnimalDatabase animalDatabase = Room.databaseBuilder(getContext(), AnimalDatabase.class, "animal database").build();
+                    animalDatabase.clearAllTables();
+                    ISearchForAnimalService searchForAnimalService = new SearchForAnimalService();
+                    animalDatabase.animalDao().insertAllAnimals(searchForAnimalService.getAllAnimals());
+                    Animal animal = animalDatabase.animalDao().getAnimalWithNoun(noun);
+                    sNoun[0] = animal.getScientificNoun();
+                    animalDatabase.close();
+                }
+            });
+
+            synchronized (this) {
+                while (sNoun[0] == null) {
+                    try {
+                        wait(5);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
         final AnimalDatabase animalDB = Room.databaseBuilder(getContext(), AnimalDatabase.class, "animal database").build();
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                animal = animalDB.animalDao().getAnimalWithScientificNoun(sNoun);
+                animal = animalDB.animalDao().getAnimalWithScientificNoun(sNoun[0]);
                 animalDB.close();
             }
         });
         View v = inflater.inflate(R.layout.fragment_animal_info, container,false);
         synchronized (this ) {
-            while (animal == null || !animal.getScientificNoun().equals(sNoun)) {
+            while (animal == null || !animal.getScientificNoun().equals(sNoun[0])) {
                 try {
                     AnimalInformationFragment.this.wait(10);
                 } catch (InterruptedException e) {

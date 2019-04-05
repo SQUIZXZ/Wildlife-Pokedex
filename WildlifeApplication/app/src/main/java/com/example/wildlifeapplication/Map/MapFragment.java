@@ -15,9 +15,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.wildlifeapplication.R;
+import com.example.wildlifeapplication.Search.AnimalInformation.Animal;
+import com.example.wildlifeapplication.Search.AnimalInformation.AnimalDatabase;
+import com.example.wildlifeapplication.Search.AnimalInformation.AnimalInformationFragment;
 import com.example.wildlifeapplication.Store.StoreFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -29,6 +31,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -174,6 +177,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     spotting.getDatetimeOfSpotting()).
                     icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         }
+
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                final String animalNoun = marker.getTitle();
+                AnimalInformationFragment animalInformationFragment = new AnimalInformationFragment();
+                Bundle args = new Bundle();
+                args.putString("Noun", animalNoun);
+                animalInformationFragment.setArguments(args);
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, animalInformationFragment).commit();
+            }
+        });
 
     }
 
