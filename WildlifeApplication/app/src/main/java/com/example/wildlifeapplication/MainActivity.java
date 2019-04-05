@@ -96,7 +96,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchToMapFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment = new MapFragment()).addToBackStack(null).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment = new MapFragment(),"Map").addToBackStack(null).commit();
+        fragmentManager.executePendingTransactions();
     }
 
 

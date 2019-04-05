@@ -65,7 +65,7 @@ public class StoreFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mapFragment = new MapFragment();
+        mapFragment = (MapFragment) getFragmentManager().findFragmentByTag("Map");
         manualLocation = false;
         activity = getActivity();
         final View view = inflater.inflate(R.layout.fragment_store,container,false);
@@ -75,11 +75,6 @@ public class StoreFragment extends Fragment {
         final Button button2 = view.findViewById(R.id.button2);
         final TextView nounDisplay = view.findViewById(R.id.textView15);
         final TextView scientificNounDisplay = view.findViewById(R.id.textView16);
-        final EditText bodyLengthInput = view.findViewById(R.id.editText1);
-        final EditText wingspanInput = view.findViewById(R.id.editText2);
-        final EditText colourInput = view.findViewById(R.id.editText3);
-        final EditText habitatInput = view.findViewById(R.id.editText4);
-        final EditText toyInput = view.findViewById(R.id.editText5);
         String noun = getArguments().getString("noun");
         String scientificNoun = getArguments().getString("scientific_noun");
 
@@ -134,11 +129,8 @@ public class StoreFragment extends Fragment {
             public void onClick(View v) {
                 if (!manual) {
                     LatLng pos = mapFragment.storeFragGetLoc(); // crashing here
-                    System.out.println(pos);
                     setLatLng(pos);
                 }
-                System.out.println("Location: " + getLocation());
-
 
 
                 final Spotting spotting = new Spotting(nounDisplay.getText().toString(),
