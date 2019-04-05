@@ -19,6 +19,9 @@ public interface SpottingDao {
     @Insert
     void insertAll(List<Spotting> listOfSpottings);
 
+    @Insert
+    void insertSpotting(Spotting spotting);
+
     @Delete
     void clearDatabase(List<Spotting> spottingList);
 }

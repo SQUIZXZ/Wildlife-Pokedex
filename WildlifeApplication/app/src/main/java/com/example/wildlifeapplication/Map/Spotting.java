@@ -80,4 +80,16 @@ public class Spotting {
     public void setDatetimeOfSpotting(Date datetimeOfSpotting) {
         this.datetimeOfSpotting = datetimeOfSpotting;
     }
+
+    public Spotting(){}
+
+
+    public Spotting(String aNoun, String aScientficNoun, Float aLatitudeOfSpotting, Float aLongitudeOfSpotting, Date aDatetimeOfSpotting ){
+        this.noun = aNoun;
+        this.scientificNoun = aScientficNoun;
+        this.latitudeOfSpotting = aLatitudeOfSpotting;
+        this.longitudeOfSpotting = aLongitudeOfSpotting;
+        this.datetimeOfSpotting = aDatetimeOfSpotting;
+    }
 }
+

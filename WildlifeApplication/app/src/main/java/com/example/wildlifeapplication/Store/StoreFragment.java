@@ -1,8 +1,10 @@
 package com.example.wildlifeapplication.Store;
 
 import android.app.Activity;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -21,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wildlifeapplication.Map.MapFragment;
+import com.example.wildlifeapplication.Map.Spotting;
+import com.example.wildlifeapplication.Map.SpottingOfAnimalsDatabase;
 import com.example.wildlifeapplication.R;
 import com.example.wildlifeapplication.Search.AnimalSearchFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -135,17 +139,21 @@ public class StoreFragment extends Fragment {
                 }
                 System.out.println("Location: " + getLocation());
 
-                StoreAnimalSighting storeAnimalSighting = new StoreAnimalSighting();
-                storeAnimalSighting.storeAnimal(
-                        nounDisplay.getText().toString(),
+
+
+                final Spotting spotting = new Spotting(nounDisplay.getText().toString(),
                         scientificNounDisplay.getText().toString(),
-                        Integer.parseInt(bodyLengthInput.getText().toString()),
-                        Integer.parseInt(wingspanInput.getText().toString()),
-                        colourInput.getText().toString(),
-                        habitatInput.getText().toString(),
-                        toyInput.getText().toString(),
-                        getLocation().latitude,
-                        getLocation().longitude);
+                        ((float) getLocation().latitude),
+                        (float)getLocation().longitude,
+                        new Date());
+                final SpottingOfAnimalsDatabase spottingOfAnimalsDatabase = Room.databaseBuilder(getContext(),SpottingOfAnimalsDatabase.class,"animal sighting database").build();
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        spottingOfAnimalsDatabase.spottingAnimalDao().insertSpotting(spotting);
+                    }
+                });
+
                 Toast.makeText(getContext(),"Thank you for reporting your sighting",Toast.LENGTH_LONG).show();
                 FragmentTransaction tr = getFragmentManager().beginTransaction();
                 tr.replace(R.id.fragment_container,searchFragment = new AnimalSearchFragment()).commit();
