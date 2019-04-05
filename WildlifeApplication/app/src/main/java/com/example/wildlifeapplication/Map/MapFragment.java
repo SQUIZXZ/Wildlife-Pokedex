@@ -120,6 +120,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 db.spottingAnimalDao().insertAll(listOfSpottingsGenerated);
 
                 recentSpottings = db.spottingAnimalDao().getRecentSpottings();
+
+                db.close();
             }
 
         });
