@@ -52,11 +52,15 @@ public class FeedFragment extends Fragment {
                 db = Room.databaseBuilder(getContext(),
                         PostDatabase.class, "Newsfeed_Database").build();
 
-//                db.postDA0().insertPosts(
-//                        new Post("Joey", "I love this app!!!", "mipmap-hdpi/blue_tit.JPG"
-//                ));
-
                 posts = db.postDA0().getAllPosts();
+
+                if(posts.size() == 0) {
+                    db.postDA0().insertPosts(
+                            new Post("Joey", "I love this app!!!", "mipmap-hdpi/blue_tit.JPG"
+                            ));
+
+                    posts = db.postDA0().getAllPosts();
+                }
                 db.close();
 
 //                Toast.makeText(getApplicationContext(),username,Toast.LENGTH_SHORT).show();
@@ -77,9 +81,13 @@ public class FeedFragment extends Fragment {
 
         Log.d("BOO_TEST", String.format("Number of Posts: %d", posts.size()));
 
-        String username = posts.get(posts.size() - 1).getUsername();
+        int i = 1;
+        if(posts.size()<1) {
+            i = 0;
+        }
+        String username = posts.get(posts.size() - i).getUsername();
 
-        String caption = posts.get(posts.size() - 1).getCaption();
+        String caption = posts.get(posts.size() - i).getCaption();
 
         TextView textViewUsername = (TextView) v.findViewById(R.id.username);
 
@@ -89,7 +97,7 @@ public class FeedFragment extends Fragment {
         textViewCaption.setText(caption);
 
         ImageView birdImage = v.findViewById(R.id.imageView2);
-        birdImage.setImageBitmap(BitmapFactory.decodeFile(posts.get(posts.size() - 1).getImagePath()));
+        birdImage.setImageBitmap(BitmapFactory.decodeFile(posts.get(posts.size() - i).getImagePath()));
 
         Button createPostButton = v.findViewById(R.id.create_post_button);
         createPostButton.setOnClickListener(new View.OnClickListener() {
