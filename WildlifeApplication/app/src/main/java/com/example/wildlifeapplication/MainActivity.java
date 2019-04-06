@@ -84,15 +84,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchToBirdSearchFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, animalSearchFragment = new AnimalSearchFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, animalSearchFragment = new AnimalSearchFragment()).addToBackStack(null).commit();
+        fragmentManager.executePendingTransactions();
     }
 
     public void switchToExtrasFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, extrasFragment = new ExtrasFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, extrasFragment = new ExtrasFragment()).addToBackStack(null).commit();
+        fragmentManager.executePendingTransactions();
     }
 
     public void switchToFeedFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, feedFragment = new FeedFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, feedFragment = new FeedFragment()).addToBackStack(null).commit();
+        fragmentManager.executePendingTransactions();
     }
 
     public void switchToMapFragment() {

@@ -51,7 +51,7 @@ public class StatisticsFragment extends Fragment {
 
 
         final SearchForAnimalService animalSearchService = new SearchForAnimalService();
-        final AnimalDatabase db = Room.databaseBuilder(getContext(), AnimalDatabase.class, "animal database").build();
+        final AnimalDatabase db = Room.databaseBuilder(getContext(), AnimalDatabase.class, "animal sighting database").build();
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
