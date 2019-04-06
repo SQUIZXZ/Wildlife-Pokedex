@@ -143,6 +143,7 @@ public class StoreFragment extends Fragment {
                     @Override
                     public void run() {
                         spottingOfAnimalsDatabase.spottingAnimalDao().insertSpotting(spotting);
+                        spottingOfAnimalsDatabase.close();
                     }
                 });
 

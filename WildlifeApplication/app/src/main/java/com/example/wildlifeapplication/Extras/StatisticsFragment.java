@@ -51,7 +51,7 @@ public class StatisticsFragment extends Fragment {
 
 
         final SearchForAnimalService animalSearchService = new SearchForAnimalService();
-        final AnimalDatabase db = Room.databaseBuilder(getContext(), AnimalDatabase.class, "animal sighting database").build();
+        final AnimalDatabase db = Room.databaseBuilder(getContext(), AnimalDatabase.class, "animal database").build();
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -68,7 +68,7 @@ public class StatisticsFragment extends Fragment {
             }
         });
 
-        final SpottingOfAnimalsDatabase spottingOfAnimalsDB = Room.databaseBuilder(getContext(),SpottingOfAnimalsDatabase.class,"spotting database").build();
+        final SpottingOfAnimalsDatabase spottingOfAnimalsDB = Room.databaseBuilder(getContext(),SpottingOfAnimalsDatabase.class,"animal sighting database").build();
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -82,7 +82,7 @@ public class StatisticsFragment extends Fragment {
         });
 
         try {
-            TimeUnit.MILLISECONDS.sleep(100);
+            TimeUnit.MILLISECONDS.sleep(200);
         } catch (java.lang.InterruptedException e) {
             e.printStackTrace();
         }
