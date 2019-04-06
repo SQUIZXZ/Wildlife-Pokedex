@@ -149,7 +149,7 @@ public class StoreFragment extends Fragment {
 
                 Toast.makeText(getContext(),"Thank you for reporting your sighting",Toast.LENGTH_LONG).show();
                 FragmentTransaction tr = getFragmentManager().beginTransaction();
-                tr.replace(R.id.fragment_container,searchFragment = new AnimalSearchFragment()).commit();
+                tr.replace(R.id.fragment_container,mapFragment).commit();
 
 
 
