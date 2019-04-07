@@ -24,6 +24,7 @@ import java.io.File;
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
+    private BottomNavigationView navigation;
     private AnimalSearchFragment animalSearchFragment;
     private ExtrasFragment extrasFragment;
     private FeedFragment feedFragment;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         SharedPreferences sp = getSharedPreferences("pref",Context.MODE_PRIVATE);
@@ -114,5 +115,11 @@ public class MainActivity extends AppCompatActivity {
                 imageview.setImageURI(Uri.fromFile(imgFile));
             }
         }
+    }
+
+    public void clickNavBar(String button){
+        String id = "R.id." + button;
+        view = navigation.findViewById(Integer.parseInt(id));
+        view.performClick();
     }
 }

@@ -16,8 +16,6 @@ import com.example.wildlifeapplication.Search.AnimalInformation.Animal;
 import com.example.wildlifeapplication.Search.AnimalInformation.AnimalDatabase;
 import com.example.wildlifeapplication.Search.SearchForAnimalService;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 

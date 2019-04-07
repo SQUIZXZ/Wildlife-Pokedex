@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.wildlifeapplication.R;
 import com.example.wildlifeapplication.Store.StoreFragment;
@@ -124,8 +123,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     listOfSpottingsGenerated.add(mAllSpottings.get(i));
                 }
 
-                //SELF-NOTE: Need to add the sightings that are reported (taken from database)
-                //into the listOfSpottingsGenerated list (List<Animal>)
 
                 db.spottingAnimalDao().insertAll(listOfSpottingsGenerated);
 

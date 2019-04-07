@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
+
 
 public class StoreFragment extends Fragment {
 
@@ -50,6 +48,7 @@ public class StoreFragment extends Fragment {
     private String colour;
     private String habitat;
     private String toy;
+
     public static StoreFragment newInstance() {
         StoreFragment fragment = new StoreFragment();
         Bundle args = new Bundle();
