@@ -50,6 +50,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     volatile static List<Spotting> recentSpottings;
+    private List<Spotting> mAllSpottings;
     private boolean storeFragManualLocation = false;
     private StoreFragment storeFragment;
     private LatLng position;
@@ -108,18 +109,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         final List<Spotting> listOfSpottingsGenerated = generateSpottings(seenAnimals);
 
         final SpottingOfAnimalsDatabase db;
-        db = Room.databaseBuilder(getContext(), SpottingOfAnimalsDatabase.class, "spotting of animals database").build();
+        db = Room.databaseBuilder(getContext(), SpottingOfAnimalsDatabase.class, "animal sighting database").build();
 
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
                 if (db.spottingAnimalDao().getAllSpottingOfAnimals() != null) {
+                    mAllSpottings = db.spottingAnimalDao().getAllSpottingOfAnimals();
                     db.spottingAnimalDao().clearDatabase(db.spottingAnimalDao().getAllSpottingOfAnimals());
                 }
+
+                for (int i=17; i<mAllSpottings.size();i++){
+                    System.out.println(i + ": " + mAllSpottings.get(i).getNoun());
+                    listOfSpottingsGenerated.add(mAllSpottings.get(i));
+                }
+
+                //SELF-NOTE: Need to add the sightings that are reported (taken from database)
+                //into the listOfSpottingsGenerated list (List<Animal>)
 
                 db.spottingAnimalDao().insertAll(listOfSpottingsGenerated);
 
                 recentSpottings = db.spottingAnimalDao().getRecentSpottings();
+
 
                 db.close();
             }

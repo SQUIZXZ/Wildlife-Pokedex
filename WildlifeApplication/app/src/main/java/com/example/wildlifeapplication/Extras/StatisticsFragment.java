@@ -55,10 +55,7 @@ public class StatisticsFragment extends Fragment {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                if (db.animalDao().getAllAnimals() != null) {
-                    db.clearAllTables();
-                }
-                db.animalDao().insertAllAnimals(animalSearchService.getAllAnimals());
+
                 mAllAnimals = db.animalDao().getAllAnimals();
 
                 for (int i = 0; i < mAllAnimals.size(); i++) {
