@@ -1,13 +1,14 @@
 package com.example.wildlifeapplication.Store;
 
 import android.app.Activity;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
@@ -20,13 +21,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wildlifeapplication.Map.MapFragment;
+import com.example.wildlifeapplication.Map.Spotting;
+import com.example.wildlifeapplication.Map.SpottingOfAnimalsDatabase;
 import com.example.wildlifeapplication.R;
+import com.example.wildlifeapplication.Search.AnimalSearchFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
+
 
 public class StoreFragment extends Fragment {
 
@@ -36,8 +40,14 @@ public class StoreFragment extends Fragment {
     private Activity activity;
     private boolean manualLocation;
     private MapFragment mapFragment;
-    private LatLng latLng;
+    private AnimalSearchFragment searchFragment;
+    private LatLng location;
     private boolean manual = false;
+    private String bodyLength;
+    private String wingspan;
+    private String colour;
+    private String habitat;
+    private String toy;
 
     public static StoreFragment newInstance() {
         StoreFragment fragment = new StoreFragment();
@@ -54,10 +64,10 @@ public class StoreFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mapFragment = new MapFragment();
+        mapFragment = (MapFragment) getFragmentManager().findFragmentByTag("Map");
         manualLocation = false;
         activity = getActivity();
-        View view = inflater.inflate(R.layout.fragment_store,container,false);
+        final View view = inflater.inflate(R.layout.fragment_store,container,false);
         Switch switch1 = view.findViewById(R.id.switch1);
         final Button button3 = view.findViewById(R.id.button3);
         final Button button1 = view.findViewById(R.id.button);
@@ -120,6 +130,27 @@ public class StoreFragment extends Fragment {
                     setLatLng(pos);
                 }
 
+
+                final Spotting spotting = new Spotting(nounDisplay.getText().toString(),
+                        scientificNounDisplay.getText().toString(),
+                        ((float) getLocation().latitude),
+                        (float)getLocation().longitude,
+                        new Date());
+                final SpottingOfAnimalsDatabase spottingOfAnimalsDatabase = Room.databaseBuilder(getContext(),SpottingOfAnimalsDatabase.class,"animal sighting database").build();
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        spottingOfAnimalsDatabase.spottingAnimalDao().insertSpotting(spotting);
+                        spottingOfAnimalsDatabase.close();
+                    }
+                });
+
+                Toast.makeText(getContext(),"Thank you for reporting your sighting",Toast.LENGTH_LONG).show();
+                FragmentTransaction tr = getFragmentManager().beginTransaction();
+                tr.replace(R.id.fragment_container,mapFragment).commit();
+
+
+
             }
         });
         return view;
@@ -132,6 +163,50 @@ public class StoreFragment extends Fragment {
 
 
     public void setLatLng(LatLng latLng){
-        this.latLng = latLng;
+        this.location = latLng;
+    }
+
+    public void setBodyLength(String bodyLength){
+        this.bodyLength = bodyLength;
+    }
+
+    public void setWingspan(String wingspan){
+        this.wingspan = wingspan;
+    }
+
+    public void setColour(String colour){
+        this.colour = colour;
+    }
+
+    public void setHabitat(String habitat){
+        this.habitat = habitat;
+    }
+
+    public void setTimeOfYear(String toy){
+        this.toy = toy;
+    }
+
+    public LatLng getLocation() {
+        return location;
+    }
+
+    public String getBodyLength() {
+        return bodyLength;
+    }
+
+    public String getWingspan() {
+        return wingspan;
+    }
+
+    public String getColour() {
+        return colour;
+    }
+
+    public String getHabitat() {
+        return habitat;
+    }
+
+    public String getToy() {
+        return toy;
     }
 }

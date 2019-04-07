@@ -13,11 +13,14 @@ public interface SpottingDao {
     @Query("SELECT * FROM Spotting")
     List<Spotting> getAllSpottingOfAnimals();
 
-    @Query("SELECT * FROM Spotting ORDER BY datetime_of_spotting LIMIT 10")
+    @Query("SELECT * FROM Spotting ORDER BY datetime_of_spotting DESC LIMIT 10")
     List<Spotting> getRecentSpottings();
 
     @Insert
     void insertAll(List<Spotting> listOfSpottings);
+
+    @Insert
+    void insertSpotting(Spotting spotting);
 
     @Delete
     void clearDatabase(List<Spotting> spottingList);

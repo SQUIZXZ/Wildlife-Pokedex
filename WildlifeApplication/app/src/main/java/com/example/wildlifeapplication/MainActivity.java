@@ -24,6 +24,7 @@ import java.io.File;
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
+    private BottomNavigationView navigation;
     private AnimalSearchFragment animalSearchFragment;
     private ExtrasFragment extrasFragment;
     private FeedFragment feedFragment;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        
         feedFragment = new FeedFragment();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -86,20 +87,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchToBirdSearchFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, new AnimalSearchFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, animalSearchFragment = new AnimalSearchFragment()).addToBackStack(null).commit();
+        fragmentManager.executePendingTransactions();
     }
 
     public void switchToExtrasFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, new ExtrasFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, extrasFragment = new ExtrasFragment()).addToBackStack(null).commit();
+        fragmentManager.executePendingTransactions();
     }
 
     public void switchToFeedFragment() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, feedFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, feedFragment = new FeedFragment()).addToBackStack(null).commit();
+        fragmentManager.executePendingTransactions();
     }
 
     public void switchToMapFragment() {
-
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment = new MapFragment()).addToBackStack(null).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, mapFragment = new MapFragment(),"Map").addToBackStack(null).commit();
+        fragmentManager.executePendingTransactions();
     }
 
 
@@ -114,5 +118,11 @@ public class MainActivity extends AppCompatActivity {
                 imageview.setImageURI(Uri.fromFile(imgFile));
             }
         }
+    }
+
+    public void clickNavBar(String button){
+        String id = "R.id." + button;
+        view = navigation.findViewById(Integer.parseInt(id));
+        view.performClick();
     }
 }

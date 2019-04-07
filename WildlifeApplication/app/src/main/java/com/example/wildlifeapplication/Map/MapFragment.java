@@ -53,6 +53,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     volatile static List<Spotting> recentSpottings;
+    private List<Spotting> mAllSpottings;
     private boolean storeFragManualLocation = false;
     private StoreFragment storeFragment;
     private LatLng position;
@@ -111,18 +112,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         final List<Spotting> listOfSpottingsGenerated = generateSpottings(seenAnimals);
 
         final SpottingOfAnimalsDatabase db;
-        db = Room.databaseBuilder(getContext(), SpottingOfAnimalsDatabase.class, "spotting of animals database").build();
+        db = Room.databaseBuilder(getContext(), SpottingOfAnimalsDatabase.class, "animal sighting database").build();
 
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                if (db.spottingAnimalDao().getAllSpottingOfAnimals() != null) {
-                    db.spottingAnimalDao().clearDatabase(db.spottingAnimalDao().getAllSpottingOfAnimals());
+
+                if (db.spottingAnimalDao().getAllSpottingOfAnimals() == null){
+                    db.spottingAnimalDao().insertAll(listOfSpottingsGenerated);
                 }
 
-                db.spottingAnimalDao().insertAll(listOfSpottingsGenerated);
-
                 recentSpottings = db.spottingAnimalDao().getRecentSpottings();
+
+
+                db.close();
             }
 
         });
@@ -134,6 +137,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         } else {
             CameraPosition cardiffCentre = CameraPosition.builder().target(new LatLng(51.481580, -3.179089)).zoom(13).bearing(5).tilt(2).build();
             googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cardiffCentre));
+            setPosition(new LatLng(51.481580, -3.179089));
         }
 
         synchronized (this ) {
@@ -252,7 +256,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             Location currentLocation = (Location) task.getResult();
                             CameraPosition devicePosition = CameraPosition.builder().target(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).zoom(13).bearing(5).tilt(2).build();
                             mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(devicePosition));
-                            position = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                            setPosition(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                         } else {
                             Log.d(TAG,"could not find device's location");
 
@@ -284,5 +288,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     public LatLng storeFragGetLoc(){
         return position;
+    }
+
+    public void setPosition(LatLng aPosition){
+        this.position = aPosition;
     }
 }
