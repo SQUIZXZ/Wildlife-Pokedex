@@ -113,18 +113,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                if (db.spottingAnimalDao().getAllSpottingOfAnimals() != null) {
-                    mAllSpottings = db.spottingAnimalDao().getAllSpottingOfAnimals();
-                    db.spottingAnimalDao().clearDatabase(db.spottingAnimalDao().getAllSpottingOfAnimals());
+
+                if (db.spottingAnimalDao().getAllSpottingOfAnimals() == null){
+                    db.spottingAnimalDao().insertAll(listOfSpottingsGenerated);
                 }
-
-                for (int i=17; i<mAllSpottings.size();i++){
-                    System.out.println(i + ": " + mAllSpottings.get(i).getNoun());
-                    listOfSpottingsGenerated.add(mAllSpottings.get(i));
-                }
-
-
-                db.spottingAnimalDao().insertAll(listOfSpottingsGenerated);
 
                 recentSpottings = db.spottingAnimalDao().getRecentSpottings();
 
