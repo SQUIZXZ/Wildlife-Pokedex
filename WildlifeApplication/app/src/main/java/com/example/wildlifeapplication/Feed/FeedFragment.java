@@ -47,7 +47,7 @@ public class FeedFragment extends Fragment {
                         PostDatabase.class, "Newsfeed_Database").build();
 
                 db.postDA0().insertPosts(
-                        new Post("Joey", "I love this app!!!")
+                        new Post("Joey", "I love this app!!!",6)
                 );
 
                 posts = db.postDA0().getAllPosts();
