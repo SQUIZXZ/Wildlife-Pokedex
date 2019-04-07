@@ -2,7 +2,9 @@ package com.example.wildlifeapplication.Store;
 
 import android.app.Activity;
 import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -64,6 +66,7 @@ public class StoreFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final SharedPreferences sp = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
         mapFragment = (MapFragment) getFragmentManager().findFragmentByTag("Map");
         manualLocation = false;
         activity = getActivity();
@@ -126,8 +129,12 @@ public class StoreFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!manual) {
-                    LatLng pos = mapFragment.storeFragGetLoc(); // crashing here
-                    setLatLng(pos);
+                    if(sp.getString("OnlineStatus","Online").equals("Online")) {
+                        LatLng pos = mapFragment.storeFragGetLoc(); // crashing here
+                        setLatLng(pos);
+                    }else {
+                        setLatLng(new LatLng(51.481580, -3.179089));
+                    }
                 }
 
 
