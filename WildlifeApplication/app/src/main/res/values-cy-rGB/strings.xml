@@ -33,7 +33,7 @@
     <string name="create_a_post">Creu swydd</string>
     <string name="manual_or_automatic_location">Lleoliad Llawlyfr neu Awtomatig</string>
     <string name="automatic">Awtomatig</string>
-    <string name="switch">Newid</string>
+    <string name="aswitch">Newid</string>
     <string name="manual">Llawlyfr</string>
     <string name="choose_location">Llawlyfr...</string>
     <string name="submit">Cyflwyno</string>

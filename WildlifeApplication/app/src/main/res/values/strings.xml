@@ -38,7 +38,7 @@
     <string name="create_a_post">Create a post</string>
     <string name="manual_or_automatic_location">Manual or Automatic Location</string>
     <string name="automatic">Automatic</string>
-    <string name="switch">Switch</string>
+    <string name="aswitch">Switch</string>
     <string name="manual">Manual</string>
     <string name="choose_location">Choose Location</string>
     <string name="submit">Submit</string>

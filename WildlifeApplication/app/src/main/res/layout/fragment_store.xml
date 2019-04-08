@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView4"
             android:layout_toRightOf="@+id/textView5"
-            android:text="@string/switch" />
+            android:text="@string/aswitch" />
 
         <TextView
             android:id="@+id/textView6"
