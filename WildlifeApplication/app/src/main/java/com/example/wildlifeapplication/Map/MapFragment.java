@@ -2,11 +2,16 @@ package com.example.wildlifeapplication.Map;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -249,31 +254,68 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void getDeviceLocation() {
         Log.d(TAG,"getting devices location");
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.getContext());
-        try{
-            if (mLocationPermissionGranted){
-                Task location = mFusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG,"found device's location");
-                            Location currentLocation = (Location) task.getResult();
-                            CameraPosition devicePosition = CameraPosition.builder().target(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).zoom(13).bearing(5).tilt(2).build();
-                            mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(devicePosition));
-                            setPosition(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
-                        } else {
-                            Log.d(TAG,"could not find device's location");
+        LocationManager locationManager = (LocationManager)getActivity().getSystemService(getActivity().LOCATION_SERVICE);
+        boolean gpsIsEnabled = false;
+        boolean networkIsEnabled = false;
 
-                        }
-                    }
-                });
-            }
-
-        }catch(SecurityException e){
-            Log.d(TAG,"getDeviceLocation: SecurityException: " + e.getMessage());
-
+        try {
+            gpsIsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception e) {
+            e.printStackTrace();
         }
+
+        try {
+            networkIsEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        if(!gpsIsEnabled && !networkIsEnabled) {
+            // notify user
+            new AlertDialog.Builder(getActivity())
+                    .setMessage("Location services unavailable")
+                    .setPositiveButton("Open Settings", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                            getActivity().startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    })
+                            .setNegativeButton("Cancel",null)
+                            .show();
+        } else {
+            mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.getContext());
+            try {
+                if (mLocationPermissionGranted) {
+                    Task location = mFusedLocationProviderClient.getLastLocation();
+                    location.addOnCompleteListener(new OnCompleteListener() {
+                        @Override
+                        public void onComplete(@NonNull Task task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "found device's location");
+                                Location currentLocation = (Location) task.getResult();
+                                CameraPosition devicePosition = CameraPosition.builder().target(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).zoom(13).bearing(5).tilt(2).build();
+                                mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(devicePosition));
+                                setPosition(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                            } else {
+                                Log.d(TAG, "could not find device's location");
+
+                            }
+                        }
+                    });
+                    updateLocationUI();
+                }
+
+            } catch (SecurityException e) {
+                Log.d(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
+
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDeviceLocation();
     }
 
     public void storeFragLocationSelect(){
