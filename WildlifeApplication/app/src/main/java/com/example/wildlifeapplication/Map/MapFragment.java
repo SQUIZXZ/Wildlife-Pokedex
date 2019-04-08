@@ -2,11 +2,16 @@ package com.example.wildlifeapplication.Map;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -15,9 +20,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.wildlifeapplication.R;
+import com.example.wildlifeapplication.Search.AnimalInformation.Animal;
+import com.example.wildlifeapplication.Search.AnimalInformation.AnimalDatabase;
+import com.example.wildlifeapplication.Search.AnimalInformation.AnimalInformationFragment;
 import com.example.wildlifeapplication.Store.StoreFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -29,6 +36,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -50,6 +58,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     volatile static List<Spotting> recentSpottings;
+    private List<Spotting> mAllSpottings;
     private boolean storeFragManualLocation = false;
     private StoreFragment storeFragment;
     private LatLng position;
@@ -94,21 +103,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         String[] seenAnimals = new String[]{"51.493514, -3.194885, Common Kingfisher, 19/03/19," +
                 " 10:30", "51.490448, -3.193393, European Blue Tit, 15/03/19, 15:00", "51.488832, " +
-                "-3.186988, Southern Hawker, 20/03/19, 13:00", "51.490993, -3.194303," +
-                " Jay, 20/03/19, 13:00", "51.507242, -3.176287, Mute Swan, 18/03/19, 12:53",
-                "51.515108, -3.176015, Lesser Spotted Woodpeckers, 17/03/19, 11:48", "51.513500," +
-                " -3.173833, Cormorant, 16/03/19, 13:16", "51.500444, -3.182972, Green Woodpecker," +
+                "-3.186988, Southern Hawker, 20/03/19, 13:00", "51.507242, -3.176287, Mute Swan, 18/03/19, 12:53",
+                "51.515108, -3.176015, Lesser Spotted Woodpecker, 17/03/19, 11:48", "51.513500," +
+                " -3.173833, Cormorant, 16/03/19, 13:16", "51.500444, -3.182972, European Green Woodpecker," +
                 " 17/03/19, 15:44", "51.503224, -3.180453, Large Yellow Underwing, 18/03/19, 18:03",
                 "51.532150, -3.166498, Long-tailed Tit, 16/03/19, 10:15", "51.528373, -3.168607," +
-                " Robin, 19/03/19, 09:02", "51.459524, -3.169187, Common Moorhens, 20/03/19, " +
+                " Robin, 19/03/19, 09:02", "51.459524, -3.169187, Common Moorhen, 20/03/19, " +
                 "16/03/19, 11:54", "51.461700, -3.175436, European Reed Warbler, 17/03/19, 14:00",
                 "51.460692, -3.168486, Whitethroat, 15/03/19, 17:20", "51.523946, -3.245422, " +
-                "Great Spotted Woodpecker, 16/03/19, 16:41", "51.519453, -3.252643, Blue Tit," +
-                " 19/03/19, 11:36", "51.517328, -3.247728, Kingfisher, 18/03/19, 15:55"};
+                "Great Spotted Woodpecker, 16/03/19, 16:41", "51.519453, -3.252643, European Blue Tit," +
+                " 19/03/19, 11:36", "51.517328, -3.247728, Common Kingfisher, 18/03/19, 15:55"};
         final List<Spotting> listOfSpottingsGenerated = generateSpottings(seenAnimals);
 
         final SpottingOfAnimalsDatabase db;
-        db = Room.databaseBuilder(getContext(), SpottingOfAnimalsDatabase.class, "spotting of animals database").build();
+        db = Room.databaseBuilder(getContext(), SpottingOfAnimalsDatabase.class, "animal sighting database").build();
 
         AsyncTask.execute(new Runnable() {
             @Override
@@ -117,9 +125,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     db.spottingAnimalDao().clearDatabase(db.spottingAnimalDao().getAllSpottingOfAnimals());
                 }
 
-                db.spottingAnimalDao().insertAll(listOfSpottingsGenerated);
+                if (db.spottingAnimalDao().getAllSpottingOfAnimals().size() < 16){
+                    db.spottingAnimalDao().insertAll(listOfSpottingsGenerated);
+                }
 
                 recentSpottings = db.spottingAnimalDao().getRecentSpottings();
+
+
+                db.close();
             }
 
         });
@@ -131,6 +144,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         } else {
             CameraPosition cardiffCentre = CameraPosition.builder().target(new LatLng(51.481580, -3.179089)).zoom(13).bearing(5).tilt(2).build();
             googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cardiffCentre));
+            setPosition(new LatLng(51.481580, -3.179089));
         }
 
         synchronized (this ) {
@@ -150,6 +164,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
                                            @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         mLocationPermissionGranted = false;
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
@@ -157,10 +172,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true;
+                    getDeviceLocation();
+                    updateLocationUI();
                 }
             }
         }
-        updateLocationUI();
+
     }
 
 
@@ -174,6 +191,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     spotting.getDatetimeOfSpotting()).
                     icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         }
+
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                final String animalNoun = marker.getTitle();
+                AnimalInformationFragment animalInformationFragment = new AnimalInformationFragment();
+                Bundle args = new Bundle();
+                args.putString("Noun", animalNoun);
+                animalInformationFragment.setArguments(args);
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, animalInformationFragment).commit();
+            }
+        });
 
     }
 
@@ -201,9 +231,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if (ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
         } else {
-            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+//            getFragmentManager().beginTransaction().replace(R.id.fragment_container,new MapFragment());
         }
     }
+
 
     private void updateLocationUI() {
         if (mGoogleMap == null) {
@@ -211,6 +243,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
         try {
             if (mLocationPermissionGranted) {
+                mGoogleMap.setMyLocationEnabled(true);
                 mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
             } else {
                 mGoogleMap.setMyLocationEnabled(false);
@@ -224,31 +257,68 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void getDeviceLocation() {
         Log.d(TAG,"getting devices location");
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.getContext());
-        try{
-            if (mLocationPermissionGranted){
-                Task location = mFusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG,"found device's location");
-                            Location currentLocation = (Location) task.getResult();
-                            CameraPosition devicePosition = CameraPosition.builder().target(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).zoom(13).bearing(5).tilt(2).build();
-                            mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(devicePosition));
-                            position = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                        } else {
-                            Log.d(TAG,"could not find device's location");
+        LocationManager locationManager = (LocationManager)getActivity().getSystemService(getActivity().LOCATION_SERVICE);
+        boolean gpsIsEnabled = false;
+        boolean networkIsEnabled = false;
 
-                        }
-                    }
-                });
-            }
-
-        }catch(SecurityException e){
-            Log.d(TAG,"getDeviceLocation: SecurityException: " + e.getMessage());
-
+        try {
+            gpsIsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception e) {
+            e.printStackTrace();
         }
+
+        try {
+            networkIsEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        if(!gpsIsEnabled && !networkIsEnabled) {
+            // notify user
+            new AlertDialog.Builder(getActivity())
+                    .setMessage("Location services unavailable")
+                    .setPositiveButton("Open Settings", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                            getActivity().startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    })
+                            .setNegativeButton("Cancel",null)
+                            .show();
+        } else {
+            mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.getContext());
+            try {
+                if (mLocationPermissionGranted) {
+                    Task location = mFusedLocationProviderClient.getLastLocation();
+                    location.addOnCompleteListener(new OnCompleteListener() {
+                        @Override
+                        public void onComplete(@NonNull Task task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "found device's location");
+                                Location currentLocation = (Location) task.getResult();
+                                CameraPosition devicePosition = CameraPosition.builder().target(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).zoom(13).bearing(5).tilt(2).build();
+                                mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(devicePosition));
+                                setPosition(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                            } else {
+                                Log.d(TAG, "could not find device's location");
+
+                            }
+                        }
+                    });
+                    updateLocationUI();
+                }
+
+            } catch (SecurityException e) {
+                Log.d(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
+
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDeviceLocation();
     }
 
     public void storeFragLocationSelect(){
@@ -268,5 +338,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     public LatLng storeFragGetLoc(){
         return position;
+    }
+
+    public void setPosition(LatLng aPosition){
+        this.position = aPosition;
     }
 }

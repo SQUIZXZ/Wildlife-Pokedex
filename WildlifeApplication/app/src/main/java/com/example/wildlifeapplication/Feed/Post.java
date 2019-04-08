@@ -2,7 +2,11 @@ package com.example.wildlifeapplication.Feed;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.net.Uri;
+
+import java.io.File;
 
 
 @Entity
@@ -17,19 +21,17 @@ public class Post {
     @ColumnInfo(name = "post_caption")
     private String caption;
 
-    @ColumnInfo(name = "post_profile_pic")
-    private int pp;
+    @ColumnInfo(name = "image_path")
+    private String imagePath;
 
-
-//    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-//    private byte[] image;
-
-    public Post(String username, String caption, int pp) {
-        this.username = username;
-        this.caption = caption;
-        this.pp = pp;
-
+    @Ignore
+    public Post(String aUsername, String aCaption, String anImagePath) {
+        this.username = aUsername;
+        this.caption = aCaption;
+        this.imagePath = anImagePath;
     }
+
+    public Post(){}
 
     public int getId() {
         return id;
@@ -55,11 +57,11 @@ public class Post {
         this.caption = caption;
     }
 
-    public int getPp() {
-        return pp;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setPp(int pp) {
-        this.pp = pp;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

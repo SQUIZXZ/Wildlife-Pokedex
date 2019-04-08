@@ -5,18 +5,19 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.telephony.mbms.FileInfo;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.wildlifeapplication.Extras.ExtrasFragment;
 import com.example.wildlifeapplication.R;
 
+import java.io.File;
 import java.util.List;
 
 public class FeedFragment extends Fragment {
@@ -50,11 +51,15 @@ public class FeedFragment extends Fragment {
                 db = Room.databaseBuilder(getContext(),
                         PostDatabase.class, "Newsfeed_Database").build();
 
-                db.postDA0().insertPosts(
-                        new Post("Joey", "I love this app!!!",6)
-                );
-
                 posts = db.postDA0().getAllPosts();
+
+                if(posts.size() == 0) {
+                    db.postDA0().insertPosts(
+                            new Post("Joey", "I love this app!!!", "mipmap-hdpi/blue_tit.JPG"
+                            ));
+
+                    posts = db.postDA0().getAllPosts();
+                }
                 db.close();
 
 //                Toast.makeText(getApplicationContext(),username,Toast.LENGTH_SHORT).show();
@@ -63,7 +68,7 @@ public class FeedFragment extends Fragment {
         });
 
         synchronized (this) {
-            while(posts == null) {
+            while(posts == null || posts.size() == 0) {
                 try {
                     wait(5);
                 } catch (InterruptedException e) {
@@ -80,6 +85,14 @@ public class FeedFragment extends Fragment {
         CustomAdapter customAdapter = new CustomAdapter();
 
         list.setAdapter(customAdapter);
+
+        Button createPostButton = v.findViewById(R.id.create_post_button);
+        createPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new PostCreationFragment()).commit();
+            }
+        });
 
         return v;
         }

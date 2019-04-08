@@ -43,7 +43,7 @@ public class SettingsFragment extends ListFragment {
             case "Online/Offline Mode":
                 System.out.println(sp.getAll());
                 if(sp.getString("OnlineStatus","Online").equals("Online")){
-                    Toast.makeText(getContext(), "You'vre gone offline", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "You've gone offline", Toast.LENGTH_SHORT).show();
                     editor.putString("OnlineStatus","Offline");
                 }else{
                     Toast.makeText(getContext(),"You've gone online",Toast.LENGTH_SHORT).show();
