@@ -118,7 +118,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void run() {
 
-                if (db.spottingAnimalDao().getAllSpottingOfAnimals() == null){
+                if (db.spottingAnimalDao().getAllSpottingOfAnimals().size() < 10){
                     db.spottingAnimalDao().insertAll(listOfSpottingsGenerated);
                 }
 
