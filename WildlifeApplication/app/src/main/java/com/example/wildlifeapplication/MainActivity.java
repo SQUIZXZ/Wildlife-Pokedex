@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.wildlifeapplication.Extras.ExtrasFragment;
 import com.example.wildlifeapplication.Feed.FeedFragment;
@@ -44,8 +45,14 @@ public class MainActivity extends AppCompatActivity {
                     switchToMapFragment();
                     return true;
                 case R.id.navigation_feed:
+                    SharedPreferences sp = getSharedPreferences("pref",Context.MODE_PRIVATE);
+                    if (sp.getString("OnlineStatus","Online").equals("Online")) {
                     switchToFeedFragment();
                     return true;
+                    }else{
+                        Toast.makeText(getApplicationContext(),"Sorry, you need to be on online mode to access the newsfeed",Toast.LENGTH_LONG).show();
+                        return false;
+                    }
                 case R.id.navigation_search:
                     switchToBirdSearchFragment();
                     return true;
