@@ -1,15 +1,19 @@
 package com.example.wildlifeapplication.Store;
 
+import android.Manifest;
 import android.app.Activity;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
@@ -37,6 +41,7 @@ import java.util.Date;
 public class StoreFragment extends Fragment {
 
     private static final int CAMERA_PIC_REQUEST = 1337;
+    private static final int REQUEST_PERM_WRITE_STORAGE = 102;
     private String pictureFilePath;
     private File image = null;
     private Activity activity;
@@ -98,21 +103,33 @@ public class StoreFragment extends Fragment {
         });
         button1.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                try {
-                    String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-                    String pictureFile = "Wildlife_" + timeStamp;
-                    File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                    image = File.createTempFile(pictureFile, ".jpg", storageDir); // crashing here
-                }catch (java.io.IOException e){
-                    e.printStackTrace();
-                    Toast.makeText(getContext(),"Photo file could not be created, please try again",Toast.LENGTH_SHORT).show();
-                    return;
+
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if(getActivity().checkSelfPermission(Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PIC_REQUEST);
+                    }
                 }
-                if (image != null) {
-                    Uri photoURI = FileProvider.getUriForFile(getContext(), "com.example.wildlifeapplication", image);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    activity.startActivityForResult(intent, CAMERA_PIC_REQUEST);
+                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERM_WRITE_STORAGE);
+                }else {
+
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    try {
+                        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+                        String pictureFile = "Wildlife_" + timeStamp;
+                        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                        image = File.createTempFile(pictureFile, ".jpg", storageDir);
+                        pictureFilePath = image.getAbsolutePath();
+                    } catch (java.io.IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), "Photo file could not be created, please try again", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (image != null) {
+                        Uri photoURI = FileProvider.getUriForFile(getContext(), "com.example.wildlifeapplication", image);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                        activity.startActivityForResult(intent, CAMERA_PIC_REQUEST);
+                    }
                 }
             }
         });
