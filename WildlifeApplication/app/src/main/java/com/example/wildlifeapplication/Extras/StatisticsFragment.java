@@ -77,7 +77,7 @@ public class StatisticsFragment extends Fragment {
         });
 
         try {
-            TimeUnit.MILLISECONDS.sleep(200);
+            TimeUnit.MILLISECONDS.sleep(300);
         } catch (java.lang.InterruptedException e) {
             e.printStackTrace();
         }

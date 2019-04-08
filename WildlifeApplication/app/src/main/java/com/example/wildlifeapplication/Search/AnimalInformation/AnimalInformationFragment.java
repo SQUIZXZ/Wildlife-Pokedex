@@ -34,7 +34,7 @@ public class AnimalInformationFragment extends Fragment {
                 public void run() {
                     AnimalDatabase animalDatabase = Room.databaseBuilder(getContext(), AnimalDatabase.class, "animal database").build();
                     animalDatabase.clearAllTables();
-                    ISearchForAnimalService searchForAnimalService = new SearchForAnimalService();
+                    SearchForAnimalService searchForAnimalService = new SearchForAnimalService();
                     animalDatabase.animalDao().insertAllAnimals(searchForAnimalService.getAllAnimals());
                     Animal animal = animalDatabase.animalDao().getAnimalWithNoun(noun);
                     sNoun[0] = animal.getScientificNoun();

@@ -98,17 +98,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         String[] seenAnimals = new String[]{"51.493514, -3.194885, Common Kingfisher, 19/03/19," +
                 " 10:30", "51.490448, -3.193393, European Blue Tit, 15/03/19, 15:00", "51.488832, " +
-                "-3.186988, Southern Hawker, 20/03/19, 13:00", "51.490993, -3.194303," +
-                " Jay, 20/03/19, 13:00", "51.507242, -3.176287, Mute Swan, 18/03/19, 12:53",
-                "51.515108, -3.176015, Lesser Spotted Woodpeckers, 17/03/19, 11:48", "51.513500," +
-                " -3.173833, Cormorant, 16/03/19, 13:16", "51.500444, -3.182972, Green Woodpecker," +
+                "-3.186988, Southern Hawker, 20/03/19, 13:00", "51.507242, -3.176287, Mute Swan, 18/03/19, 12:53",
+                "51.515108, -3.176015, Lesser Spotted Woodpecker, 17/03/19, 11:48", "51.513500," +
+                " -3.173833, Cormorant, 16/03/19, 13:16", "51.500444, -3.182972, European Green Woodpecker," +
                 " 17/03/19, 15:44", "51.503224, -3.180453, Large Yellow Underwing, 18/03/19, 18:03",
                 "51.532150, -3.166498, Long-tailed Tit, 16/03/19, 10:15", "51.528373, -3.168607," +
-                " Robin, 19/03/19, 09:02", "51.459524, -3.169187, Common Moorhens, 20/03/19, " +
+                " Robin, 19/03/19, 09:02", "51.459524, -3.169187, Common Moorhen, 20/03/19, " +
                 "16/03/19, 11:54", "51.461700, -3.175436, European Reed Warbler, 17/03/19, 14:00",
                 "51.460692, -3.168486, Whitethroat, 15/03/19, 17:20", "51.523946, -3.245422, " +
-                "Great Spotted Woodpecker, 16/03/19, 16:41", "51.519453, -3.252643, Blue Tit," +
-                " 19/03/19, 11:36", "51.517328, -3.247728, Kingfisher, 18/03/19, 15:55"};
+                "Great Spotted Woodpecker, 16/03/19, 16:41", "51.519453, -3.252643, European Blue Tit," +
+                " 19/03/19, 11:36", "51.517328, -3.247728, Common Kingfisher, 18/03/19, 15:55"};
         final List<Spotting> listOfSpottingsGenerated = generateSpottings(seenAnimals);
 
         final SpottingOfAnimalsDatabase db;
@@ -118,7 +117,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void run() {
 
-                if (db.spottingAnimalDao().getAllSpottingOfAnimals().size() < 10){
+                if (db.spottingAnimalDao().getAllSpottingOfAnimals().size() < 16){
                     db.spottingAnimalDao().insertAll(listOfSpottingsGenerated);
                 }
 

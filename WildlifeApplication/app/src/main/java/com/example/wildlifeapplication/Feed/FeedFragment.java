@@ -69,7 +69,7 @@ public class FeedFragment extends Fragment {
         });
 
         synchronized (this) {
-            while(posts == null) {
+            while(posts == null || posts.size() == 0) {
                 try {
                     wait(5);
                 } catch (InterruptedException e) {
