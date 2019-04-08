@@ -28,4 +28,25 @@
     <string name="max_length">Hyd llawn</string>
     <string name="min_length">Isafswm hyd</string>
     <string name="type">Math</string>
+    <string name="insert_a_caption_for_your_post">Rhowch deitl ar gyfer eich swydd ...</string>
+    <string name="enter_your_username">Rhowch eich enw defnyddiwr ..</string>
+    <string name="create_a_post">Creu swydd</string>
+    <string name="manual_or_automatic_location">Lleoliad Llawlyfr neu Awtomatig</string>
+    <string name="automatic">Awtomatig</string>
+    <string name="switch">Newid</string>
+    <string name="manual">Llawlyfr</string>
+    <string name="choose_location">Llawlyfr...</string>
+    <string name="submit">Cyflwyno</string>
+    <string name="noun">Enw:</string>
+    <string name="scientific_noun">Enw Gwyddonol:</string>
+    <string name="body_length">Hyd y Corff:</string>
+    <string name="insert_body_length">Rhowch Hyd y Corff</string>
+    <string name="wingspan">Adenydd:</string>
+    <string name="insert_wingspan">Mewnosod Wingspan</string>
+    <string name="colour">Lliw:</string>
+    <string name="insert_colour">Mewnosod Lliw</string>
+    <string name="habitat">Cynefin:</string>
+    <string name="insert_habitat">Mewnosod Cynefin</string>
+    <string name="time_of_year">Amser o\'r Flwyddyn:</string>
+    <string name="insert_time_of_year">Mewnosodwch Amser o\'r Flwyddyn</string>
 </resources>

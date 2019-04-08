@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="Create a post" />
+        android:text="@string/create_a_post" />
 
 <ListView
     android:id="@+id/listview"

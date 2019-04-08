@@ -26,6 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setAppLocale("cy");
         setContentView(R.layout.activity_register);
 
         db = new DatabaseAssist(this);
@@ -65,7 +66,6 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
-        setAppLocale("cy");
     }
 
     private void setAppLocale(String localeCode) {

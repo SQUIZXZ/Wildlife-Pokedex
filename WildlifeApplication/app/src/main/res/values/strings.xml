@@ -33,6 +33,27 @@
     <string name="max_length">Max length</string>
     <string name="min_length">Min length</string>
     <string name="type">Type</string>
+    <string name="insert_a_caption_for_your_post">Insert a caption for your post...</string>
+    <string name="enter_your_username">Enter your username..</string>
+    <string name="create_a_post">Create a post</string>
+    <string name="manual_or_automatic_location">Manual or Automatic Location</string>
+    <string name="automatic">Automatic</string>
+    <string name="switch">Switch</string>
+    <string name="manual">Manual</string>
+    <string name="choose_location">Choose Location</string>
+    <string name="submit">Submit</string>
+    <string name="noun">Noun:</string>
+    <string name="scientific_noun">Scientific Noun:</string>
+    <string name="body_length">Body Length:</string>
+    <string name="insert_body_length">Insert Body Length</string>
+    <string name="wingspan">Wingspan:</string>
+    <string name="insert_wingspan">Insert Wingspan</string>
+    <string name="colour">Colour:</string>
+    <string name="insert_colour">Insert Colour</string>
+    <string name="habitat">Habitat:</string>
+    <string name="insert_habitat">Insert Habitat</string>
+    <string name="time_of_year">Time of Year:</string>
+    <string name="insert_time_of_year">Insert Time of Year</string>
 
     <string-array name="colours">
         <item>Black</item>

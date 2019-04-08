@@ -25,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setAppLocale("cy");
         setContentView(R.layout.activity_login);
 
         db = new DatabaseAssist(this);

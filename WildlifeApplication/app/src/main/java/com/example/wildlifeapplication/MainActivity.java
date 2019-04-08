@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setAppLocale("cy");
         setContentView(R.layout.activity_main);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -101,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
                 view.performClick();
                 break;
         }
-        setAppLocale("cy");
     }
 
     public void switchToBirdSearchFragment() {
