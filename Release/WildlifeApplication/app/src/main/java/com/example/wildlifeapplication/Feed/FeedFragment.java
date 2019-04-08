@@ -1,53 +1,32 @@
 package com.example.wildlifeapplication.Feed;
 
-import android.net.Uri;
+import android.arch.persistence.room.Room;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
-import com.example.wildlifeapplication.Extras.ExtrasFragment;
 import com.example.wildlifeapplication.R;
 
+import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ExtrasFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ExtrasFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FeedFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    PostDatabase db;
+    List<Post> posts;
 
-
-    public FeedFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ExtrasFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ExtrasFragment newInstance(String param1, String param2) {
-        ExtrasFragment fragment = new ExtrasFragment();
+    public static FeedFragment newInstance() {
+        FeedFragment fragment = new FeedFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,33 +34,94 @@ public class FeedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_extras, container, false);
+        View v = inflater.inflate(R.layout.fragment_feed, container, false);
+
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                db = Room.databaseBuilder(getContext(),
+                        PostDatabase.class, "Newsfeed_Database").build();
+
+                posts = db.postDA0().getAllPosts();
+
+                db.close();
+
+
+            }
+        });
+
+        synchronized (this) {
+            while (posts == null) {
+                try {
+                    wait(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        Log.d("BOO_TEST", String.format("Number of Posts: %d", posts.size()));
+
+        ListView list = (ListView) v.findViewById(R.id.listview);
+
+        CustomAdapter customAdapter = new CustomAdapter();
+
+        list.setAdapter(customAdapter);
+
+        Button createPostButton = v.findViewById(R.id.create_post_button);
+        createPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new PostCreationFragment()).commit();
+            }
+        });
+        createPostButton.bringToFront();
+
+        return v;
     }
 
+    class CustomAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return posts.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = getLayoutInflater().inflate(R.layout.postlayout, null);
+
+            ImageView pp = (ImageView) view.findViewById(R.id.pp);
+            TextView textView_name = (TextView) view.findViewById(R.id.textView_name);
+            TextView textView_description = (TextView) view.findViewById(R.id.textView_description);
+            ImageView image = (ImageView) view.findViewById(R.id.image);
+
+            pp.setImageResource(R.drawable.fox_avatar);
+            textView_name.setText(posts.get(posts.size() - i - 1).getUsername());
+            textView_description.setText(posts.get(posts.size() - i - 1).getCaption());
+            image.setImageBitmap(BitmapFactory.decodeFile(posts.get(posts.size() - i - 1).getImagePath()));
 
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+            return view;
+        }
     }
 }
