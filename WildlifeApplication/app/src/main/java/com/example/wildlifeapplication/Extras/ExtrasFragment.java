@@ -1,5 +1,8 @@
 package com.example.wildlifeapplication.Extras;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.wildlifeapplication.LoginActivity;
 import com.example.wildlifeapplication.R;
 
 import java.util.ArrayList;
@@ -47,7 +51,8 @@ public class ExtrasFragment extends ListFragment {
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, statisticsFragment = new StatisticsFragment()).commit();
                 break;
             case "Log Out":
-                Toast.makeText(getContext(), item, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
                 break;
         }
     }
