@@ -12,8 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.wildlifeapplication.Extras.ExtrasFragment;
@@ -44,6 +46,7 @@ public class FeedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_feed, container, false);
+
 
         AsyncTask.execute(new Runnable() {
             @Override
@@ -81,23 +84,11 @@ public class FeedFragment extends Fragment {
 
         Log.d("BOO_TEST", String.format("Number of Posts: %d", posts.size()));
 
-        int i = 1;
-        if(posts.size()<1) {
-            i = 0;
-        }
-        String username = posts.get(posts.size() - i).getUsername();
+        ListView list = (ListView) v.findViewById(R.id.listview);
 
-        String caption = posts.get(posts.size() - i).getCaption();
+        CustomAdapter customAdapter = new CustomAdapter();
 
-        TextView textViewUsername = (TextView) v.findViewById(R.id.username);
-
-        textViewUsername.setText(username);
-
-        TextView textViewCaption = (TextView) v.findViewById(R.id.caption);
-        textViewCaption.setText(caption);
-
-        ImageView birdImage = v.findViewById(R.id.imageView2);
-        birdImage.setImageBitmap(BitmapFactory.decodeFile(posts.get(posts.size() - i).getImagePath()));
+        list.setAdapter(customAdapter);
 
         Button createPostButton = v.findViewById(R.id.create_post_button);
         createPostButton.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +97,43 @@ public class FeedFragment extends Fragment {
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container, new PostCreationFragment()).commit();
             }
         });
+        createPostButton.bringToFront();
 
         return v;
+        }
+
+    class CustomAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return posts.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = getLayoutInflater().inflate(R.layout.postlayout, null);
+
+            ImageView pp = (ImageView) view.findViewById(R.id.pp);
+            TextView textView_name = (TextView) view.findViewById(R.id.textView_name);
+            TextView textView_description = (TextView) view.findViewById(R.id.textView_description);
+            ImageView image = (ImageView) view.findViewById(R.id.image);
+
+            pp.setImageResource(R.drawable.alexjones);
+            textView_name.setText(posts.get(i).getUsername());
+            textView_description.setText(posts.get(i).getCaption());
+            image.setImageResource(R.drawable.sparrowhawk);
+
+
+            return view;
     }
-}
+}}
