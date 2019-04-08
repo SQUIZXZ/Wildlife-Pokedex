@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WildLife</string>
+    <string name="title_map">Map</string>
+    <string name="title_feed">Porthiant</string>
+    <string name="title_search">Chwilio</string>
+    <string name="extras">Ychwanegiadau</string>
+    <string name="hello_blank_fragment">Helo darn gwag</string>
+    <string name="animal">Cyfanswm yr anifeiliaid a welwyd yng Nghaerdydd:</string>
+    <string name="animal_in_database">Mathau o anifeiliaid yn y gronfa ddata:</string>
+    <string name="number_of_birds_string">Adar yn y gronfa ddata:</string>
+    <string name="number_of_reptiles_string">Ymlusgiaid yn y gronfa ddata:</string>
+    <string name="number_of_mammals_string">Mamaliaid yn y gronfa ddata:</string>
+    <string name="number_of_invert_string">Infertebratau yn y gronfa ddata:</string>
+    <string name="username">Enw defnyddiwr</string>
+    <string name="password">Cyfrinair</string>
+    <string name="login">MEWNGOFNODI</string>
+    <string name="not_registered">Ddim wedi cofrestru?</string>
+    <string name="register">COFRESTR</string>
+    <string name="confirm_password">cadarnhau cyfrinair</string>
+    <string name="already_registered">Wedi cofrestru eisoes?</string>
+    <string name="existing_account_login">Mewngofnodi</string>
+    <string name="unknown">Anhysbys</string>
+    <string name="image_of_animal">delwedd yr anifail</string>
+    <string name="image_of_an_animal">delwedd anifail</string>
+    <string name="colours">Lliwiau</string>
+    <string name="no_results">Dim canlyniadau</string>
+    <string name="max_length">Hyd llawn</string>
+    <string name="min_length">Isafswm hyd</string>
+    <string name="type">Math</string>
+</resources>

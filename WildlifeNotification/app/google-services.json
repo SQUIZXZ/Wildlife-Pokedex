@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "246604060063",
+    "firebase_url": "https://wildlifenotification.firebaseio.com",
+    "project_id": "wildlifenotification",
+    "storage_bucket": "wildlifenotification.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246604060063:android:1e1663a9a41f938d",
+        "android_client_info": {
+          "package_name": "com.example.wildlifenotification"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "246604060063-08mlc3vvq00ilrc6ug8n1labi5r7tsp3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.wildlifenotification",
+            "certificate_hash": "66e3a6e69f0c3f4899b4b200b19356a136947a07"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCT30_DTHwprw7P7jS8m-nilVnHEkKa0sA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "246604060063-g71uqour15k96ticuekgoq47u0a4abub.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
