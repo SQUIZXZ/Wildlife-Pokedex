@@ -22,6 +22,7 @@ import com.example.wildlifeapplication.Extras.ExtrasFragment;
 import com.example.wildlifeapplication.R;
 
 import java.io.File;
+import java.net.URI;
 import java.util.List;
 
 public class FeedFragment extends Fragment {
@@ -57,22 +58,14 @@ public class FeedFragment extends Fragment {
 
                 posts = db.postDA0().getAllPosts();
 
-                if(posts.size() == 0) {
-                    db.postDA0().insertPosts(
-                            new Post("Joey", "I love this app!!!", "mipmap-hdpi/blue_tit.JPG"
-                            ));
-
-                    posts = db.postDA0().getAllPosts();
-                }
                 db.close();
 
-//                Toast.makeText(getApplicationContext(),username,Toast.LENGTH_SHORT).show();
 
             }
         });
 
         synchronized (this) {
-            while(posts == null || posts.size() == 0) {
+            while(posts == null) {
                 try {
                     wait(5);
                 } catch (InterruptedException e) {
@@ -128,10 +121,10 @@ public class FeedFragment extends Fragment {
             TextView textView_description = (TextView) view.findViewById(R.id.textView_description);
             ImageView image = (ImageView) view.findViewById(R.id.image);
 
-            pp.setImageResource(R.drawable.alexjones);
-            textView_name.setText(posts.get(i).getUsername());
-            textView_description.setText(posts.get(i).getCaption());
-            image.setImageResource(R.drawable.sparrowhawk);
+            pp.setImageResource(R.drawable.fox_avatar);
+            textView_name.setText(posts.get(posts.size()-i-1).getUsername());
+            textView_description.setText(posts.get(posts.size()-i-1).getCaption());
+            image.setImageBitmap(BitmapFactory.decodeFile(posts.get(posts.size()-i-1).getImagePath()));
 
 
             return view;
