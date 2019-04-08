@@ -138,7 +138,7 @@ public class AnimalSearchFragment extends ListFragment {
                             if (!mSelectedColoursPositions.contains(position)) {
                                 mSelectedColoursPositions.add(position);
                             }
-                        }else if(mSelectedColoursPositions.contains(position)) {
+                        } else if (mSelectedColoursPositions.contains(position)) {
                             mSelectedColoursPositions.remove(mSelectedColoursPositions.indexOf(position));
                         }
 
@@ -152,8 +152,8 @@ public class AnimalSearchFragment extends ListFragment {
                         String item = "";
                         for (int i = 0; i < mSelectedColoursPositions.size(); i++) {
                             item = item + colourList[mSelectedColoursPositions.get(i)];
-                            if(i != mSelectedColoursPositions.size() - 1){
-                                item = item +", ";
+                            if (i != mSelectedColoursPositions.size() - 1) {
+                                item = item + ", ";
                             }
                         }
 
@@ -165,13 +165,13 @@ public class AnimalSearchFragment extends ListFragment {
                         updateListView();
 
                         //removes all tags currently displaying
-                        if(((ViewGroup) getActivity().findViewById(R.id.colour_filter)).getChildCount() > 1){
-                            ((ViewGroup) getActivity().findViewById(R.id.colour_filter)).removeViews(1, ((ViewGroup) getActivity().findViewById(R.id.colour_filter)).getChildCount()-1);
+                        if (((ViewGroup) getActivity().findViewById(R.id.colour_filter)).getChildCount() > 1) {
+                            ((ViewGroup) getActivity().findViewById(R.id.colour_filter)).removeViews(1, ((ViewGroup) getActivity().findViewById(R.id.colour_filter)).getChildCount() - 1);
                         }
 
                         //adds tags for each colour
-                        for(String colour: selectedColoursAsStringArray) {
-                            if(!colour.equals("")) {
+                        for (String colour : selectedColoursAsStringArray) {
+                            if (!colour.equals("")) {
                                 addFilterTag(inflater, container, R.id.colour_filter, "Colour", colour.trim());
                             }
                         }
@@ -239,14 +239,14 @@ public class AnimalSearchFragment extends ListFragment {
                             //adding filter tag
                             addFilterTag(inflater, container, R.id.type_filter, "Type", selectedItemText);
                             updateListView();
-                        }else{
+                        } else {
                             updateFilterTag(R.id.type_filter, selectedItemText);
                             updateListView();
                         }
 
                     }
                 } else {
-                    if(selectedItemText.equals("Select a type") && ((ViewGroup) v.findViewById(R.id.type_filter)).getChildCount() == 2 ) {
+                    if (selectedItemText.equals("Select a type") && ((ViewGroup) v.findViewById(R.id.type_filter)).getChildCount() == 2) {
                         View filterTagView = ((ViewGroup) v.findViewById(R.id.type_filter)).getChildAt(1);
                         ((ViewGroup) v.findViewById(R.id.type_filter)).removeView(filterTagView);
                     }
@@ -294,16 +294,16 @@ public class AnimalSearchFragment extends ListFragment {
                             }
                         }
                     }
-                        updateListView();
+                    updateListView();
                     if (((ViewGroup) v.findViewById(R.id.min_length_filter)).getChildCount() != 2) {
                         //adding filter tag
                         addFilterTag(inflater, container, R.id.min_length_filter, "Min Length", selectedItemText);
-                    }else {
-                        updateFilterTag( R.id.min_length_filter, selectedItemText);
+                    } else {
+                        updateFilterTag(R.id.min_length_filter, selectedItemText);
 
                     }
                 } else {
-                    if(selectedItemText.equals("Select a minimum size(cm)") && ((ViewGroup) v.findViewById(R.id.min_length_filter)).getChildCount() == 2 ) {
+                    if (selectedItemText.equals("Select a minimum size(cm)") && ((ViewGroup) v.findViewById(R.id.min_length_filter)).getChildCount() == 2) {
                         View filterTagView = ((ViewGroup) v.findViewById(R.id.min_length_filter)).getChildAt(1);
                         ((ViewGroup) v.findViewById(R.id.min_length_filter)).removeView(filterTagView);
                     }
@@ -351,13 +351,13 @@ public class AnimalSearchFragment extends ListFragment {
                     }
                     if (((ViewGroup) v.findViewById(R.id.max_length_filter)).getChildCount() != 2) {
                         //adding filter tag
-                        addFilterTag(inflater, container, R.id.max_length_filter,"Max Length", selectedItemText);
-                    }else {
-                        updateFilterTag( R.id.max_length_filter, selectedItemText);
+                        addFilterTag(inflater, container, R.id.max_length_filter, "Max Length", selectedItemText);
+                    } else {
+                        updateFilterTag(R.id.max_length_filter, selectedItemText);
                     }
                     updateListView();
                 } else {
-                    if(selectedItemText.equals("Select a maximum size(cm)") && ((ViewGroup) v.findViewById(R.id.max_length_filter)).getChildCount() == 2 ) {
+                    if (selectedItemText.equals("Select a maximum size(cm)") && ((ViewGroup) v.findViewById(R.id.max_length_filter)).getChildCount() == 2) {
                         View filterTagView = ((ViewGroup) v.findViewById(R.id.max_length_filter)).getChildAt(1);
                         ((ViewGroup) v.findViewById(R.id.max_length_filter)).removeView(filterTagView);
                     }
@@ -430,10 +430,10 @@ public class AnimalSearchFragment extends ListFragment {
 
     }
 
-    public List<Animal> determineListOfAnimalsToDisplay(List<Animal> allAnimals, List<Animal> ... args){
+    public List<Animal> determineListOfAnimalsToDisplay(List<Animal> allAnimals, List<Animal>... args) {
         List<List<Animal>> listsOfAnimals = new ArrayList<>();
-        for(List<Animal> list: args) {
-            if(list != null) {
+        for (List<Animal> list : args) {
+            if (list != null) {
                 listsOfAnimals.add(list);
             }
         }
@@ -443,19 +443,19 @@ public class AnimalSearchFragment extends ListFragment {
 
         //Checks which animals all the lists have in common and removes the ones that are not
         //present in all of the lists
-        for(List<Animal> listOfAnimals: listsOfAnimals) {
-                for (Animal animalInAllAnimals : allAnimals) {
-                    boolean animalInList = false;
-                    for(Animal animal: listOfAnimals){
-                        if(animal.getScientificNoun().equalsIgnoreCase(animalInAllAnimals.getScientificNoun())){
-                            animalInList = true;
-                        }
-                    }
-
-                    if (!animalInList && copyMAllAnimals.contains(animalInAllAnimals)) {
-                        copyMAllAnimals.remove(animalInAllAnimals);
+        for (List<Animal> listOfAnimals : listsOfAnimals) {
+            for (Animal animalInAllAnimals : allAnimals) {
+                boolean animalInList = false;
+                for (Animal animal : listOfAnimals) {
+                    if (animal.getScientificNoun().equalsIgnoreCase(animalInAllAnimals.getScientificNoun())) {
+                        animalInList = true;
                     }
                 }
+
+                if (!animalInList && copyMAllAnimals.contains(animalInAllAnimals)) {
+                    copyMAllAnimals.remove(animalInAllAnimals);
+                }
+            }
         }
         return copyMAllAnimals;
     }
@@ -501,7 +501,7 @@ public class AnimalSearchFragment extends ListFragment {
         //Setting text of filter tag
         ((TextView) filterTagView.findViewById(R.id.filter_tag_title)).setText(filterSelected);
 
-        if(typeOfFilter == "Colour") {
+        if (typeOfFilter == "Colour") {
             ((ViewGroup) filterTagView).removeView(filterTagView.findViewById(R.id.x_button));
         } else {
 

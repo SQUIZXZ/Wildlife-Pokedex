@@ -10,11 +10,10 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.example.wildlifeapplication.R;
-import com.example.wildlifeapplication.Search.ISearchForAnimalService;
 import com.example.wildlifeapplication.Search.SearchForAnimalService;
 import com.example.wildlifeapplication.Store.StoreFragment;
 
@@ -27,7 +26,7 @@ public class AnimalInformationFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final String[] sNoun = new String[1];
         sNoun[0] = getArguments().getString("Scientific noun");
-        if(sNoun[0] == null){
+        if (sNoun[0] == null) {
             final String noun = getArguments().getString("Noun");
             AsyncTask.execute(new Runnable() {
                 @Override
@@ -60,8 +59,8 @@ public class AnimalInformationFragment extends Fragment {
                 animalDB.close();
             }
         });
-        View v = inflater.inflate(R.layout.fragment_animal_info, container,false);
-        synchronized (this ) {
+        View v = inflater.inflate(R.layout.fragment_animal_info, container, false);
+        synchronized (this) {
             while (animal == null || !animal.getScientificNoun().equals(sNoun[0])) {
                 try {
                     AnimalInformationFragment.this.wait(10);
@@ -82,7 +81,7 @@ public class AnimalInformationFragment extends Fragment {
             ((TextView) v.findViewById(R.id.animal_food_source)).setText(animal.getFoodSource());
         }
 
-        ((Button) v.findViewById(R.id.store_animal_button)).setOnClickListener(new View.OnClickListener() {
+        v.findViewById(R.id.store_animal_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
@@ -90,10 +89,10 @@ public class AnimalInformationFragment extends Fragment {
                 Bundle args = new Bundle();
                 String noun = animal.getNoun();
                 String scientificNoun = animal.getScientificNoun();
-                args.putString("noun",noun);
-                args.putString("scientific_noun",scientificNoun);
+                args.putString("noun", noun);
+                args.putString("scientific_noun", scientificNoun);
                 storeFragment.setArguments(args);
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, storeFragment,"Store").commit();
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, storeFragment, "Store").commit();
             }
         });
 

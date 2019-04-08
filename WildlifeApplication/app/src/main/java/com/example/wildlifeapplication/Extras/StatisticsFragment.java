@@ -25,7 +25,7 @@ public class StatisticsFragment extends Fragment {
     private List<Animal> mAllAnimals;
     private List<Spotting> mAllSpottings;
     int animalCount = 0;
-    int spotCount = 0 ;
+    int spotCount = 0;
 
     public static StatisticsFragment newInstance() {
         StatisticsFragment fragment = new StatisticsFragment();
@@ -45,8 +45,6 @@ public class StatisticsFragment extends Fragment {
         final TextView total_Sightings_Stored = view.findViewById(R.id.number1);
         final TextView types_of_animal_count = view.findViewById(R.id.number2);
 
-        //        final SpottingOfAnimalsDatabase spottingOfAnimalsDB = Room.databaseBuilder(getContext(),SpottingOfAnimalsDatabase.class,"animal sighting database").build();
-
 
         final SearchForAnimalService animalSearchService = new SearchForAnimalService();
         final AnimalDatabase db = Room.databaseBuilder(getContext(), AnimalDatabase.class, "animal database").build();
@@ -63,13 +61,13 @@ public class StatisticsFragment extends Fragment {
             }
         });
 
-        final SpottingOfAnimalsDatabase spottingOfAnimalsDB = Room.databaseBuilder(getContext(),SpottingOfAnimalsDatabase.class,"animal sighting database").build();
+        final SpottingOfAnimalsDatabase spottingOfAnimalsDB = Room.databaseBuilder(getContext(), SpottingOfAnimalsDatabase.class, "animal sighting database").build();
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
                 mAllSpottings = spottingOfAnimalsDB.spottingAnimalDao().getAllSpottingOfAnimals();
 
-                for(int i = 0; i <mAllSpottings.size();i++){
+                for (int i = 0; i < mAllSpottings.size(); i++) {
                     spotCount++;
                 }
                 spottingOfAnimalsDB.close();
@@ -86,24 +84,5 @@ public class StatisticsFragment extends Fragment {
         total_Sightings_Stored.setText(Integer.toString(spotCount));
         return view;
     }
-
-
-    public List<Animal> getmAllAnimals() {
-        return mAllAnimals;
-    }
-
-    public void setmAllAnimals(List<Animal> mAllAnimals) {
-        this.mAllAnimals = mAllAnimals;
-    }
-
-    public int getAnimalCount() {
-        return animalCount;
-    }
-
-    public void setAnimalCount(int animalCount) {
-        this.animalCount = animalCount;
-    }
-
-
 
 }

@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.example.wildlifeapplication.R;
 
 import java.io.File;
@@ -50,14 +51,14 @@ public class PostCreationFragment extends Fragment {
         cameraButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 //Set permission to access gallery and camera
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                    if(getActivity().checkSelfPermission(Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PIC_REQUEST);
                     }
                 }
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERM_WRITE_STORAGE);
-                }else{
+                } else {
                     takePhoto();
                 }
 
@@ -74,7 +75,7 @@ public class PostCreationFragment extends Fragment {
 
                 if (username.trim().equals("") | caption.trim().equals("")) {
                     Toast.makeText(getActivity(), "Username and caption cannot be empty", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     final Post post = new Post(username, caption, imagePath);
                     AsyncTask.execute(new Runnable() {
                         @Override
@@ -104,10 +105,10 @@ public class PostCreationFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent returnIntent) {
         super.onActivityResult(requestCode, resultCode, returnIntent);
 
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case CAMERA_PIC_REQUEST:
-                    Bitmap capturedBitmap =(Bitmap) returnIntent.getExtras().get("data");
+                    Bitmap capturedBitmap = (Bitmap) returnIntent.getExtras().get("data");
                     ImageView imageView = getActivity().findViewById(R.id.imageView);
                     imageView.setImageBitmap(capturedBitmap);
                     saveImageToGallery(capturedBitmap);
@@ -116,17 +117,17 @@ public class PostCreationFragment extends Fragment {
         }
     }
 
-    public void saveImageToGallery(Bitmap bitmap){
+    public void saveImageToGallery(Bitmap bitmap) {
         String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root+"/image");
+        File myDir = new File(root + "/image");
         myDir.mkdirs();
         Random generator = new Random();
         int i = 10000;
         i = generator.nextInt(i);
-        String imageName = "Image-"+i+".jpg";
+        String imageName = "Image-" + i + ".jpg";
         File file = new File(myDir, imageName);
-        if(file.exists()) file.delete();
-        try{
+        if (file.exists()) file.delete();
+        try {
             FileOutputStream out = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             imagePath = file.getAbsolutePath();

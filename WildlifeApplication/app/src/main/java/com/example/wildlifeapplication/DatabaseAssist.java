@@ -50,7 +50,7 @@ public class DatabaseAssist extends SQLiteOpenHelper {
         cursor.close();
         db.close();
 
-        if(count>0)
+        if (count > 0)
             return true;
         else
             return false;

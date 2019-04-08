@@ -12,9 +12,6 @@ public interface PostDA0 {
     @Query("SELECT * FROM Post")
     List<Post> getAllPosts();
 
-    @Query("SELECT * FROM Post WHERE id = :id")
-    Post getPostid(int id);
-
     @Insert
     void insertPosts(Post... Post);
 

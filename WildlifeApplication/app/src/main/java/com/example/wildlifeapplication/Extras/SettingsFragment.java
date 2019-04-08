@@ -22,7 +22,6 @@ public class SettingsFragment extends ListFragment {
     private ArrayList<String> Settings_List = new ArrayList<>();
     private ArrayAdapter<String> mAdapter;
     ListView listView;
-    String selected;
 
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
@@ -33,7 +32,7 @@ public class SettingsFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView listView, View v, int position, long id) {
-        SharedPreferences sp = getActivity().getSharedPreferences("pref",Context.MODE_PRIVATE);
+        SharedPreferences sp = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         String item = listView.getAdapter().getItem(position).toString();
         switch (item) {
@@ -42,12 +41,12 @@ public class SettingsFragment extends ListFragment {
                 break;
             case "Online/Offline Mode":
                 System.out.println(sp.getAll());
-                if(sp.getString("OnlineStatus","Online").equals("Online")){
+                if (sp.getString("OnlineStatus", "Online").equals("Online")) {
                     Toast.makeText(getContext(), "You've gone offline", Toast.LENGTH_SHORT).show();
-                    editor.putString("OnlineStatus","Offline");
-                }else{
-                    Toast.makeText(getContext(),"You've gone online",Toast.LENGTH_SHORT).show();
-                    editor.putString("OnlineStatus","Online");
+                    editor.putString("OnlineStatus", "Offline");
+                } else {
+                    Toast.makeText(getContext(), "You've gone online", Toast.LENGTH_SHORT).show();
+                    editor.putString("OnlineStatus", "Online");
                 }
                 editor.apply();
                 break;
@@ -76,9 +75,9 @@ public class SettingsFragment extends ListFragment {
         Settings_List.add("Online/Offline Mode");
     }
 
-    public void createPopUpMenu(View View){
-        PopupMenu popup = new PopupMenu(getContext(),View);
-        popup.getMenuInflater().inflate(R.menu.launch_setting_menu,popup.getMenu());
+    public void createPopUpMenu(View View) {
+        PopupMenu popup = new PopupMenu(getContext(), View);
+        popup.getMenuInflater().inflate(R.menu.launch_setting_menu, popup.getMenu());
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -91,19 +90,19 @@ public class SettingsFragment extends ListFragment {
 
     }
 
-    public void changeLaunchSettings(String selected){
-        SharedPreferences sp = getActivity().getSharedPreferences("pref",Context.MODE_PRIVATE);
+    public void changeLaunchSettings(String selected) {
+        SharedPreferences sp = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
-        switch (selected){
+        switch (selected) {
             case "Feed":
-                editor.putString("LaunchChoice","Feed");
+                editor.putString("LaunchChoice", "Feed");
                 break;
             case "Search":
-                editor.putString("LaunchChoice","Search");
+                editor.putString("LaunchChoice", "Search");
                 break;
             case "Map":
-                editor.putString("LaunchChoice","Map");
+                editor.putString("LaunchChoice", "Map");
         }
         editor.apply();
     }

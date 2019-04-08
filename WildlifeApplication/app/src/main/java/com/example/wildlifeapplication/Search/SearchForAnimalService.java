@@ -33,7 +33,7 @@ public class SearchForAnimalService implements ISearchForAnimalService {
                 "black, blue, white, yellow", "Woodland, parks and gardens.",
                 "All year round", "Insects, seeds and nuts",
                 R.mipmap.blue_tit));
-        listOfAllAnimals.add(new Animal("Southern Hawker", "Aeshna cyanea", "Invertebrate",  R.mipmap.southern_hawker));
+        listOfAllAnimals.add(new Animal("Southern Hawker", "Aeshna cyanea", "Invertebrate", R.mipmap.southern_hawker));
         listOfAllAnimals.add(new Animal("Mute Swan", "Cygnus olor", "Bird",
                 140, 160, 200, 240,
                 "Adults are all white, with males differing by their larger size" +
@@ -60,7 +60,7 @@ public class SearchForAnimalService implements ISearchForAnimalService {
                 "black, white", "Generally coastal, but some " +
                 "populations winter inland. They can build nests and breed in a variety of " +
                 "places including cliff-ledges, in trees or on the ground", "All " +
-                "year round","Cormorants are talented fishers, half-leaping into " +
+                "year round", "Cormorants are talented fishers, half-leaping into " +
                 "dives without first looking", R.mipmap.cormorant));
         listOfAllAnimals.add(new Animal("European Green Woodpecker",
                 "Picus viridis", "Bird", 30, 36,
@@ -133,7 +133,8 @@ public class SearchForAnimalService implements ISearchForAnimalService {
         return listOfAllAnimals;
     }
 
-    List<Animal> filterByColours(List<Animal> animalsToBeFiltered, String[] coloursSelected) {
+    @Override
+    public List<Animal> filterByColours(List<Animal> animalsToBeFiltered, String[] coloursSelected) {
         ArrayList<Animal> filteredAnimals = new ArrayList<>(animalsToBeFiltered);
         for (Animal animal : animalsToBeFiltered) {
             String[] colours = animal.getColoursAsStringArray();
@@ -152,7 +153,6 @@ public class SearchForAnimalService implements ISearchForAnimalService {
 
         return filteredAnimals;
     }
-
 
 
 }

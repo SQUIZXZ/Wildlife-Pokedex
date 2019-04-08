@@ -30,7 +30,6 @@ import com.example.wildlifeapplication.Map.MapFragment;
 import com.example.wildlifeapplication.Map.Spotting;
 import com.example.wildlifeapplication.Map.SpottingOfAnimalsDatabase;
 import com.example.wildlifeapplication.R;
-import com.example.wildlifeapplication.Search.AnimalSearchFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
@@ -45,9 +44,7 @@ public class StoreFragment extends Fragment {
     private String pictureFilePath;
     private File image = null;
     private Activity activity;
-    private boolean manualLocation;
     private MapFragment mapFragment;
-    private AnimalSearchFragment searchFragment;
     private LatLng location;
     private boolean manual = false;
     private String bodyLength;
@@ -55,6 +52,9 @@ public class StoreFragment extends Fragment {
     private String colour;
     private String habitat;
     private String toy;
+
+    public StoreFragment() {
+    }
 
     public static StoreFragment newInstance() {
         StoreFragment fragment = new StoreFragment();
@@ -73,9 +73,8 @@ public class StoreFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final SharedPreferences sp = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
         mapFragment = (MapFragment) getFragmentManager().findFragmentByTag("Map");
-        manualLocation = false;
         activity = getActivity();
-        final View view = inflater.inflate(R.layout.fragment_store,container,false);
+        final View view = inflater.inflate(R.layout.fragment_store, container, false);
         Switch switch1 = view.findViewById(R.id.switch1);
         final Button button3 = view.findViewById(R.id.button3);
         final Button button1 = view.findViewById(R.id.button);
@@ -92,26 +91,26 @@ public class StoreFragment extends Fragment {
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
                     manual = true;
                     button3.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     manual = false;
                     button3.setVisibility(View.INVISIBLE);
                 }
             }
         });
-        button1.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        button1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
 
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                    if(getActivity().checkSelfPermission(Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PIC_REQUEST);
                     }
                 }
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERM_WRITE_STORAGE);
-                }else {
+                } else {
 
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     try {
@@ -133,12 +132,12 @@ public class StoreFragment extends Fragment {
                 }
             }
         });
-        button3.setOnClickListener(new View.OnClickListener(){
+        button3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 FragmentTransaction tr = getFragmentManager().beginTransaction();
-                tr.replace(R.id.fragment_container, mapFragment,"Map").addToBackStack(null).commit();
+                tr.replace(R.id.fragment_container, mapFragment, "Map").addToBackStack(null).commit();
                 mapFragment.setStoreFragManualLocation(true);
-                Toast.makeText(getContext(),"Tap on the Location",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Tap on the Location", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -146,10 +145,10 @@ public class StoreFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!manual) {
-                    if(sp.getString("OnlineStatus","Online").equals("Online")) {
+                    if (sp.getString("OnlineStatus", "Online").equals("Online")) {
                         LatLng pos = mapFragment.storeFragGetLoc(); // crashing here
                         setLatLng(pos);
-                    }else {
+                    } else {
                         setLatLng(new LatLng(51.481580, -3.179089));
                     }
                 }
@@ -158,9 +157,9 @@ public class StoreFragment extends Fragment {
                 final Spotting spotting = new Spotting(nounDisplay.getText().toString(),
                         scientificNounDisplay.getText().toString(),
                         ((float) getLocation().latitude),
-                        (float)getLocation().longitude,
+                        (float) getLocation().longitude,
                         new Date());
-                final SpottingOfAnimalsDatabase spottingOfAnimalsDatabase = Room.databaseBuilder(getContext(),SpottingOfAnimalsDatabase.class,"animal sighting database").build();
+                final SpottingOfAnimalsDatabase spottingOfAnimalsDatabase = Room.databaseBuilder(getContext(), SpottingOfAnimalsDatabase.class, "animal sighting database").build();
                 AsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
@@ -169,10 +168,9 @@ public class StoreFragment extends Fragment {
                     }
                 });
 
-                Toast.makeText(getContext(),"Thank you for reporting your sighting",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Thank you for reporting your sighting", Toast.LENGTH_LONG).show();
                 FragmentTransaction tr = getFragmentManager().beginTransaction();
-                tr.replace(R.id.fragment_container,mapFragment).commit();
-
+                tr.replace(R.id.fragment_container, mapFragment).commit();
 
 
             }
@@ -181,56 +179,16 @@ public class StoreFragment extends Fragment {
     }
 
 
-    public String getPictureFilePath(){
+    public String getPictureFilePath() {
         return this.pictureFilePath;
     }
 
-
-    public void setLatLng(LatLng latLng){
+    public void setLatLng(LatLng latLng) {
         this.location = latLng;
-    }
-
-    public void setBodyLength(String bodyLength){
-        this.bodyLength = bodyLength;
-    }
-
-    public void setWingspan(String wingspan){
-        this.wingspan = wingspan;
-    }
-
-    public void setColour(String colour){
-        this.colour = colour;
-    }
-
-    public void setHabitat(String habitat){
-        this.habitat = habitat;
-    }
-
-    public void setTimeOfYear(String toy){
-        this.toy = toy;
     }
 
     public LatLng getLocation() {
         return location;
     }
 
-    public String getBodyLength() {
-        return bodyLength;
-    }
-
-    public String getWingspan() {
-        return wingspan;
-    }
-
-    public String getColour() {
-        return colour;
-    }
-
-    public String getHabitat() {
-        return habitat;
-    }
-
-    public String getToy() {
-        return toy;
-    }
 }
