@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
                 String pwd = mTextPassword.getText().toString().trim();
                 Boolean res = db.validateUser(user, pwd);
 
-                if(res == true) {
+                if (res == true) {
                     Toast.makeText(LoginActivity.this, "Successful login", Toast.LENGTH_SHORT).show();
                     Intent loggedIn = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(loggedIn);

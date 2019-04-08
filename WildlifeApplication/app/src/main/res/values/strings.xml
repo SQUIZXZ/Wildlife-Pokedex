@@ -45,7 +45,7 @@
     </string-array>
 
     <string-array name="types">
-        <item>Select a type...</item>
+        <item>Select a type</item>
         <item>Bird</item>
         <item>Invertebrate</item>
     </string-array>

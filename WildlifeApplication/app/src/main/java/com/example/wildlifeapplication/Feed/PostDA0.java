@@ -1,8 +1,8 @@
 package com.example.wildlifeapplication.Feed;
 
 import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.Query;
 
 import java.util.List;
 
@@ -10,13 +10,13 @@ import java.util.List;
 public interface PostDA0 {
 
     @Query("SELECT * FROM Post")
-    List<Post> getAllBooks();
+    List<Post> getAllPosts();
 
     @Insert
-    void insertBooks(Post... Post);
+    void insertPosts(Post... Post);
 
     @Query("DELETE FROM Post")
-    void clearBooks();
+    void clearPosts();
 
 
 }

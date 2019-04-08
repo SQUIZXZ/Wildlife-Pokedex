@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleAdapter;
@@ -28,7 +29,6 @@ import com.example.wildlifeapplication.Search.AnimalInformation.AnimalDatabase;
 import com.example.wildlifeapplication.Search.AnimalInformation.AnimalInformationFragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +41,7 @@ public class AnimalSearchFragment extends ListFragment {
 
     AppCompatButton mButton;
     String[] colourList;
+    String[] selectedColoursAsStringArray;
     boolean[] checkedItems;
     ArrayList<Integer> mSelectedColoursPositions = new ArrayList<>();
     volatile static List<Animal> animalsWithSelectedType;
@@ -74,7 +75,6 @@ public class AnimalSearchFragment extends ListFragment {
         args.putString(scientificNounValueAsStringArray[0], scientificNounValueAsStringArray[1]);
         animalInformationFragment.setArguments(args);
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, animalInformationFragment).commit();
-
     }
 
     @Override
@@ -83,8 +83,8 @@ public class AnimalSearchFragment extends ListFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_bird_search, container, false);
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        final View v = inflater.inflate(R.layout.fragment_animal_search, container, false);
         v.findViewById(R.id.empty).setVisibility(View.INVISIBLE);
 
         synchronized (this) {
@@ -96,6 +96,8 @@ public class AnimalSearchFragment extends ListFragment {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+            //Adding all the animals from the database to the list view
             HashMap<String, String> hashMap;
             for (Animal animal : mAllAnimals) {
                 hashMap = new HashMap<>();
@@ -107,7 +109,7 @@ public class AnimalSearchFragment extends ListFragment {
                 } else {
                     hashMap.put("Body length", "");
                 }
-                hashMap.put("Image", Integer.toString(animal.getImgURL()));
+                hashMap.put("Image", Integer.toString(animal.getImgId()));
                 data.add(hashMap);
             }
 
@@ -117,6 +119,8 @@ public class AnimalSearchFragment extends ListFragment {
             setListAdapter(mAdapter);
         }
 
+        //Button in order to be able to select multiple colours in a dialog box
+
         mButton = v.findViewById(R.id.colour_button);
         colourList = getResources().getStringArray(R.array.colours);
         checkedItems = new boolean[colourList.length];
@@ -124,7 +128,7 @@ public class AnimalSearchFragment extends ListFragment {
         //Adapted code from https://github.com/codingdemos/MultichoiceTutorial
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
                 mBuilder.setTitle("Colours of animal");
                 mBuilder.setMultiChoiceItems(colourList, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
@@ -134,9 +138,11 @@ public class AnimalSearchFragment extends ListFragment {
                             if (!mSelectedColoursPositions.contains(position)) {
                                 mSelectedColoursPositions.add(position);
                             }
-                        }else if(mSelectedColoursPositions.contains(position)) {
+                        } else if (mSelectedColoursPositions.contains(position)) {
                             mSelectedColoursPositions.remove(mSelectedColoursPositions.indexOf(position));
                         }
+
+
                     }
                 });
                 mBuilder.setCancelable(false);
@@ -146,20 +152,29 @@ public class AnimalSearchFragment extends ListFragment {
                         String item = "";
                         for (int i = 0; i < mSelectedColoursPositions.size(); i++) {
                             item = item + colourList[mSelectedColoursPositions.get(i)];
-                            if(i != mSelectedColoursPositions.size() - 1){
-                                item = item +", ";
+                            if (i != mSelectedColoursPositions.size() - 1) {
+                                item = item + ", ";
                             }
                         }
 
-                        String[] selectedColoursAsStringArray = item.split(",");
+                        selectedColoursAsStringArray = item.split(", ");
 
-                        ///heress
+                        ///getting animals with specified colours
                         SearchForAnimalService animalSearchService = new SearchForAnimalService();
                         animalsWithSelectedColours = animalSearchService.filterByColours(mAllAnimals, selectedColoursAsStringArray);
-                        if(animalsWithSelectedColours.size() == 0 ){
-                            animalsWithSelectedColours = null;
-                        }
                         updateListView();
+
+                        //removes all tags currently displaying
+                        if (((ViewGroup) getActivity().findViewById(R.id.colour_filter)).getChildCount() > 1) {
+                            ((ViewGroup) getActivity().findViewById(R.id.colour_filter)).removeViews(1, ((ViewGroup) getActivity().findViewById(R.id.colour_filter)).getChildCount() - 1);
+                        }
+
+                        //adds tags for each colour
+                        for (String colour : selectedColoursAsStringArray) {
+                            if (!colour.equals("")) {
+                                addFilterTag(inflater, container, R.id.colour_filter, "Colour", colour.trim());
+                            }
+                        }
 
 
                     }
@@ -190,7 +205,6 @@ public class AnimalSearchFragment extends ListFragment {
         //Adapted code from: https://android--code.blogspot.com/2015/08/android-spinner-hint.html
         //setting type filter spinner options
         ArrayAdapter<String> typeSpinnerAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.types));
-        final TextView typeTitle = v.findViewById(R.id.type_title);
         typeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ((Spinner) v.findViewById(R.id.type_spinner)).setAdapter(typeSpinnerAdapter);
 
@@ -202,7 +216,6 @@ public class AnimalSearchFragment extends ListFragment {
                 animalsWithSelectedType = null;
                 if (position > 0) {
                     // Notify the selected item text
-                    typeTitle.setText(selectedItemText);
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
@@ -222,10 +235,21 @@ public class AnimalSearchFragment extends ListFragment {
                             }
                         }
 
-                        updateListView();
+                        if (((ViewGroup) v.findViewById(R.id.type_filter)).getChildCount() == 1) {
+                            //adding filter tag
+                            addFilterTag(inflater, container, R.id.type_filter, "Type", selectedItemText);
+                            updateListView();
+                        } else {
+                            updateFilterTag(R.id.type_filter, selectedItemText);
+                            updateListView();
+                        }
+
                     }
                 } else {
-                    typeTitle.setText("Type");
+                    if (selectedItemText.equals("Select a type") && ((ViewGroup) v.findViewById(R.id.type_filter)).getChildCount() == 2) {
+                        View filterTagView = ((ViewGroup) v.findViewById(R.id.type_filter)).getChildAt(1);
+                        ((ViewGroup) v.findViewById(R.id.type_filter)).removeView(filterTagView);
+                    }
                     updateListView();
                 }
             }
@@ -240,7 +264,6 @@ public class AnimalSearchFragment extends ListFragment {
 
         //setting minimum size filter spinner options
         ArrayAdapter<String> minSizeSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.min_length));
-        final TextView minSizeTitle = v.findViewById(R.id.min_size_title);
         minSizeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ((Spinner) v.findViewById(R.id.min_size_spinner)).setAdapter(minSizeSpinnerAdapter);
 
@@ -252,7 +275,6 @@ public class AnimalSearchFragment extends ListFragment {
                 animalsWithSelectedMinLength = null;
                 if (position > 0) {
                     // Notify the selected item text
-                    minSizeTitle.setText(selectedItemText);
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
@@ -272,9 +294,19 @@ public class AnimalSearchFragment extends ListFragment {
                             }
                         }
                     }
-                        updateListView();
+                    updateListView();
+                    if (((ViewGroup) v.findViewById(R.id.min_length_filter)).getChildCount() != 2) {
+                        //adding filter tag
+                        addFilterTag(inflater, container, R.id.min_length_filter, "Min Length", selectedItemText);
+                    } else {
+                        updateFilterTag(R.id.min_length_filter, selectedItemText);
+
+                    }
                 } else {
-                    minSizeTitle.setText("Min Length");
+                    if (selectedItemText.equals("Select a minimum size(cm)") && ((ViewGroup) v.findViewById(R.id.min_length_filter)).getChildCount() == 2) {
+                        View filterTagView = ((ViewGroup) v.findViewById(R.id.min_length_filter)).getChildAt(1);
+                        ((ViewGroup) v.findViewById(R.id.min_length_filter)).removeView(filterTagView);
+                    }
                     updateListView();
                 }
             }
@@ -287,7 +319,6 @@ public class AnimalSearchFragment extends ListFragment {
 
         //setting maximum size filter spinner options
         ArrayAdapter<String> maxSizeSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.max_length));
-        final TextView maxSizeTitle = v.findViewById(R.id.max_size_title);
         maxSizeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ((Spinner) v.findViewById(R.id.max_size_spinner)).setAdapter(maxSizeSpinnerAdapter);
 
@@ -299,7 +330,6 @@ public class AnimalSearchFragment extends ListFragment {
                 animalsWithSelectedMaxLength = null;
                 if (position > 0) {
                     // Notify the selected item text
-                    maxSizeTitle.setText(selectedItemText);
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
@@ -319,9 +349,18 @@ public class AnimalSearchFragment extends ListFragment {
                             }
                         }
                     }
+                    if (((ViewGroup) v.findViewById(R.id.max_length_filter)).getChildCount() != 2) {
+                        //adding filter tag
+                        addFilterTag(inflater, container, R.id.max_length_filter, "Max Length", selectedItemText);
+                    } else {
+                        updateFilterTag(R.id.max_length_filter, selectedItemText);
+                    }
                     updateListView();
                 } else {
-                    maxSizeTitle.setText("Max Length");
+                    if (selectedItemText.equals("Select a maximum size(cm)") && ((ViewGroup) v.findViewById(R.id.max_length_filter)).getChildCount() == 2) {
+                        View filterTagView = ((ViewGroup) v.findViewById(R.id.max_length_filter)).getChildAt(1);
+                        ((ViewGroup) v.findViewById(R.id.max_length_filter)).removeView(filterTagView);
+                    }
                     updateListView();
                 }
             }
@@ -342,6 +381,7 @@ public class AnimalSearchFragment extends ListFragment {
         inflater.inflate(R.menu.search_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
+        //Expanding the search view
         searchView.setIconifiedByDefault(false);
         searchView.setQueryHint("Search by name");
 
@@ -390,10 +430,10 @@ public class AnimalSearchFragment extends ListFragment {
 
     }
 
-    public List<Animal> determineListOfAnimalsToDisplay(List<Animal> allAnimals, List<Animal> ... args){
+    public List<Animal> determineListOfAnimalsToDisplay(List<Animal> allAnimals, List<Animal>... args) {
         List<List<Animal>> listsOfAnimals = new ArrayList<>();
-        for(List<Animal> list: args) {
-            if(list != null) {
+        for (List<Animal> list : args) {
+            if (list != null) {
                 listsOfAnimals.add(list);
             }
         }
@@ -401,20 +441,21 @@ public class AnimalSearchFragment extends ListFragment {
         List<Animal> copyMAllAnimals = new ArrayList<>(allAnimals);
 
 
-
-        for(List<Animal> listOfAnimals: listsOfAnimals) {
-                for (Animal animalInAllAnimals : allAnimals) {
-                    boolean animalInList = false;
-                    for(Animal animal: listOfAnimals){
-                        if(animal.getScientificNoun().equalsIgnoreCase(animalInAllAnimals.getScientificNoun())){
-                            animalInList = true;
-                        }
-                    }
-
-                    if (!animalInList && copyMAllAnimals.contains(animalInAllAnimals)) {
-                        copyMAllAnimals.remove(animalInAllAnimals);
+        //Checks which animals all the lists have in common and removes the ones that are not
+        //present in all of the lists
+        for (List<Animal> listOfAnimals : listsOfAnimals) {
+            for (Animal animalInAllAnimals : allAnimals) {
+                boolean animalInList = false;
+                for (Animal animal : listOfAnimals) {
+                    if (animal.getScientificNoun().equalsIgnoreCase(animalInAllAnimals.getScientificNoun())) {
+                        animalInList = true;
                     }
                 }
+
+                if (!animalInList && copyMAllAnimals.contains(animalInAllAnimals)) {
+                    copyMAllAnimals.remove(animalInAllAnimals);
+                }
+            }
         }
         return copyMAllAnimals;
     }
@@ -423,9 +464,11 @@ public class AnimalSearchFragment extends ListFragment {
         List<Animal> listOfAnimalsToDisplay = determineListOfAnimalsToDisplay(mAllAnimals, animalsWithSelectedMinLength, animalsWithSelectedType, animalsWithSelectedMaxLength, animalsWithSelectedColours);
 
         if (listOfAnimalsToDisplay.size() == 0) {
+            //Display no results text and hide list view
             getActivity().findViewById(R.id.empty).setVisibility(View.VISIBLE);
             getActivity().findViewById(android.R.id.list).setVisibility(View.INVISIBLE);
         } else {
+            //Display the list view with animals and hide the no results text
             getActivity().findViewById(android.R.id.list).setVisibility(View.VISIBLE);
             getActivity().findViewById(R.id.empty).setVisibility(View.INVISIBLE);
             HashMap<String, String> hashMap;
@@ -440,7 +483,7 @@ public class AnimalSearchFragment extends ListFragment {
                 } else {
                     hashMap.put("Body length", "");
                 }
-                hashMap.put("Image", Integer.toString(animal.getImgURL()));
+                hashMap.put("Image", Integer.toString(animal.getImgId()));
                 data.add(hashMap);
             }
 
@@ -450,5 +493,38 @@ public class AnimalSearchFragment extends ListFragment {
             setListAdapter(mAdapter);
 
         }
+    }
+
+    public void addFilterTag(LayoutInflater inflater, ViewGroup container, final int idOfViewWhichToInsertInto, final String typeOfFilter, final String filterSelected) {
+        final View filterTagView = inflater.inflate(R.layout.filter_tag, container, false);
+        ((LinearLayout) getActivity().findViewById(idOfViewWhichToInsertInto)).addView(filterTagView);
+        //Setting text of filter tag
+        ((TextView) filterTagView.findViewById(R.id.filter_tag_title)).setText(filterSelected);
+
+        if (typeOfFilter == "Colour") {
+            ((ViewGroup) filterTagView).removeView(filterTagView.findViewById(R.id.x_button));
+        } else {
+
+            //Setting listener for filter tag
+            ((ViewGroup) filterTagView).getChildAt(1).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((LinearLayout) getActivity().findViewById(idOfViewWhichToInsertInto)).removeView(filterTagView);
+                    switch (typeOfFilter) {
+                        case "Type":
+                            animalsWithSelectedType = null;
+                        case "Min Length":
+                            animalsWithSelectedMinLength = null;
+                        case "Max Length":
+                            animalsWithSelectedMaxLength = null;
+                    }
+                    updateListView();
+                }
+            });
+        }
+    }
+
+    public void updateFilterTag(final int idOfViewFilterTagIsIn, String filter) {
+        ((TextView) getActivity().findViewById(idOfViewFilterTagIsIn).findViewById(R.id.filter_tag_title)).setText(filter);
     }
 }

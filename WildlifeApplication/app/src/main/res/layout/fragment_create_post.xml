@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center">
+
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:src="@drawable/yih"
+        android:adjustViewBounds="true"
+        android:layout_gravity="center"
+        />
+    <Button
+        android:id="@+id/camera_button"
+        android:layout_width="44dp"
+        android:layout_height="48dp"
+        android:layout_below="@+id/imageView"
+        android:drawableLeft="@drawable/ic_camera_alt_black_24dp"
+        android:layout_gravity="center"/>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your username:"
+        android:textStyle="bold" />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/username_edit_text"
+        android:background="@android:color/transparent"
+        android:layout_marginLeft="5dp"
+        android:hint="Enter your username.."
+        android:padding="2dp"
+        android:textSize="14dp" />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Caption"
+        android:textStyle="bold"
+        android:textSize="17dp"/>
+    <EditText
+        android:id="@+id/caption_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText1"
+        android:background="@android:color/transparent"
+        android:hint="Insert a caption for your post..."
+        android:padding="2dp"
+        android:textSize="14dp" />
+
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView13"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
+        android:text="Submit"
+        android:layout_gravity="center"/>
+
+
+</android.support.v7.widget.LinearLayoutCompat>

@@ -16,6 +16,9 @@ public interface AnimalDao {
     @Query("SELECT * FROM Animal WHERE scientific_noun = :scientificNoun")
     Animal getAnimalWithScientificNoun(String scientificNoun);
 
+    @Query("SELECT * FROM Animal WHERE noun = :noun")
+    Animal getAnimalWithNoun(String noun);
+
     @Query("SELECT * FROM Animal WHERE  type= :type")
     List<Animal> getAnimalOfType(String type);
 
