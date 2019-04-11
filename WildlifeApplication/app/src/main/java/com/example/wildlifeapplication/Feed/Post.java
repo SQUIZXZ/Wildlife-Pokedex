@@ -4,9 +4,6 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.net.Uri;
-
-import java.io.File;
 
 
 @Entity
@@ -31,7 +28,8 @@ public class Post {
         this.imagePath = anImagePath;
     }
 
-    public Post(){}
+    public Post() {
+    }
 
     public int getId() {
         return id;

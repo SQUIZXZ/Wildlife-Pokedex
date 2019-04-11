@@ -13,7 +13,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -22,8 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.wildlifeapplication.R;
-import com.example.wildlifeapplication.Search.AnimalInformation.Animal;
-import com.example.wildlifeapplication.Search.AnimalInformation.AnimalDatabase;
 import com.example.wildlifeapplication.Search.AnimalInformation.AnimalInformationFragment;
 import com.example.wildlifeapplication.Store.StoreFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -42,11 +39,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.text.SimpleDateFormat;
-
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -58,11 +54,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     volatile static List<Spotting> recentSpottings;
-    private List<Spotting> mAllSpottings;
     private boolean storeFragManualLocation = false;
     private StoreFragment storeFragment;
     private LatLng position;
-
 
 
     public MapFragment() {
@@ -82,7 +76,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
         getLocationPermission();
 
-        mapView = (MapView) v.findViewById(R.id.map);
+        mapView = v.findViewById(R.id.map);
         if (mapView != null) {
             mapView.onCreate(null);
             mapView.onResume();
@@ -95,10 +89,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(final GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
         mGoogleMap = googleMap;
-        if(storeFragManualLocation){
+        if (storeFragManualLocation) {
             storeFragLocationSelect();
         }
-
 
 
         String[] seenAnimals = new String[]{"51.493514, -3.194885, Common Kingfisher, 19/03/19," +
@@ -122,7 +115,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void run() {
 
-                if (db.spottingAnimalDao().getAllSpottingOfAnimals().size() < 16){
+                if (db.spottingAnimalDao().getAllSpottingOfAnimals().size() < 16) {
                     db.spottingAnimalDao().insertAll(listOfSpottingsGenerated);
                 }
 
@@ -144,7 +137,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             setPosition(new LatLng(51.481580, -3.179089));
         }
 
-        synchronized (this ) {
+        synchronized (this) {
             while (recentSpottings == null) {
                 try {
                     MapFragment.this.wait(10);
@@ -229,7 +222,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             mLocationPermissionGranted = true;
         } else {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-//            getFragmentManager().beginTransaction().replace(R.id.fragment_container,new MapFragment());
         }
     }
 
@@ -247,30 +239,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
                 mGoogleMap = null;
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
 
     private void getDeviceLocation() {
-        Log.d(TAG,"getting devices location");
-        LocationManager locationManager = (LocationManager)getActivity().getSystemService(getActivity().LOCATION_SERVICE);
+        Log.d(TAG, "getting devices location");
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
         boolean gpsIsEnabled = false;
         boolean networkIsEnabled = false;
 
         try {
             gpsIsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         try {
             networkIsEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(!gpsIsEnabled && !networkIsEnabled) {
+        if (!gpsIsEnabled && !networkIsEnabled) {
             // notify user
             new AlertDialog.Builder(getActivity())
                     .setMessage("Location services unavailable")
@@ -280,8 +272,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             getActivity().startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                         }
                     })
-                            .setNegativeButton("Cancel",null)
-                            .show();
+                    .setNegativeButton("Cancel", null)
+                    .show();
         } else {
             mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.getContext());
             try {
@@ -318,7 +310,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         getDeviceLocation();
     }
 
-    public void storeFragLocationSelect(){
+    public void storeFragLocationSelect() {
         mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -329,15 +321,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    public void setStoreFragManualLocation(boolean value){
+    public void setStoreFragManualLocation(boolean value) {
         this.storeFragManualLocation = value;
     }
 
-    public LatLng storeFragGetLoc(){
+    public LatLng storeFragGetLoc() {
         return position;
     }
 
-    public void setPosition(LatLng aPosition){
+    public void setPosition(LatLng aPosition) {
         this.position = aPosition;
     }
 }

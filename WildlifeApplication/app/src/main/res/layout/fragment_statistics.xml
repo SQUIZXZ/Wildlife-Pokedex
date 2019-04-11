@@ -59,39 +59,6 @@
         android:layout_gravity="center"
         android:textColor="@color/Red"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/number_of_reptiles_string"
-        android:textSize="18sp"
-        android:layout_gravity="center"
-        />
-
-    <TextView
-        android:id="@+id/number4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/reptiles"
-        android:textSize="17sp"
-        android:layout_gravity="center"
-        android:textColor="@color/Red"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/number_of_mammals_string"
-        android:textSize="18sp"
-        android:layout_gravity="center"
-        />
-
-    <TextView
-        android:id="@+id/number5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/mammals"
-        android:textSize="17sp"
-        android:layout_gravity="center"
-        android:textColor="@color/Red"/>
 
     <TextView
         android:layout_width="wrap_content"

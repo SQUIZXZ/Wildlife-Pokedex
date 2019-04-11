@@ -1,13 +1,10 @@
 package com.example.wildlifeapplication.Feed;
 
 import android.arch.persistence.room.Room;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.telephony.mbms.FileInfo;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +15,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.wildlifeapplication.Extras.ExtrasFragment;
 import com.example.wildlifeapplication.R;
 
-import java.io.File;
-import java.net.URI;
 import java.util.List;
 
 public class FeedFragment extends Fragment {
@@ -30,11 +24,11 @@ public class FeedFragment extends Fragment {
     PostDatabase db;
     List<Post> posts;
 
-        public static FeedFragment newInstance() {
-            FeedFragment fragment = new FeedFragment();
-            Bundle args = new Bundle();
-            fragment.setArguments(args);
-            return fragment;
+    public static FeedFragment newInstance() {
+        FeedFragment fragment = new FeedFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -65,7 +59,7 @@ public class FeedFragment extends Fragment {
         });
 
         synchronized (this) {
-            while(posts == null) {
+            while (posts == null) {
                 try {
                     wait(5);
                 } catch (InterruptedException e) {
@@ -93,7 +87,7 @@ public class FeedFragment extends Fragment {
         createPostButton.bringToFront();
 
         return v;
-        }
+    }
 
     class CustomAdapter extends BaseAdapter {
 
@@ -122,11 +116,12 @@ public class FeedFragment extends Fragment {
             ImageView image = (ImageView) view.findViewById(R.id.image);
 
             pp.setImageResource(R.drawable.fox_avatar);
-            textView_name.setText(posts.get(posts.size()-i-1).getUsername());
-            textView_description.setText(posts.get(posts.size()-i-1).getCaption());
-            image.setImageBitmap(BitmapFactory.decodeFile(posts.get(posts.size()-i-1).getImagePath()));
+            textView_name.setText(posts.get(posts.size() - i - 1).getUsername());
+            textView_description.setText(posts.get(posts.size() - i - 1).getCaption());
+            image.setImageBitmap(BitmapFactory.decodeFile(posts.get(posts.size() - i - 1).getImagePath()));
 
 
             return view;
+        }
     }
-}}
+}

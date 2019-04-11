@@ -50,11 +50,12 @@ public class Animal {
     @ColumnInfo
     private Integer imgId;
 
-    public Animal() {}
+    public Animal() {
+    }
 
     @Ignore
-    public Animal(@NonNull String aNoun, @NonNull String aScientificNoun, String aType, Integer anImgId ) {
-        if(aNoun.equalsIgnoreCase(aScientificNoun)){
+    public Animal(@NonNull String aNoun, @NonNull String aScientificNoun, String aType, Integer anImgId) {
+        if (aNoun.equalsIgnoreCase(aScientificNoun)) {
             throw new IllegalArgumentException("Noun and scientific noun cannot be the same");
         }
         this.noun = aNoun;
@@ -66,7 +67,7 @@ public class Animal {
     @Ignore
     public Animal(@NonNull String aNoun, @NonNull String aScientificNoun, String aType, int aMinBodyLength, int aMaxBodyLength,
                   String anIdentification, String someColours, String aHabitat, String aBestTimeToSee, String aFoodSource, Integer anImgId) {
-        if(aNoun.equalsIgnoreCase(aScientificNoun)){
+        if (aNoun.equalsIgnoreCase(aScientificNoun)) {
             throw new IllegalArgumentException("Noun and scientific noun cannot be the same");
         }
         this.noun = aNoun;
@@ -85,7 +86,7 @@ public class Animal {
     public Animal(String aNoun, String aScientificNoun, String aType, int aMinBodyLength, int aMaxBodyLength,
                   int aMinWingspan, int aMaxWingspan, String anIdentification, String beakAndFeatherColours, String aHabitat,
                   String aBestTimeToSee, String aFoodSource, Integer anImgId) {
-        if(aNoun.equalsIgnoreCase(aScientificNoun)){
+        if (aNoun.equalsIgnoreCase(aScientificNoun)) {
             throw new IllegalArgumentException("Noun and scientific noun cannot be the same");
         }
         this.noun = aNoun;
@@ -105,7 +106,7 @@ public class Animal {
 
     @Override
     public String toString() {
-        return noun+"\nScientific Noun: "+scientificNoun;
+        return noun + "\nScientific Noun: " + scientificNoun;
     }
 
     @NonNull
@@ -114,7 +115,7 @@ public class Animal {
     }
 
     public void setNoun(@NonNull String noun) {
-        if(noun.equalsIgnoreCase(this.scientificNoun)){
+        if (noun.equalsIgnoreCase(this.scientificNoun)) {
             throw new IllegalArgumentException("Noun and scientific noun cannot be the same");
         }
         this.noun = noun;
@@ -126,7 +127,7 @@ public class Animal {
     }
 
     public void setScientificNoun(@NonNull String scientificNoun) {
-        if(scientificNoun.equalsIgnoreCase(this.noun)){
+        if (scientificNoun.equalsIgnoreCase(this.noun)) {
             throw new IllegalArgumentException("Noun and scientific noun cannot be the same");
         }
         this.scientificNoun = scientificNoun;
@@ -145,7 +146,7 @@ public class Animal {
     }
 
     public void setMaxBodyLength(int maxBodyLength) {
-        if(maxBodyLength < 0 || maxBodyLength < this.minBodyLength ){
+        if (maxBodyLength < 0 || maxBodyLength < this.minBodyLength) {
             throw new IllegalArgumentException("maximum body length must be greater than 0 and greater than its minimum body length");
         }
         this.maxBodyLength = maxBodyLength;
@@ -156,7 +157,7 @@ public class Animal {
     }
 
     public void setMinBodyLength(int minBodyLength) {
-        if(minBodyLength < 0 || minBodyLength > this.maxBodyLength ){
+        if (minBodyLength < 0 || minBodyLength > this.maxBodyLength) {
             throw new IllegalArgumentException("minimum body length must be greater than 0 and smaller than its maximum body length");
         }
         this.minBodyLength = minBodyLength;
@@ -171,7 +172,7 @@ public class Animal {
     }
 
     public void setMaxWingspan(int maxWingspan) {
-        if(maxBodyLength < 0 || maxBodyLength < this.minBodyLength ){
+        if (maxBodyLength < 0 || maxBodyLength < this.minBodyLength) {
             throw new IllegalArgumentException("maximum body length must be greater than 0 and greater than its minimum body length");
         }
         this.maxWingspan = maxWingspan;
@@ -182,7 +183,7 @@ public class Animal {
     }
 
     public void setMinWingspan(int minWingspan) {
-        if(minWingspan < 0 || minWingspan > this.maxWingspan ){
+        if (minWingspan < 0 || minWingspan > this.maxWingspan) {
             throw new IllegalArgumentException("minimum wingspan must be greater than 0 and smaller than its maximum wingspan");
         }
         this.minWingspan = minWingspan;
@@ -197,9 +198,9 @@ public class Animal {
     }
 
     public String[] getColoursAsStringArray() {
-        if(colours!= null) {
+        if (colours != null) {
             return colours.split(", ");
-        }else {
+        } else {
             return new String[]{};
         }
     }

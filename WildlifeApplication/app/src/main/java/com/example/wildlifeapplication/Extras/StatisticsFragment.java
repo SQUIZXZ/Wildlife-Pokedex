@@ -23,9 +23,9 @@ import java.util.concurrent.TimeUnit;
 public class StatisticsFragment extends Fragment {
 
     private List<Animal> mAllAnimals;
+    private List<Animal> mAllBirds;
+    private List<Animal> mAllInvertebrates;
     private List<Spotting> mAllSpottings;
-    int animalCount = 0;
-    int spotCount = 0 ;
 
     public static StatisticsFragment newInstance() {
         StatisticsFragment fragment = new StatisticsFragment();
@@ -44,66 +44,43 @@ public class StatisticsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_statistics, container, false);
         final TextView total_Sightings_Stored = view.findViewById(R.id.number1);
         final TextView types_of_animal_count = view.findViewById(R.id.number2);
+        final TextView types_of_bird_count = view.findViewById(R.id.number3);
+        final TextView types_of_invertebrates_count = view.findViewById(R.id.number6);
 
-        //        final SpottingOfAnimalsDatabase spottingOfAnimalsDB = Room.databaseBuilder(getContext(),SpottingOfAnimalsDatabase.class,"animal sighting database").build();
-
-
-        final SearchForAnimalService animalSearchService = new SearchForAnimalService();
         final AnimalDatabase db = Room.databaseBuilder(getContext(), AnimalDatabase.class, "animal database").build();
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
 
                 mAllAnimals = db.animalDao().getAllAnimals();
+                mAllBirds = db.animalDao().getAnimalOfType("Bird");
+                mAllInvertebrates = db.animalDao().getAnimalOfType("Invertebrate");
 
-                for (int i = 0; i < mAllAnimals.size(); i++) {
-                    animalCount++;
-                }
+
                 db.close();
             }
         });
 
-        final SpottingOfAnimalsDatabase spottingOfAnimalsDB = Room.databaseBuilder(getContext(),SpottingOfAnimalsDatabase.class,"animal sighting database").build();
+        final SpottingOfAnimalsDatabase spottingOfAnimalsDB = Room.databaseBuilder(getContext(), SpottingOfAnimalsDatabase.class, "animal sighting database").build();
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
                 mAllSpottings = spottingOfAnimalsDB.spottingAnimalDao().getAllSpottingOfAnimals();
-
-                for(int i = 0; i <mAllSpottings.size();i++){
-                    spotCount++;
-                }
                 spottingOfAnimalsDB.close();
             }
         });
 
         try {
-            TimeUnit.MILLISECONDS.sleep(300);
+            TimeUnit.MILLISECONDS.sleep(500);
         } catch (java.lang.InterruptedException e) {
             e.printStackTrace();
         }
 
-        types_of_animal_count.setText(Integer.toString(animalCount));
-        total_Sightings_Stored.setText(Integer.toString(spotCount));
+        types_of_animal_count.setText(Integer.toString(mAllAnimals.size()));
+        total_Sightings_Stored.setText(Integer.toString(mAllSpottings.size()));
+        types_of_bird_count.setText(Integer.toString(mAllBirds.size()));
+        types_of_invertebrates_count.setText(Integer.toString(mAllInvertebrates.size()));
         return view;
     }
-
-
-    public List<Animal> getmAllAnimals() {
-        return mAllAnimals;
-    }
-
-    public void setmAllAnimals(List<Animal> mAllAnimals) {
-        this.mAllAnimals = mAllAnimals;
-    }
-
-    public int getAnimalCount() {
-        return animalCount;
-    }
-
-    public void setAnimalCount(int animalCount) {
-        this.animalCount = animalCount;
-    }
-
-
 
 }
