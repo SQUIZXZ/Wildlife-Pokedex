@@ -4,3 +4,6 @@ Insert the key into the android:value = "" setting in the meta-data tag with nam
 The application will require the location setting to be turned on even if the user does not give permission for it to be used.
 
 The application has no specific admin rights so any user can register and have the same access level as anyone else.
+
+The application can be launched through android studio on an emulator, or additionally, launched on an android phone using android 
+studio.
