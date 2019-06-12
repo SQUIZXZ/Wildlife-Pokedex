@@ -7,3 +7,5 @@ The application has no specific admin rights so any user can register and have t
 
 The application can be launched through android studio on an emulator, or additionally, launched on an android phone using android 
 studio.
+
+Wildlife-Pokedex/Release/WildlifeApplication/app/src/debug/res/values/google_maps_api.xml
